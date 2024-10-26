@@ -41,6 +41,12 @@ import {
   MoreOutlined,
 } from "@ant-design/icons";
 import { Dropdown, Menu, Popconfirm, Space } from "antd";
+import TextNode from "./component/nodes/TextNode";
+import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
+import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
+import ButtonNode from "./component/nodes/ButtonNode";
+import RichcardNode from "./component/nodes/RichcardNode";
+import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
 // import dagre from '@dagrejs/dagre';
 
 const initialNodes = [];
@@ -183,7 +189,7 @@ const DnDFlow = () => {
       case "button":
         return <ButtonNodeSidebar node={selected} />;
       case "poll":
-        return <PollNodeSider node={selected} />;
+        return <RichcardNodeSidebar node={selected} />;
       case "list":
         return <ListNodeSidebar node={selected} />;
       case "media":
@@ -226,13 +232,14 @@ const DnDFlow = () => {
           onDrop={onDrop}
           onDragOver={onDragOver}
           onReconnect={onReconnect}
-          // nodeTypes={{
-          //   Text: TextNode,
-          //   button: ButtonNode,
-          //   poll: PollNode,
-          //   list: ListNode,
-          //   media: MediaNode,
-          // }}
+          nodeTypes={{
+            Text: TextNode,
+            button: ButtonNode,
+            richcard:RichcardNode,
+            // poll: PollNode,
+            // list: ListNode,
+            // media: MediaNode,
+          }}
           fitView
           fitViewOptions={{ maxZoom: 1 }}
           onInit={setReactFlowInstance}
@@ -280,7 +287,7 @@ const DnDFlow = () => {
           <Background />
         </ReactFlow>
       </div>
-      {renderSidebar()}
+      {renderSidebar  ()}
     </div>
   );
 };

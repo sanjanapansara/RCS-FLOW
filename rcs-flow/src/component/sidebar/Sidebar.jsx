@@ -16,7 +16,7 @@ function Sidebar() {
   const cards = [
     { id: 1, text: "Text", type: "Text", bgColor: "#F9D4D4" },
     { id: 2, text: "Text With Button", type: "button", bgColor: "#D6D8F7" },
-    { id: 3, text: "Poll Message", type: "poll", bgColor: "#CEDFCC" },
+    { id: 3, text: "Richcard", type: "richcard", bgColor: "#CEDFCC" },
     { id: 4, text: "List Message", type: "list", bgColor: "#EED2FA" },
     { id: 5, text: "Media", type: "media", bgColor: "#CACACA" },
   ];
