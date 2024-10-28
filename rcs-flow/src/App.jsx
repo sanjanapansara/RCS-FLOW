@@ -47,6 +47,11 @@ import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
 import ButtonNode from "./component/nodes/ButtonNode";
 import RichcardNode from "./component/nodes/RichcardNode";
 import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
+import RichcardCarosalNode from "./component/nodes/RichcardCarouselNode";
+import RichcardCarouselNode from "./component/nodes/RichcardCarouselNode";
+import RichCardCarouselSidebar from "./component/sidebar/RichCardCarouselSidebar";
+import MediaNode from "./component/nodes/MediaNode";
+import MediaSidebar from "./component/sidebar/MediaSidebar";
 // import dagre from '@dagrejs/dagre';
 
 const initialNodes = [];
@@ -190,10 +195,10 @@ const DnDFlow = () => {
         return <ButtonNodeSidebar node={selected} />;
       case "richcard":
         return <RichcardNodeSidebar node={selected} />;
-      // case "list":
-      //   return <ListNodeSidebar node={selected} />;
-      // case "media":
-      //   return <MediaNodeSider node={selected} />;
+      case "richcard_carosal":
+        return <RichCardCarouselSidebar node={selected} />;
+      case "media":
+        return <MediaSidebar node={selected} />;
       default:
         return <Sidebar />;
     }
@@ -236,9 +241,10 @@ const DnDFlow = () => {
             Text: TextNode,
             button: ButtonNode,
             richcard:RichcardNode,
+            richcard_carosal:RichcardCarouselNode,
             // poll: PollNode,
             // list: ListNode,
-            // media: MediaNode,
+            media: MediaNode,
           }}
           fitView
           fitViewOptions={{ maxZoom: 1 }}
