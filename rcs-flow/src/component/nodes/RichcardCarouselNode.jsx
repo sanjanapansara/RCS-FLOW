@@ -14,7 +14,7 @@ function RichcardCarouselNode({data,selected}) {
       },
     }}
   >
-    <Card
+   <Card
       title="Rich Card Carousel"
       extra={<Switch size="small"/>}
       size="small"
@@ -28,7 +28,14 @@ function RichcardCarouselNode({data,selected}) {
       }}
     >
       <Handle type="target" position={Position.Left} />
-      <Typography.Text>{data.label}</Typography.Text>
+      {/* <Typography.Text>{data.label}</Typography.Text><br/> */}
+      <img
+       style={{width:"100%"}}
+            alt="example"
+            src="https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+          />
+      <Typography.Text><strong>{data.label}</strong></Typography.Text><br/>
+      <Typography.Text>Description</Typography.Text>
       <Flex justify="space-around">
         <Button
           size="small"
