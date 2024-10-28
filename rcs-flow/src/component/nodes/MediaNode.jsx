@@ -42,21 +42,6 @@ function MediaNode({ data,selected}) {
         <Text type="secondary">Menu Middle Title</Text>
         <br />
         <Text type="secondary">Footer Title</Text>
-        <Card
-          bordered={false}
-          style={{ backgroundColor: "#f5f5f5", borderRadius: 10 }}
-          bodyStyle={{ padding: "5px" }}
-        >
-          <Title level={5} style={{ margin: "0px" }}>
-            Title
-          </Title>
-          <Text>Lorem Ipsum is simply dummy text</Text>
-          <Divider style={{ margin: "8px 0" }} />
-          <Title level={5} style={{ margin: "0px" }}>
-            Title
-          </Title>
-          <Text>Lorem Ipsum is simply dummy text</Text>
-        </Card>
       </Card>
     </ConfigProvider>
   );
