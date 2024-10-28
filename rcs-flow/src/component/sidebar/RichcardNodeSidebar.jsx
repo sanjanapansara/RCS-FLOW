@@ -42,6 +42,12 @@ const props = {
 function RichcardNodeSidebar() {
   const [loading] = useState(false);
   const [imageUrl] = useState();
+  const [value, setValue] = useState("short");
+
+  const onChange = (e) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+  };
 
   const uploadButton = (
     <button
@@ -100,14 +106,14 @@ function RichcardNodeSidebar() {
                 name={"Template Name"}
                 style={{ marginBottom: "10px" }}
               >
-                <Input variant="filled" placeholder="Template Name" />
+                <Input placeholder="Template Name" />
               </Form.Item>
               <Form.Item label="Title" style={{ marginBottom: "10px" }}>
-                <Input variant="filled" placeholder="Title" id="message" />
+                <Input placeholder="Title" id="message" />
               </Form.Item>
               <Form.Item label="Description" style={{ marginBottom: "10px" }}>
                 <TextArea
-                  variant="filled"
+                 
                   size="small"
                   placeholder="Description"
                   rows={4}
@@ -152,7 +158,7 @@ function RichcardNodeSidebar() {
                     label="Size"
                     rules={[{ required: true, message: "Select media height" }]}
                   >
-                    <Radio.Group style={{ width: "100%" }}>
+                    <Radio.Group  onChange={onChange} value={value} style={{ width: "100%" }}>
                       <Space direction="vertical" style={{ width: "100%" }}>
                         <div
                           style={{

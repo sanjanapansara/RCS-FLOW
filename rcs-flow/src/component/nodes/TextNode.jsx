@@ -34,5 +34,4 @@ const TextNode = ({ data, selected }) => {
     </ConfigProvider>
   );
 };
-
-export default TextNode;
+export default TextNode;  
