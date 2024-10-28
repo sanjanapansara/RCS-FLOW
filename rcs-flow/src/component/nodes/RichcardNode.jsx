@@ -4,6 +4,8 @@ import { Button, Card, ConfigProvider, Flex, Switch, Typography } from "antd";
 import React from "react";
 
 function RichcardNode({ data, selected }) {
+  console.log(data);
+  
   return (
     <ConfigProvider
       theme={{
