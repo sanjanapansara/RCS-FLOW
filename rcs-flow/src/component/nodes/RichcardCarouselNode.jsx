@@ -8,8 +8,8 @@ function RichcardCarouselNode({data,selected}) {
     theme={{
       components: {
         Card: {
-          headerBg: "#ADB3E8",
-          colorBorderSecondary: "#acb2e9",
+          headerBg: "#796383",
+          colorBorderSecondary: "#796383",
         },
       },
     }}
@@ -19,11 +19,12 @@ function RichcardCarouselNode({data,selected}) {
       extra={<Switch size="small"/>}
       size="small"
       bodyStyle={{ padding: "10px" }}
+      
       style={{
         width: 200,
         padding: "0px",
         boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-        border: selected ? "1px solid #ADB3E8" : "none",
+        border: selected ? "1px solid #796383" : "none",
       }}
     >
       <Handle type="target" position={Position.Left} />

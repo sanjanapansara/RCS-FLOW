@@ -322,9 +322,8 @@ function RichCardCarouselSidebar() {
                 </Form.Item>
               </Col>
             </Row>
-            <br/>
             <Flex justify="space-between">
-              <Form.Item label="Button Label" />
+              <Form.Item label="" />
               <Button onClick={addNewCard}>
                 <PlusOutlined /> Add Button
               </Button>

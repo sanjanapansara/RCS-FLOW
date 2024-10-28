@@ -9,8 +9,8 @@ const TextNode = ({ data, selected }) => {
       theme={{
         components: {
           Card: {
-            headerBg: "#D1AFAF",
-            colorBorderSecondary: "#D1AFAF",
+            headerBg: "#cc9999",
+            colorBorderSecondary: "#cc9999",
           },
         },
       }}

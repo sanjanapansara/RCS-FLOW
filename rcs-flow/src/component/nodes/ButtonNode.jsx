@@ -8,8 +8,8 @@ const ButtonNode = ({ data ,selected}) => {
       theme={{
         components: {
           Card: {
-            headerBg: "#ADB3E8",
-            colorBorderSecondary: "#acb2e9",
+            headerBg: "#8f91a8",
+            colorBorderSecondary: "#8f91a8",
           },
         },
       }}
@@ -23,7 +23,7 @@ const ButtonNode = ({ data ,selected}) => {
           width: 200,
           padding: "0px",
           boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-          border: selected ? "1px solid #ADB3E8" : "none",
+          border: selected ? "1px solid #8f91a8" : "none",
         }}
       >
         <Handle type="target" position={Position.Left} />
@@ -32,7 +32,7 @@ const ButtonNode = ({ data ,selected}) => {
           <Button
             size="small"
             block
-            style={{ background: "#adafce", color: "black" }}
+            style={{ background: "#8f91a8", color: "black" }}
           >
             <Handle
               type="source"
