@@ -16,7 +16,7 @@ function RichcardNode({ data, selected }) {
       }}
     >
        <Card
-      title="Rich Card Carousel"
+      title="Rich Card"
       extra={<Switch size="small"/>}
       size="small"
       bodyStyle={{ padding: "10px" }}
