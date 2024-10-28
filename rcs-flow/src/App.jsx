@@ -188,12 +188,12 @@ const DnDFlow = () => {
         return <TextNodeSidebar node={selected} />;
       case "button":
         return <ButtonNodeSidebar node={selected} />;
-      case "poll":
+      case "richcard":
         return <RichcardNodeSidebar node={selected} />;
-      case "list":
-        return <ListNodeSidebar node={selected} />;
-      case "media":
-        return <MediaNodeSider node={selected} />;
+      // case "list":
+      //   return <ListNodeSidebar node={selected} />;
+      // case "media":
+      //   return <MediaNodeSider node={selected} />;
       default:
         return <Sidebar />;
     }
