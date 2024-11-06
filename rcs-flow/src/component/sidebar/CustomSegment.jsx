@@ -10,6 +10,7 @@ const CustomSegment = ({
   setRichCardCarousels,
   richCardCarousels = [], // Default to an empty array
   previewImage = [], // Default to an empty array
+  // eslint-disable-next-line react/prop-types
   value,
 }) => {
   const [close, setClose] = useState(false);

@@ -16,23 +16,12 @@ import {
   getOutgoers,
   getConnectedEdges,
   reconnectEdge,
-  Panel,
   MiniMap,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./App.css";
 import Sidebar from "./component/sidebar/Sidebar";
 import { DnDProvider, useDnD } from "./component/sidebar/DnDContext";
-// import ButtonNode from "./components/Node/ButtonNode";
-// import TextNode from "./components/Node/TextNode";
-// import PollNode from "./components/Node/PollNode";
-// import ListNode from "./components/Node/ListNode";
-// import MediaNode from "./components/Node/MediaNode";
-// import TextNodeSidebar from "./components/sidebar/TextNodeSidebar";
-// import ButtonNodeSidebar from "./components/sidebar/ButtonNodeSidebar";
-// import ListNodeSidebar from "./components/sidebar/ListNodeSidebar";
-// import MediaNodeSider from "./components/sidebar/MediaNodeSider";
-// import PollNodeSider from "./components/sidebar/PollNodeSider";
 import {
   CopyOutlined,
   DeleteOutlined,
@@ -47,43 +36,13 @@ import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
 import ButtonNode from "./component/nodes/ButtonNode";
 import RichcardNode from "./component/nodes/RichcardNode";
 import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
-import RichcardCarosalNode from "./component/nodes/RichcardCarouselNode";
 import RichcardCarouselNode from "./component/nodes/RichcardCarouselNode";
 import RichCardCarouselSidebar from "./component/sidebar/RichCardCarouselSidebar";
 import MediaNode from "./component/nodes/MediaNode";
 import MediaSidebar from "./component/sidebar/MediaSidebar";
-// import dagre from '@dagrejs/dagre';
 
 const initialNodes = [];
-// const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-// const nodeWidth = 300;
-// const nodeHeight = 100;
-// const getLayoutedElements = (nodes, edges, direction = 'TB') => {
-//   const isHorizontal = direction === 'LR';
-//   dagreGraph.setGraph({ rankdir: direction });
-//   nodes.forEach((node) => {
-//     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-//   });
-//   edges.forEach((edge) => {
-//     dagreGraph.setEdge(edge.source, edge.target);
-//   });
-//   dagre.layout(dagreGraph);
-//   const newNodes = nodes.map((node) => {
-//     const nodeWithPosition = dagreGraph.node(node.id);
-//     const newNode = {
-//       ...node,
-//       targetPosition: isHorizontal ? 'left' : 'top',
-//       sourcePosition: isHorizontal ? 'right' : 'bottom',
-//       position: {
-//         x: nodeWithPosition.x - nodeWidth / 2,
-//         y: nodeWithPosition.y - nodeHeight / 2,
-//       },
-//     };
 
-//     return newNode;
-//   });
-//   return { nodes: newNodes, edges };
-// };
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
@@ -210,16 +169,6 @@ const DnDFlow = () => {
     [setEdges]
   );
 
-  const onLayout = useCallback(
-    (direction) => {
-      const { nodes: layoutedNodes, edges: layoutedEdges } =
-        getLayoutedElements(nodes, edges, direction);
-
-      setNodes([...layoutedNodes]);
-      setEdges([...layoutedEdges]);
-    },
-    [nodes, edges, setNodes, setEdges],
-  );
 
   return (
     <div className="dndflow" style={{ display: "flex" }}>
@@ -242,8 +191,6 @@ const DnDFlow = () => {
             button: ButtonNode,
             richcard:RichcardNode,
             richcard_carosal:RichcardCarouselNode,
-            // poll: PollNode,
-            // list: ListNode,
             media: MediaNode,
           }}
           fitView
@@ -252,9 +199,6 @@ const DnDFlow = () => {
           onNodeClick={onNodeClick}
           onNodesDelete={onNodesDelete}
         >
-          <Panel position="top-right">
-            <button onClick={() => onLayout("LR")}>horizontal layout</button>
-          </Panel>
           {selectedNode && (
             <NodeToolbar
             style={{left: "60px"}}

@@ -66,10 +66,17 @@ const ButtonNodeSidebar = () => {
     }
   };
 
+  // const deleteCard = (index) => {
+  //   setData((prev) => ({
+  //     ...prev,
+  //     actions: prev.actions.filter((_, i) => i !== index),
+  //   }));
+  // };
+
   const deleteCard = (index) => {
     setData((prev) => ({
       ...prev,
-      actions: prev.actions.filter((_, i) => i !== index),
+      actions: prev.actions.filter((_, i) => i !== index || prev.actions[i].id === 0),
     }));
   };
 
