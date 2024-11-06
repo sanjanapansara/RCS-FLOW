@@ -42,7 +42,7 @@ function RichcardNode({ data, selected }) {
         <Button
           size="small"
           block
-          style={{ background: "#adafce", color: "black" }}
+          style={{ background: "#8f91a8", color: "black" }}
         >
           <Handle
             type="source"

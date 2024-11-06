@@ -152,9 +152,8 @@ const ButtonNodeSidebar = () => {
             <Form.Item label="Message">
               <TextArea rows={4} placeholder="Enter Message" />
             </Form.Item>
-            <br />
             <Flex justify="space-between">
-              <Form.Item label="Button Label" />
+              <Form.Item label="" />
               <Button onClick={addNewCard}>
                 <PlusOutlined /> Add Button
               </Button>

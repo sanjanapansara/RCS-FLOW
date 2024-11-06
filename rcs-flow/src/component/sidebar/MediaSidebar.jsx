@@ -1,58 +1,23 @@
 import React, { useState } from "react";
-import { Button, Card, Col, ConfigProvider, DatePicker, Flex, Form, Input, InputNumber, Layout, message, Row, Select, Typography, Upload } from "antd";
-import { CloseOutlined, LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  Card,
+  ConfigProvider,
+  Flex,
+  Form,
+  Input,
+  Layout,
+  Row,
+  Typography,
+  Upload,
+} from "antd";
+import { LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 const { Sider } = Layout;
-
 const MediaSidebar = ({ node }) => {
-
   const [form] = Form.useForm();
-  const {Dragger} = Upload;
-  const [loading,] = useState(false);
-  const [imageUrl,] = useState();
-  const [data, setData] = useState({
-    actions: [
-      {
-        id: 0,
-        type: "quick",
-        title: "",
-        payload: "",
-      },
-    ],
-  });
-  const handleChange = (index, key, value) => {
-    setData((prev) => {
-      const actions = [...prev.actions];
-      actions[index] = { ...actions[index], [key]: value };
-      return { ...prev, actions };
-    });
-  };
-  const addNewCard = () => {
-    if (data.actions.length < 11) {
-      setData((prev) => ({
-        ...prev,
-        actions: [
-          ...prev.actions,
-          {
-            id: prev.actions.length,
-            type: "quick",
-            title: "",
-            payload: "",
-          },
-        ],
-      }));
-    } else {
-      message.warning("Cannot add more than 11 buttons");
-    }
-  };
-
-  const deleteCard = (index) => {
-    setData((prev) => ({
-      ...prev,
-      actions: prev.actions.filter((_, i) => i !== index),
-    }));
-  };
-
+  const { Dragger } = Upload;
+  const [loading] = useState(false);
+  const [imageUrl] = useState();
   const uploadButton = (
     <button
       style={{
@@ -71,10 +36,9 @@ const MediaSidebar = ({ node }) => {
       </div>
     </button>
   );
-
   return (
     <Layout>
-    <Sider width="305px">
+      <Sider width="305px">
         <Row>
           <Card
             bodyStyle={{ padding: 5 }}
@@ -131,7 +95,4 @@ const MediaSidebar = ({ node }) => {
     </Layout>
   );
 };
-
 export default MediaSidebar;
-
-
