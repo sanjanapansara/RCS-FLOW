@@ -23,13 +23,19 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
+import SideBarHeader from "./SideBarHeader";
 const { Sider } = Layout;
 
-const ButtonNodeSidebar = () => {
+const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
+  console.log("node", node);
   const [form] = Form.useForm();
   const { Dragger } = Upload;
-  const [loading] = useState(false);
-  const [imageUrl] = useState();
+  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
+  const [loading, setLoading] = useState(false);
+  const [templateName, setTemplateName] = useState(
+    node?.data?.templateName || ""
+  );
+  const [meesagename, setMessageName] = useState(node?.data?.label || "");
   const [data, setData] = useState({
     actions: [
       {
@@ -40,6 +46,31 @@ const ButtonNodeSidebar = () => {
       },
     ],
   });
+
+  const handleTemplateNameChange = (e) => {
+    const newTemplateName = e.target.value;
+    setTemplateName(newTemplateName);
+    updateNodeData(node.id, { templateName: newTemplateName });
+  };
+
+  const handleMessageNameChange = (e) => {
+    const MessageName = e.target.value;
+    setMessageName(MessageName);
+    updateNodeData(node.id, { label: MessageName });
+  };
+
+  const handleImageUpload = (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
+      setImageUrl(newImageUrl);
+      setLoading(false);
+      updateNodeData(node.id, { imageUrl: newImageUrl });
+    }
+  };
   const handleChange = (index, key, value) => {
     setData((prev) => {
       const actions = [...prev.actions];
@@ -76,7 +107,9 @@ const ButtonNodeSidebar = () => {
   const deleteCard = (index) => {
     setData((prev) => ({
       ...prev,
-      actions: prev.actions.filter((_, i) => i !== index || prev.actions[i].id === 0),
+      actions: prev.actions.filter(
+        (_, i) => i !== index || prev.actions[i].id === 0
+      ),
     }));
   };
 
@@ -109,7 +142,7 @@ const ButtonNodeSidebar = () => {
           >
             <Row align="middle">
               <Flex align="center" gap={20}>
-                <LeftOutlined />
+              <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
                 <Typography.Title level={5} style={{ margin: "0px" }}>
                   {" "}
                   Text with Button
@@ -131,33 +164,19 @@ const ButtonNodeSidebar = () => {
         >
           <Form form={form} layout="vertical">
             <Form.Item label="Template Name">
-              <Input placeholder="Enter Template Name" />
-            </Form.Item>
-            <Form.Item
-              label={
-                <>
-                  Media optional{" "}
-                  <Typography.Text type="secondary">(Optional)</Typography.Text>
-                </>
-              }
-              required={false}
-            >
-              <Dragger>
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="avatar"
-                    style={{
-                      width: "100%",
-                    }}
-                  />
-                ) : (
-                  uploadButton
-                )}
-              </Dragger>
+              <Input
+                placeholder="Enter Template Name"
+                value={templateName}
+                onChange={handleTemplateNameChange}
+              />
             </Form.Item>
             <Form.Item label="Message">
-              <TextArea rows={4} placeholder="Enter Message" />
+              <TextArea
+                rows={4}
+                placeholder="Enter Message"
+                value={meesagename}
+                onChange={handleMessageNameChange}
+              />
             </Form.Item>
             <Flex justify="space-between">
               <Form.Item label="" />

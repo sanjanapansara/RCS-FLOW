@@ -54,14 +54,23 @@ const DnDFlow = () => {
   const [setReactFlowInstance] = useState(null);
   const [type] = useDnD();
   const [selectedNode, setSelectedNode] = useState(null);
+
+  const updateNodeData = (nodeId, newData) => {
+    setNodes((nds) =>
+      nds.map((node) => (node.id === nodeId ? { ...node, data: { ...node.data, ...newData } } : node))
+    );
+  };
+
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -73,7 +82,7 @@ const DnDFlow = () => {
         event.clientY < reactFlowBounds.top ||
         event.clientY > reactFlowBounds.bottom
       ) {
-      return;
+        return;
       }
       const position = screenToFlowPosition({
         x: event.clientX - reactFlowBounds.left,
@@ -89,6 +98,7 @@ const DnDFlow = () => {
     },
     [screenToFlowPosition, setNodes, type]
   );
+
   const onNodeClick = (event, node) => {
     event.stopPropagation();
     setSelectedNode(node.id);
@@ -149,15 +159,15 @@ const DnDFlow = () => {
     if (!selected) return <Sidebar />;
     switch (selected.type) {
       case "Text":
-        return <TextNodeSidebar node={selected} />;
+        return <TextNodeSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
       case "button":
-        return <ButtonNodeSidebar node={selected} />;
+        return <ButtonNodeSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
       case "richcard":
-        return <RichcardNodeSidebar node={selected} />;
+        return <RichcardNodeSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
       case "richcard_carosal":
-        return <RichCardCarouselSidebar node={selected} />;
+        return <RichCardCarouselSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
       case "media":
-        return <MediaSidebar node={selected} />;
+        return <MediaSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
       default:
         return <Sidebar />;
     }
@@ -168,7 +178,6 @@ const DnDFlow = () => {
       setEdges((els) => reconnectEdge(oldEdge, newConnection, els)),
     [setEdges]
   );
-
 
   return (
     <div className="dndflow" style={{ display: "flex" }}>
@@ -185,12 +194,13 @@ const DnDFlow = () => {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
+          
           onReconnect={onReconnect}
           nodeTypes={{
             Text: TextNode,
             button: ButtonNode,
-            richcard:RichcardNode,
-            richcard_carosal:RichcardCarouselNode,
+            richcard: RichcardNode,
+            richcard_carosal: RichcardCarouselNode,
             media: MediaNode,
           }}
           fitView
@@ -201,7 +211,7 @@ const DnDFlow = () => {
         >
           {selectedNode && (
             <NodeToolbar
-            style={{left: "60px"}}
+              style={{ left: "60px" }}
               isVisible={!!selectedNode}
               nodeId={selectedNode}
               position={Position.Top}
@@ -213,7 +223,7 @@ const DnDFlow = () => {
               <Popconfirm
                 title="Delete the Node"
                 description="Are you sure to delete this Node?"
-                onConfirm={() => confirm(id)}
+                onConfirm={() => handleDeleteClick(id)}
                 okText="Yes"
                 cancelText="No"
               >
@@ -233,14 +243,15 @@ const DnDFlow = () => {
             </NodeToolbar>
           )}
           <Controls />
-          <MiniMap/>
+          <MiniMap />
           <Background />
         </ReactFlow>
       </div>
-      {renderSidebar  ()}
+      {renderSidebar()}
     </div>
   );
 };
+
 export default () => (
   <ReactFlowProvider>
     <DnDProvider>

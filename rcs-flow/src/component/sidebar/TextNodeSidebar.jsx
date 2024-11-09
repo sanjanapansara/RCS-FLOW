@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import {
   Card,
@@ -9,18 +7,49 @@ import {
   Input,
   Layout,
   Row,
-  Tag,
   Typography,
   Upload,
 } from "antd";
-import { LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
+import SideBarHeader from "./SideBarHeader";
 const { Sider } = Layout;
-const TextNodeSidebar = ({ node }) => {
+
+const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
   const [form] = Form.useForm();
   const { Dragger } = Upload;
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
+  const [templateName, setTemplateName] = useState(
+    node?.data?.templateName || ""
+  );
+  const [messagename, setMessageName] = useState(node?.data?.label || "");
+  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
+
+  const handleTemplateNameChange = (e) => {
+    const newTemplateName = e.target.value;
+    setTemplateName(newTemplateName);
+    updateNodeData(node.id, { templateName: newTemplateName });
+  };
+
+  const handleMessageNameChange = (e) => {
+    const MessageName = e.target.value;
+    setMessageName(MessageName);
+    updateNodeData(node.id, { label: MessageName });
+  };
+
+  const handleImageUpload = (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
+      setImageUrl(newImageUrl);
+      setLoading(false);
+      updateNodeData(node.id, { imageUrl: newImageUrl });
+    }
+  };
+
   const uploadButton = (
     <button
       style={{
@@ -30,15 +59,10 @@ const TextNodeSidebar = ({ node }) => {
       type="button"
     >
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
+      <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
+
   return (
     <Layout>
       <Sider width="305px">
@@ -50,9 +74,12 @@ const TextNodeSidebar = ({ node }) => {
           >
             <Row align="middle">
               <Flex align="center" gap={20}>
-                <LeftOutlined />
+                <SideBarHeader
+                  setSelectedNode={setSelectedNode}
+                  title={title}
+                />
                 <Typography.Title level={5} style={{ margin: "0px" }}>
-                  {" "}
+                  {""}
                   Text
                 </Typography.Title>
               </Flex>
@@ -72,33 +99,19 @@ const TextNodeSidebar = ({ node }) => {
         >
           <Form form={form} layout="vertical">
             <Form.Item label="Template Name">
-              <Input placeholder="Enter Template Name" />
-            </Form.Item>
-            <Form.Item
-              label={
-                <>
-                  Media{" "}
-                  <Typography.Text type="secondary">(Optional)</Typography.Text>
-                </>
-              }
-              required={false}
-            >
-              <Dragger>
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="avatar"
-                    style={{
-                      width: "100%",
-                    }}
-                  />
-                ) : (
-                  uploadButton
-                )}
-              </Dragger>
+              <Input
+                placeholder="Enter Template Name"
+                value={templateName}
+                onChange={handleTemplateNameChange}
+              />
             </Form.Item>
             <Form.Item label="Message">
-              <TextArea rows={4} placeholder="Enter Message" />
+              <TextArea
+                rows={4}
+                placeholder="Enter Message"
+                value={messagename}
+                onChange={handleMessageNameChange}
+              />
             </Form.Item>
           </Form>
         </ConfigProvider>
@@ -106,4 +119,5 @@ const TextNodeSidebar = ({ node }) => {
     </Layout>
   );
 };
+
 export default TextNodeSidebar;

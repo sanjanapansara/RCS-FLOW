@@ -22,6 +22,7 @@ import { CloseOutlined, LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant
 import React, { useState } from "react";
 import Sider from "antd/es/layout/Sider";
 import CustomSegment from "./CustomSegment";
+import SideBarHeader from "./SideBarHeader";
 
 const props = {
   name: "file",
@@ -43,13 +44,18 @@ const props = {
   },
 };
 
-function RichCardCarouselSidebar() {
-  const [loading] = useState(false);
-  const [imageUrl] = useState();
+function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
+  console.log(node)
+  const [loading,setLoading] = useState(false);
+  const [imageUrl,setImageUrl] = useState(node?.data?.imageUrl || "");
   const [options, setOptions] = useState(["Card 1", "Card 2"]);
   const [cardIndex, setCardIndex] = useState(0);
   const [richCardCarousels, setRichCardCarousels] = useState();
   const [previewImage, setPreviewImage] = useState([]);
+  const [value, setValue] = useState("short");
+  const [templateName,setTemplateName] = useState(node?.data?.templateName || "")
+  const[messagename,setMessageName] = useState(node?.data?.label || "")
+  const[description,setDescription] = useState(node?.data?.description || "")
   const [data, setData] = useState({
     actions: [
       {
@@ -60,6 +66,47 @@ function RichCardCarouselSidebar() {
       },
     ],
   });
+
+
+  const onChange = (e) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+  };
+
+  const handleTemplateNameChange = (e) => {
+    const newTemplateName = e.target.value;
+    setTemplateName(newTemplateName);
+    updateNodeData(node.id, { templateName: newTemplateName });
+  };
+
+  const handleMessageNameChange = (e) => {
+    const MessageName = e.target.value;
+    setMessageName(MessageName);
+    updateNodeData(node.id, { label: MessageName });
+  };
+
+  
+  const handleDescriptionNameChange = (e) => {
+    const DescriptionName = e.target.value;
+    setDescription(DescriptionName);
+    updateNodeData(node.id, { description: DescriptionName });
+  };
+
+
+  const handleImageUpload = (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
+      setImageUrl(newImageUrl);
+      setLoading(false);
+      updateNodeData(node.id, { imageUrl: newImageUrl });
+    }
+  };
+
+
   const uploadButton = (
     <button
       style={{
@@ -163,7 +210,7 @@ function RichCardCarouselSidebar() {
           >
             <Row align="middle">
               <Flex align="center" gap={20}>
-                <LeftOutlined />
+              <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
                 <Typography.Title level={5} style={{ margin: "0px" }}>
                   {" "}
                   Rich Card Carousel
@@ -186,10 +233,11 @@ function RichCardCarouselSidebar() {
           <Form layout="vertical">
             <Form.Item
               label="Template Name"
-              name={"Template Name"}
               style={{ marginBottom: "10px" }}
             >
-              <Input variant="filled" placeholder="Template Name" />
+              <Input variant="filled" placeholder="Template Name"
+              value={templateName}
+              onChange={handleTemplateNameChange} />
             </Form.Item>
             <Row>
           <Col md={24}>
@@ -236,7 +284,9 @@ function RichCardCarouselSidebar() {
               </Col>
             </Row>
             <Form.Item label="Title" style={{ marginBottom: "10px" }}>
-              <Input variant="filled" placeholder="Title" id="message" />
+              <Input variant="filled" placeholder="Title" id="message"
+              value={messagename}
+              onChange={handleMessageNameChange}/>
             </Form.Item>
             <Form.Item label="Description" style={{ marginBottom: "10px" }}>
               <TextArea
@@ -244,6 +294,8 @@ function RichCardCarouselSidebar() {
                 size="small"
                 placeholder="Description"
                 rows={4}
+                value={description}
+                onChange={handleDescriptionNameChange}
               />
             </Form.Item>
             <Row>
@@ -253,29 +305,23 @@ function RichCardCarouselSidebar() {
                   layout="vertical"
                   rules={[{ required: true, message: "Please select media" }]}
                 >
-                  <Dragger {...props} style={{ height: "170px" }}>
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt="avatar"
-                        style={{
-                          width: "100%",
-                        }}
-                      />
-                    ) : (
-                      uploadButton
-                    )}
-                    {/* <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">
-                    Click or drag file to this area to upload
-                  </p>
-                  <p className="ant-upload-hint">
-                    Support for a single or bulk upload. Strictly prohibited
-                    from uploading company data or other banned files.
-                  </p> */}
-                  </Dragger>
+                  <Dragger
+                      showUploadList={false}
+                      customRequest={({ onSuccess }) => {
+                        setTimeout(() => onSuccess("ok"), 0); // Mock success
+                      }}
+                      onChange={handleImageUpload}
+                    >
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt="avatar"
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        uploadButton
+                      )}
+                    </Dragger>
                 </Form.Item>
               </Col>
             </Row>
@@ -285,7 +331,7 @@ function RichCardCarouselSidebar() {
                   label="Size"
                   rules={[{ required: true, message: "Select media height" }]}
                 >
-                  <Radio.Group style={{ width: "100%" }}>
+                  <Radio.Group  onChange={onChange} value={value} style={{ width: "100%" }}>
                     <Space direction="vertical" style={{ width: "100%" }}>
                       <div
                         style={{

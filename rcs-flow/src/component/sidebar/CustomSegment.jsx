@@ -3,14 +3,13 @@ import { Col, Popconfirm, Row, Space, Tag } from "antd";
 import React, { useState } from "react";
 
 const CustomSegment = ({
-  options = [], // Default to an empty array
+  options = [],
   onChange,
   setOptions,
   setPreviewImage,
   setRichCardCarousels,
-  richCardCarousels = [], // Default to an empty array
-  previewImage = [], // Default to an empty array
-  // eslint-disable-next-line react/prop-types
+  richCardCarousels = [],
+  previewImage = [],
   value,
 }) => {
   const [close, setClose] = useState(false);

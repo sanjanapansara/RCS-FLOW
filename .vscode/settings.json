@@ -4,10 +4,14 @@
         "carosal",
         "Deafult",
         "hoverable",
+        "meesagename",
+        "messagename",
         "Outgoers",
         "Popconfirm",
         "Richcard",
         "Sider",
+        "tempaltename",
+        "templatename",
         "xyflow"
     ]
 }
