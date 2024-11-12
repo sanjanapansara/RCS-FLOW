@@ -8,22 +8,16 @@ import {
   Layout,
   Row,
   Typography,
-  Upload,
 } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import SideBarHeader from "./SideBarHeader";
 const { Sider } = Layout;
-
 const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
   const [form] = Form.useForm();
-  const { Dragger } = Upload;
-  const [loading, setLoading] = useState(false);
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
   const [messagename, setMessageName] = useState(node?.data?.label || "");
-  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
 
   const handleTemplateNameChange = (e) => {
     const newTemplateName = e.target.value;
@@ -36,32 +30,6 @@ const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
     setMessageName(MessageName);
     updateNodeData(node.id, { label: MessageName });
   };
-
-  const handleImageUpload = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
-      setImageUrl(newImageUrl);
-      setLoading(false);
-      updateNodeData(node.id, { imageUrl: newImageUrl });
-    }
-  };
-
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
 
   return (
     <Layout>

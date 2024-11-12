@@ -21,7 +21,6 @@ import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import {
   CloseOutlined,
-  LeftOutlined,
   LoadingOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -48,7 +47,7 @@ const props = {
   },
 };
 
-function RichcardNodeSidebar({ node, updateNodeData,title,setSelectedNode }) {
+function RichcardNodeSidebar({ node, updateNodeData, title, setSelectedNode }) {
   console.log(node);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
@@ -167,7 +166,10 @@ function RichcardNodeSidebar({ node, updateNodeData,title,setSelectedNode }) {
             >
               <Row align="middle">
                 <Flex align="center" gap={20}>
-                <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
+                  <SideBarHeader
+                    setSelectedNode={setSelectedNode}
+                    title={title}
+                  />
                   <Typography.Title level={5} style={{ margin: "0px" }}>
                     {" "}
                     Rich Card
@@ -220,6 +222,7 @@ function RichcardNodeSidebar({ node, updateNodeData,title,setSelectedNode }) {
                     rules={[{ required: true, message: "Please select media" }]}
                   >
                     <Dragger
+                      {...props}
                       showUploadList={false}
                       customRequest={({ onSuccess }) => {
                         setTimeout(() => onSuccess("ok"), 0); // Mock success

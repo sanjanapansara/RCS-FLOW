@@ -10,7 +10,7 @@ import {
   Typography,
   Upload,
 } from "antd";
-import { LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {  LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import SideBarHeader from "./SideBarHeader";
 const { Sider } = Layout;

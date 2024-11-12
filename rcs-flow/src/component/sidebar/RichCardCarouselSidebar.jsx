@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
   Card,
   Col,
   ConfigProvider,
@@ -18,7 +18,12 @@ import {
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Dragger from "antd/es/upload/Dragger";
-import { CloseOutlined, LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  LeftOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import React, { useState } from "react";
 import Sider from "antd/es/layout/Sider";
 import CustomSegment from "./CustomSegment";
@@ -44,18 +49,25 @@ const props = {
   },
 };
 
-function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
-  console.log(node)
-  const [loading,setLoading] = useState(false);
-  const [imageUrl,setImageUrl] = useState(node?.data?.imageUrl || "");
+function RichCardCarouselSidebar({
+  node,
+  updateNodeData,
+  setSelectedNode,
+  title,
+}) {
+  console.log(node);
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
   const [options, setOptions] = useState(["Card 1", "Card 2"]);
   const [cardIndex, setCardIndex] = useState(0);
   const [richCardCarousels, setRichCardCarousels] = useState();
   const [previewImage, setPreviewImage] = useState([]);
   const [value, setValue] = useState("short");
-  const [templateName,setTemplateName] = useState(node?.data?.templateName || "")
-  const[messagename,setMessageName] = useState(node?.data?.label || "")
-  const[description,setDescription] = useState(node?.data?.description || "")
+  const [templateName, setTemplateName] = useState(
+    node?.data?.templateName || ""
+  );
+  const [messagename, setMessageName] = useState(node?.data?.label || "");
+  const [description, setDescription] = useState(node?.data?.description || "");
   const [data, setData] = useState({
     actions: [
       {
@@ -67,9 +79,8 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
     ],
   });
 
-
   const onChange = (e) => {
-    console.log('radio checked', e.target.value);
+    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 
@@ -85,13 +96,11 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
     updateNodeData(node.id, { label: MessageName });
   };
 
-  
   const handleDescriptionNameChange = (e) => {
     const DescriptionName = e.target.value;
     setDescription(DescriptionName);
     updateNodeData(node.id, { description: DescriptionName });
   };
-
 
   const handleImageUpload = (info) => {
     if (info.file.status === "uploading") {
@@ -105,7 +114,6 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
       updateNodeData(node.id, { imageUrl: newImageUrl });
     }
   };
-
 
   const uploadButton = (
     <button
@@ -133,7 +141,7 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
         title: "",
         payload: "",
       };
-  
+
       const newCard = {
         title: "",
         description: "",
@@ -141,21 +149,21 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
         mediaHeight: 10, // Assuming value1 is defined
         button: [newButton],
       };
-  
+
       setOptions((prev) => [...prev, `Card ${prev.length + 1}`]);
-  
-    //   setRichCardCarousels((prev) => {
-    //     const updatedCarousels = [...prev, newCard];
-  
-    //     // Call updateNodeLabel with the updated state
-    //     if (selectedNode) {
-    //       updateNodeLabel(selectedNode.id, {
-    //         richCardCarousels: updatedCarousels,
-    //       });
-    //     }
-  
-    //     return updatedCarousels;
-    //   });
+
+      //   setRichCardCarousels((prev) => {
+      //     const updatedCarousels = [...prev, newCard];
+
+      //     // Call updateNodeLabel with the updated state
+      //     if (selectedNode) {
+      //       updateNodeLabel(selectedNode.id, {
+      //         richCardCarousels: updatedCarousels,
+      //       });
+      //     }
+
+      //     return updatedCarousels;
+      //   });
     } else {
       message.warning("Cannot add more than 10 cards");
     }
@@ -163,7 +171,7 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
   const handleCardChange = (newValue) => {
     setCardIndex(newValue);
   };
-  
+
   const addNewCard = () => {
     if (data.actions.length < 11) {
       setData((prev) => ({
@@ -197,8 +205,6 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
     });
   };
 
-
-
   return (
     <Layout>
       <Sider width="305px">
@@ -210,7 +216,10 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
           >
             <Row align="middle">
               <Flex align="center" gap={20}>
-              <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
+                <SideBarHeader
+                  setSelectedNode={setSelectedNode}
+                  title={title}
+                />
                 <Typography.Title level={5} style={{ margin: "0px" }}>
                   {" "}
                   Rich Card Carousel
@@ -231,42 +240,42 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
           }}
         >
           <Form layout="vertical">
-            <Form.Item
-              label="Template Name"
-              style={{ marginBottom: "10px" }}
-            >
-              <Input variant="filled" placeholder="Template Name"
-              value={templateName}
-              onChange={handleTemplateNameChange} />
+            <Form.Item label="Template Name" style={{ marginBottom: "10px" }}>
+              <Input
+                variant="filled"
+                placeholder="Template Name"
+                value={templateName}
+                onChange={handleTemplateNameChange}
+              />
             </Form.Item>
             <Row>
-          <Col md={24}>
-            <Flex
-              align="center"
-              justify="space-between"
-              style={{ marginTop: 10, marginBottom: 10 }}
-            >
-              <Typography
-                style={{
-                  alignSelf: "center",
-                  fontSize: 16,
-                  fontWeight: "600",
-                }}
-              >
-                Cards
-              </Typography>
-              <Button
-                onClick={handleAddCardsTemplate}
-                style={{
-                  backgroundColor: "#0F3B48",
-                }}
-                type="primary"
-              >
-                <PlusOutlined /> Add Cards
-              </Button>
-            </Flex>
-          </Col>
-        </Row>
+              <Col md={24}>
+                <Flex
+                  align="center"
+                  justify="space-between"
+                  style={{ marginTop: 10, marginBottom: 10 }}
+                >
+                  <Typography
+                    style={{
+                      alignSelf: "center",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  >
+                    Cards
+                  </Typography>
+                  <Button
+                    onClick={handleAddCardsTemplate}
+                    style={{
+                      backgroundColor: "#0F3B48",
+                    }}
+                    type="primary"
+                  >
+                    <PlusOutlined /> Add Cards
+                  </Button>
+                </Flex>
+              </Col>
+            </Row>
             <Row>
               <Col md={24}>
                 <Col>
@@ -284,9 +293,13 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
               </Col>
             </Row>
             <Form.Item label="Title" style={{ marginBottom: "10px" }}>
-              <Input variant="filled" placeholder="Title" id="message"
-              value={messagename}
-              onChange={handleMessageNameChange}/>
+              <Input
+                variant="filled"
+                placeholder="Title"
+                id="message"
+                value={messagename}
+                onChange={handleMessageNameChange}
+              />
             </Form.Item>
             <Form.Item label="Description" style={{ marginBottom: "10px" }}>
               <TextArea
@@ -306,22 +319,23 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
                   rules={[{ required: true, message: "Please select media" }]}
                 >
                   <Dragger
-                      showUploadList={false}
-                      customRequest={({ onSuccess }) => {
-                        setTimeout(() => onSuccess("ok"), 0); // Mock success
-                      }}
-                      onChange={handleImageUpload}
-                    >
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt="avatar"
-                          style={{ width: "100%" }}
-                        />
-                      ) : (
-                        uploadButton
-                      )}
-                    </Dragger>
+                    {...props}
+                    showUploadList={false}
+                    customRequest={({ onSuccess }) => {
+                      setTimeout(() => onSuccess("ok"), 0); // Mock success
+                    }}
+                    onChange={handleImageUpload}
+                  >
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt="avatar"
+                        style={{ width: "100%" }}
+                      />
+                    ) : (
+                      uploadButton
+                    )}
+                  </Dragger>
                 </Form.Item>
               </Col>
             </Row>
@@ -331,7 +345,11 @@ function RichCardCarouselSidebar({node,updateNodeData,setSelectedNode,title}) {
                   label="Size"
                   rules={[{ required: true, message: "Select media height" }]}
                 >
-                  <Radio.Group  onChange={onChange} value={value} style={{ width: "100%" }}>
+                  <Radio.Group
+                    onChange={onChange}
+                    value={value}
+                    style={{ width: "100%" }}
+                  >
                     <Space direction="vertical" style={{ width: "100%" }}>
                       <div
                         style={{

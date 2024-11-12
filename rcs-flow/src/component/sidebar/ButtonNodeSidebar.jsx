@@ -18,7 +18,6 @@ import {
 } from "antd";
 import {
   CloseOutlined,
-  LeftOutlined,
   LoadingOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -29,9 +28,6 @@ const { Sider } = Layout;
 const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
   console.log("node", node);
   const [form] = Form.useForm();
-  const { Dragger } = Upload;
-  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
-  const [loading, setLoading] = useState(false);
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
@@ -59,18 +55,6 @@ const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
     updateNodeData(node.id, { label: MessageName });
   };
 
-  const handleImageUpload = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
-      setImageUrl(newImageUrl);
-      setLoading(false);
-      updateNodeData(node.id, { imageUrl: newImageUrl });
-    }
-  };
   const handleChange = (index, key, value) => {
     setData((prev) => {
       const actions = [...prev.actions];
@@ -97,13 +81,6 @@ const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
     }
   };
 
-  // const deleteCard = (index) => {
-  //   setData((prev) => ({
-  //     ...prev,
-  //     actions: prev.actions.filter((_, i) => i !== index),
-  //   }));
-  // };
-
   const deleteCard = (index) => {
     setData((prev) => ({
       ...prev,
@@ -113,24 +90,6 @@ const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
     }));
   };
 
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
   return (
     <Layout>
       <Sider width="305px">

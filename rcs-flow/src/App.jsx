@@ -29,7 +29,7 @@ import {
   FlagOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Dropdown, Menu, Popconfirm, Space } from "antd";
+import { Dropdown, Menu, Popconfirm, Row, Space } from "antd";
 import TextNode from "./component/nodes/TextNode";
 import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
 import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
@@ -57,7 +57,11 @@ const DnDFlow = () => {
 
   const updateNodeData = (nodeId, newData) => {
     setNodes((nds) =>
-      nds.map((node) => (node.id === nodeId ? { ...node, data: { ...node.data, ...newData } } : node))
+      nds.map((node) =>
+        node.id === nodeId
+          ? { ...node, data: { ...node.data, ...newData } }
+          : node
+      )
     );
   };
 
@@ -113,20 +117,24 @@ const DnDFlow = () => {
   };
 
   const menu = (
-    <Menu>
-      <Menu.Item key="unsetStartNode">
-        <Space>
-          <DisconnectOutlined style={{ fontSize: "20px" }} />
-          Unset start node
-        </Space>
-      </Menu.Item>
-      <Menu.Item key="setStartNode">
-        <Space>
-          <FlagOutlined style={{ fontSize: "20px" }} />
-          Set start node
-        </Space>
-      </Menu.Item>
-    </Menu>
+    <>
+      <Row align="middle">
+        <Menu style={{ margin: "-130px", marginBlock: "auto" }}>
+          <Menu.Item key="unsetStartNode">
+            <Space>
+              <DisconnectOutlined style={{ fontSize: "20px" }} />
+              Unset start node
+            </Space>
+          </Menu.Item>
+          <Menu.Item key="setStartNode">
+            <Space>
+              <FlagOutlined style={{ fontSize: "20px" }} />
+              Set start node
+            </Space>
+          </Menu.Item>
+        </Menu>
+      </Row>
+    </>
   );
 
   const onNodesDelete = useCallback(
@@ -159,15 +167,45 @@ const DnDFlow = () => {
     if (!selected) return <Sidebar />;
     switch (selected.type) {
       case "Text":
-        return <TextNodeSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
+        return (
+          <TextNodeSidebar
+            node={selected}
+            updateNodeData={updateNodeData}
+            setSelectedNode={setSelectedNode}
+          />
+        );
       case "button":
-        return <ButtonNodeSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
+        return (
+          <ButtonNodeSidebar
+            node={selected}
+            updateNodeData={updateNodeData}
+            setSelectedNode={setSelectedNode}
+          />
+        );
       case "richcard":
-        return <RichcardNodeSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
+        return (
+          <RichcardNodeSidebar
+            node={selected}
+            updateNodeData={updateNodeData}
+            setSelectedNode={setSelectedNode}
+          />
+        );
       case "richcard_carosal":
-        return <RichCardCarouselSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
+        return (
+          <RichCardCarouselSidebar
+            node={selected}
+            updateNodeData={updateNodeData}
+            setSelectedNode={setSelectedNode}
+          />
+        );
       case "media":
-        return <MediaSidebar node={selected} updateNodeData={updateNodeData} setSelectedNode={setSelectedNode} />;
+        return (
+          <MediaSidebar
+            node={selected}
+            updateNodeData={updateNodeData}
+            setSelectedNode={setSelectedNode}
+          />
+        );
       default:
         return <Sidebar />;
     }
@@ -178,6 +216,21 @@ const DnDFlow = () => {
       setEdges((els) => reconnectEdge(oldEdge, newConnection, els)),
     [setEdges]
   );
+
+
+
+  const handleCopyNode = (node) => {
+    const newNode = {
+      ...node,
+      id: getId(), // Get a unique ID for the new node
+      position: {
+        x: node.position.x + 20, // Offset position to avoid overlap
+        y: node.position.y + 20,
+      },
+    };
+    setNodes((nds) => nds.concat(newNode));
+  };
+  
 
   return (
     <div className="dndflow" style={{ display: "flex" }}>
@@ -194,7 +247,6 @@ const DnDFlow = () => {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
-          
           onReconnect={onReconnect}
           nodeTypes={{
             Text: TextNode,
@@ -251,7 +303,6 @@ const DnDFlow = () => {
     </div>
   );
 };
-
 export default () => (
   <ReactFlowProvider>
     <DnDProvider>
