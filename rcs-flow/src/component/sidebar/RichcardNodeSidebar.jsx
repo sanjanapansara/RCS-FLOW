@@ -26,29 +26,20 @@ import {
 } from "@ant-design/icons";
 import Dragger from "antd/es/upload/Dragger";
 import SideBarHeader from "./SideBarHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { setRichCardNodeData } from "../redux/reducer.button";
 
-const props = {
-  name: "file",
-  multiple: true,
-  action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
-
-function RichcardNodeSidebar({ node, updateNodeData, title, setSelectedNode }) {
+function RichcardNodeSidebar({
+  node,
+  updateNodeData,
+  title,
+  setSelectedNode,
+  selectedNode,
+}) {
   console.log(node);
+  const dispatch = useDispatch();
+  const nodes = useSelector((state) => state.nodes.nodes);
+  const alldata = nodes.find((item) => item.id === selectedNode);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
   const [value, setValue] = useState("short");
@@ -70,71 +61,92 @@ function RichcardNodeSidebar({ node, updateNodeData, title, setSelectedNode }) {
 
   const handleTemplateNameChange = (e) => {
     const newTemplateName = e.target.value;
+    const data = { selectedNode, value, key: "templateName" };
     setTemplateName(newTemplateName);
     updateNodeData(node.id, { templateName: newTemplateName });
+    dispatch(setRichCardNodeData(data));
   };
 
   const handleMessageNameChange = (e) => {
     const newMessageName = e.target.value;
+    const data = { selectedNode, value, key: "label" };
     setMessageName(newMessageName);
     updateNodeData(node.id, { label: newMessageName });
+    dispatch(setRichCardNodeData(data));
   };
   const handleDescriptionNameChange = (e) => {
     const newDescription = e.target.value;
     setDescription(newDescription);
     updateNodeData(node.id, { description: newDescription });
+    dispatch(setRichCardNodeData(data));
   };
 
-  const handleImageUpload = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
-      setImageUrl(newImageUrl);
-      setLoading(false);
-      updateNodeData(node.id, { imageUrl: newImageUrl });
-    }
-  };
+  // const handleImageUpload = (info) => {
+  //   if (info.file.status === "uploading") {
+  //     setLoading(true);
+  //     return;
+  //   }
+  //   if (info.file.status === "done") {
+  //     const newImageUrl = URL.createObjectURL(info.file.originFileObj);
+  //     setImageUrl(newImageUrl);
+  //     setLoading(false);
+  //     updateNodeData(node.id, { imageUrl: newImageUrl });
+  //   }
+  // };
 
-  const addNewCard = () => {
-    if (data.actions.length < 11) {
-      setData((prev) => ({
-        ...prev,
-        actions: [
-          ...prev.actions,
-          {
-            id: prev.actions.length,
-            type: "quick",
-            title: "",
-            payload: "",
-          },
-        ],
-      }));
-    } else {
-      message.warning("Cannot add more than 11 buttons");
-    }
-  };
+ 
   const onChange = (e) => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
-  const deleteCard = (index) => {
-    setData((prev) => ({
-      ...prev,
-      actions: prev.actions.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleChange = (index, key, value) => {
+ 
+  const handleChange = (index, key, val) => {
     setData((prev) => {
       const actions = [...prev.actions];
-      actions[index] = { ...actions[index], [key]: value };
+      actions[index] = { ...actions[index], [key]: val };
+      const { actions: value } = { ...prev, actions };
+      const data = { selectedNode, value, key: "actions" };
+      dispatch(setRichCardNodeData(data));
       return { ...prev, actions };
     });
   };
-
+  const addNewCard = () => {
+    if (data.actions.length < 11) {
+      setData((prev) => {
+        const value = {
+          ...prev,
+          actions: [
+            ...prev.actions,
+            {
+              id: prev.actions.length,
+              type: "quick",
+              title: "",
+              payload: "",
+            },
+          ],
+        };
+        const data = { selectedNode, value: value.actions, key: "actions" };
+        dispatch(setRichCardNodeData(data));
+        return value;
+      });
+    } else {
+      message.warning("Cannot add more than 11 buttons");
+    }
+  };
+  const deleteCard = (index) => {
+    if (data.actions.length > 1) {
+      setData((prev) => {
+        const value = [...prev.actions]
+          .filter((_, i) => i !== index)
+          .map((item, i) => ({ ...item, id: i }));
+        const data = { selectedNode, value, key: "actions" };
+        dispatch(setRichCardNodeData(data));
+        return { ...prev, actions: value };
+      });
+    } else {
+      message.warning("Buttons must be greater than 1");
+    }
+  };
   const uploadButton = (
     <button
       style={{
@@ -154,6 +166,35 @@ function RichcardNodeSidebar({ node, updateNodeData, title, setSelectedNode }) {
     </button>
   );
 
+  const props = {
+    name: "file",
+    multiple: false,
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        setImageUrl(info.file);
+        const value = info.file.response.url;
+        const data = { selectedNode, value, key: "mediaUrl" };
+        dispatch(setRichCardNodeData(data));
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
+  const customUpload = ({ file, onSuccess, onError }) => {
+    setTimeout(() => {
+      if (file) {
+        onSuccess({ url: URL.createObjectURL(file) });
+      } else {
+        onError(new Error("Upload failed"));
+      }
+    }, 1000);
+  };
   return (
     <>
       <Layout>
@@ -221,19 +262,16 @@ function RichcardNodeSidebar({ node, updateNodeData, title, setSelectedNode }) {
                     layout="vertical"
                     rules={[{ required: true, message: "Please select media" }]}
                   >
-                    <Dragger
-                      {...props}
-                      showUploadList={false}
-                      customRequest={({ onSuccess }) => {
-                        setTimeout(() => onSuccess("ok"), 0); // Mock success
-                      }}
-                      onChange={handleImageUpload}
-                    >
+                    <Dragger {...props} customRequest={customUpload}>
                       {imageUrl ? (
                         <img
-                          src={imageUrl}
+                          src={imageUrl?.response?.url || imageUrl}
                           alt="avatar"
-                          style={{ width: "100%" }}
+                          style={{
+                            objectFit: "scale-down",
+                            width: "100%",
+                            height: 50,
+                          }}
                         />
                       ) : (
                         uploadButton

@@ -34,29 +34,59 @@ import TextNode from "./component/nodes/TextNode";
 import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
 import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
 import ButtonNode from "./component/nodes/ButtonNode";
+import { v4 as uuidv4 } from "uuid";
 import RichcardNode from "./component/nodes/RichcardNode";
 import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
 import RichcardCarouselNode from "./component/nodes/RichcardCarouselNode";
 import RichCardCarouselSidebar from "./component/sidebar/RichCardCarouselSidebar";
 import MediaNode from "./component/nodes/MediaNode";
 import MediaSidebar from "./component/sidebar/MediaSidebar";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setDeleteNodeState,
+  setEmptyState,
+  setNodesState,
+  setUpdateNodeData,
+} from "./component/redux/reducer.button";
 
-const initialNodes = [];
+// import { useStore } from "zustand";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
+const initialNodes = [
+  {
+    id: "0",
+    type: "button",
+    data: {
+      label: "Text with Button",
+      isInitial: true,
+      id: "0",
+    },
+    position: { x: 0, y: 50 },
+  },
+];
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
+  const dispatch = useDispatch();
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow();
   const [setReactFlowInstance] = useState(null);
   const [type] = useDnD();
   const [selectedNode, setSelectedNode] = useState(null);
+  const nodeData = useSelector((state) => state.nodes.nodes);
+
+  const alldata = nodeData.find((item) => item?.id === selectedNode);
 
   const updateNodeData = (nodeId, newData) => {
     setNodes((nds) =>
+      nds.map((node) =>
+        node.id === nodeId
+          ? { ...node, data: { ...node.data, ...newData } }
+          : node
+      )
       nds.map((node) =>
         node.id === nodeId
           ? { ...node, data: { ...node.data, ...newData } }
@@ -92,16 +122,24 @@ const DnDFlow = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
+      const newId = uuidv4();
+
       const newNode = {
-        id: getId(),
+        id: newId,
         type,
         position,
-        data: { label: `${type} node` },
+        data: { id: newId, label: `${type} node`, isStartNode: false },
       };
       setNodes((nds) => nds.concat(newNode));
+      dispatch(setNodesState(newNode));
     },
     [screenToFlowPosition, setNodes, type]
   );
+
+  // const onNodeClick = (event, node) => {
+  //   event.stopPropagation();
+  //   setSelectedNode(node.id);
+  // };
 
   const onNodeClick = (event, node) => {
     event.stopPropagation();
@@ -172,6 +210,7 @@ const DnDFlow = () => {
             node={selected}
             updateNodeData={updateNodeData}
             setSelectedNode={setSelectedNode}
+            selectedNode={selectedNode}
           />
         );
       case "button":
@@ -180,6 +219,7 @@ const DnDFlow = () => {
             node={selected}
             updateNodeData={updateNodeData}
             setSelectedNode={setSelectedNode}
+            selectedNode={selectedNode}
           />
         );
       case "richcard":
@@ -188,6 +228,7 @@ const DnDFlow = () => {
             node={selected}
             updateNodeData={updateNodeData}
             setSelectedNode={setSelectedNode}
+            selectedNode={selectedNode}
           />
         );
       case "richcard_carosal":
@@ -196,6 +237,7 @@ const DnDFlow = () => {
             node={selected}
             updateNodeData={updateNodeData}
             setSelectedNode={setSelectedNode}
+            selectedNode={selectedNode}
           />
         );
       case "media":
@@ -204,6 +246,7 @@ const DnDFlow = () => {
             node={selected}
             updateNodeData={updateNodeData}
             setSelectedNode={setSelectedNode}
+            selectedNode={selectedNode}
           />
         );
       default:
@@ -263,7 +306,7 @@ const DnDFlow = () => {
         >
           {selectedNode && (
             <NodeToolbar
-              style={{ left: "60px" }}
+              style={{ left: "70px", top: "9px" }}
               isVisible={!!selectedNode}
               nodeId={selectedNode}
               position={Position.Top}

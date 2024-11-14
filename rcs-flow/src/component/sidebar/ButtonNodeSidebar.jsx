@@ -23,17 +23,26 @@ import {
 } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import SideBarHeader from "./SideBarHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { setUpdateNodeData } from "../redux/reducer.button";
 const { Sider } = Layout;
 
-const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
+const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,title}) => {
   console.log("node", node);
+  const dispatch = useDispatch();
+  const nodes = useSelector((state) => state.nodes.nodes);
+  const alldata = nodes.find((item) => item.id === selectedNode);
+
   const [form] = Form.useForm();
+  const { Dragger } = Upload;
+  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
+  const [loading, setLoading] = useState(false);
   const [templateName, setTemplateName] = useState(
-    node?.data?.templateName || ""
+    alldata?.data?.templateName ?? ""
   );
-  const [meesagename, setMessageName] = useState(node?.data?.label || "");
+  const [meesagename, setMessageName] = useState(alldata?.data?.label ?? "");
   const [data, setData] = useState({
-    actions: [
+    actions: alldata?.data?.actions ?? [
       {
         id: 0,
         type: "quick",
@@ -47,49 +56,96 @@ const ButtonNodeSidebar = ({ node, updateNodeData,setSelectedNode,title}) => {
     const newTemplateName = e.target.value;
     setTemplateName(newTemplateName);
     updateNodeData(node.id, { templateName: newTemplateName });
+    dispatch(setUpdateNodeData(data));
   };
 
   const handleMessageNameChange = (e) => {
     const MessageName = e.target.value;
     setMessageName(MessageName);
     updateNodeData(node.id, { label: MessageName });
+    dispatch(setUpdateNodeData(data));
   };
 
-  const handleChange = (index, key, value) => {
+  const handleImageUpload = (info) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
+      setImageUrl(newImageUrl);
+      setLoading(false);
+      updateNodeData(node.id, { imageUrl: newImageUrl });
+    }
+  };
+  const handleChange = (index, key, val) => {
     setData((prev) => {
       const actions = [...prev.actions];
-      actions[index] = { ...actions[index], [key]: value };
+      actions[index] = { ...actions[index], [key]: val };
+      const { actions: value } = { ...prev, actions };
+      const data = { selectedNode, value, key: "actions" };
+      dispatch(setUpdateNodeData(data));
       return { ...prev, actions };
     });
   };
+
   const addNewCard = () => {
     if (data.actions.length < 11) {
-      setData((prev) => ({
-        ...prev,
-        actions: [
-          ...prev.actions,
-          {
-            id: prev.actions.length,
-            type: "quick",
-            title: "",
-            payload: "",
-          },
-        ],
-      }));
+      setData((prev) => {
+        const value = {
+          ...prev,
+          actions: [
+            ...prev.actions,
+            {
+              id: prev.actions.length,
+              type: "quick",
+              title: "",
+              payload: "",
+            },
+          ],
+        };
+        const data = { selectedNode, value: value.actions, key: "actions" };
+        dispatch(setUpdateNodeData(data));
+        return value;
+      });
     } else {
       message.warning("Cannot add more than 11 buttons");
     }
   };
 
-  const deleteCard = (index) => {
-    setData((prev) => ({
-      ...prev,
-      actions: prev.actions.filter(
-        (_, i) => i !== index || prev.actions[i].id === 0
-      ),
-    }));
+   const deleteCard = (index) => {
+    if (data.actions.length > 1) {
+      setData((prev) => {
+        const value = [...prev.actions]
+          .filter((_, i) => i !== index)
+          .map((item, i) => ({ ...item, id: i }));
+        const data = { selectedNode, value, key: "actions" };
+        dispatch(setUpdateNodeData(data));
+        return { ...prev, actions: value };
+      });
+    } else {
+      message.warning("Buttons must be greater than 1");
+    }
   };
 
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+      }}
+      type="button"
+    >
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </button>
+  );
   return (
     <Layout>
       <Sider width="305px">
