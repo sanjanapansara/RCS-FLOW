@@ -13,18 +13,34 @@ import {
   Card,
   ConfigProvider,
   Flex,
+  Image,
   Switch,
   Typography,
 } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function RichcardNode({ data, selected }) {
-  console.log(data);
-
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
+  useEffect(() => {
+  }, [nodes]);
+
+  const getImageWidth = () => {
+    if (alldata?.data?.size === "short") {
+      return 80;
+    } else if (alldata?.data?.size === "medium") {
+      return 120;
+    } else if (alldata?.data?.size === "tall") {
+      return 180;
+    } else {
+      return 150;
+    }
+  };
+
+  console.log("richcard data-->", alldata);
+
   return (
     <ConfigProvider
       theme={{
@@ -42,7 +58,7 @@ function RichcardNode({ data, selected }) {
         style={{ marginTop: -30 }}
       >
         <Card
-          title={data.templateName || "Rich Card"}
+          title={alldata?.data?.templateName || "Rich Card"}
           extra={<Switch size="small" />}
           size="small"
           bodyStyle={{ padding: "10px" }}
@@ -55,7 +71,11 @@ function RichcardNode({ data, selected }) {
         >
           <Handle type="target" position={Position.Left} />
           <Typography.Text>
-            <strong>{data.label}</strong>
+            <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
+          </Typography.Text>
+          <br />
+          <Typography.Text>
+            {alldata?.data?.description ?? "Message"}
           </Typography.Text>
           <br />
           <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
@@ -72,10 +92,12 @@ function RichcardNode({ data, selected }) {
             style={{ width: "100%" }}
             alt="example"
             src={
-              data.imageUrl ||
+              alldata?.data?.mediaUrl ||
               "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
             }
           />
+          </center>
+          {/* <br/> */}
           {alldata?.data?.actions?.length > 0 ? (
             <>
               {alldata?.data?.actions?.map((btn, i) => (

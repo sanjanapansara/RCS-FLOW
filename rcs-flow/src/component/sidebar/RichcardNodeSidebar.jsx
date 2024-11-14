@@ -18,7 +18,7 @@ import {
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Sider from "antd/es/layout/Sider";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CloseOutlined,
   LoadingOutlined,
@@ -38,18 +38,21 @@ function RichcardNodeSidebar({
 }) {
   console.log(node);
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === selectedNode);
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
-  const [value, setValue] = useState("short");
+  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
+  const [value, setValue] = useState(alldata?.data?.size ?? "medium");
   const [templateName, setTemplateName] = useState(
-    node?.data?.templateName || ""
+    alldata?.data?.templateName ?? ""
   );
-  const [messagename, setMessageName] = useState(node?.data?.description || "");
-  const [description, setDescription] = useState(node?.data?.label || "");
+  const [messagename, setMessageName] = useState(alldata?.data?.label ?? "");
+  const [description, setDescription] = useState(
+    alldata?.data?.description ?? ""
+  );
   const [data, setData] = useState({
-    actions: [
+    actions: alldata?.data?.actions ?? [
       {
         id: 0,
         type: "quick",
@@ -58,48 +61,50 @@ function RichcardNodeSidebar({
       },
     ],
   });
-
   const handleTemplateNameChange = (e) => {
-    const newTemplateName = e.target.value;
+    const value = e.target.value;
+    setTemplateName(value);
     const data = { selectedNode, value, key: "templateName" };
-    setTemplateName(newTemplateName);
-    updateNodeData(node.id, { templateName: newTemplateName });
     dispatch(setRichCardNodeData(data));
   };
 
   const handleMessageNameChange = (e) => {
-    const newMessageName = e.target.value;
+    const value = e.target.value;
+    setMessageName(value);
     const data = { selectedNode, value, key: "label" };
-    setMessageName(newMessageName);
-    updateNodeData(node.id, { label: newMessageName });
     dispatch(setRichCardNodeData(data));
   };
   const handleDescriptionNameChange = (e) => {
-    const newDescription = e.target.value;
-    setDescription(newDescription);
-    updateNodeData(node.id, { description: newDescription });
+    const value = e.target.value;
+    setDescription(value);
+    const data = { selectedNode, value, key: "description" };
+    dispatch(setRichCardNodeData(data));
+  };
+  useEffect(() => {
+    const initValues = data?.actions?.reduce((acc, button, i) => {
+      acc[`button-type-${i}`] = button.type;
+      acc[`button-title-${i}`] = button.title;
+      acc[`button-payload-${i}`] = button.payload;
+      acc[`button-phoneNumber-${i}`] = button.phoneNumber;
+      acc[`button-url-${i}`] = button.url;
+      acc[`button-label-${i}`] = button.label;
+      acc[`button-latitude-${i}`] = button.latitude;
+      acc[`button-longitude-${i}`] = button.longitude;
+      acc[`button-startDate-${i}`] = button.startDate;
+      acc[`button-endDate-${i}`] = button.endDate;
+      acc[`button-description-${i}`] = button.description;
+      return acc;
+    }, {});
+    form.setFieldsValue(initValues);
+  }, [data?.actions]);
+
+  const onChange = (e) => {
+    const value = e.target.value;
+    setValue(value);
+    const data = { selectedNode, value, key: "size" };
     dispatch(setRichCardNodeData(data));
   };
 
-  // const handleImageUpload = (info) => {
-  //   if (info.file.status === "uploading") {
-  //     setLoading(true);
-  //     return;
-  //   }
-  //   if (info.file.status === "done") {
-  //     const newImageUrl = URL.createObjectURL(info.file.originFileObj);
-  //     setImageUrl(newImageUrl);
-  //     setLoading(false);
-  //     updateNodeData(node.id, { imageUrl: newImageUrl });
-  //   }
-  // };
-
- 
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-  };
- 
   const handleChange = (index, key, val) => {
     setData((prev) => {
       const actions = [...prev.actions];
@@ -230,7 +235,7 @@ function RichcardNodeSidebar({
               },
             }}
           >
-            <Form layout="vertical">
+            <Form layout="vertical" form={form}>
               <Form.Item label="Template Name" style={{ marginBottom: "10px" }}>
                 <Input
                   placeholder="Enter Template Name"
@@ -287,6 +292,7 @@ function RichcardNodeSidebar({
                     rules={[{ required: true, message: "Select media height" }]}
                   >
                     <Radio.Group
+                      defaultValue="medium"
                       onChange={onChange}
                       value={value}
                       style={{ width: "100%" }}
