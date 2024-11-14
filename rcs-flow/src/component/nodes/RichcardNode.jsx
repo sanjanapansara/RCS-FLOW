@@ -1,4 +1,10 @@
-import { CalendarOutlined, EnvironmentOutlined, LinkOutlined, MessageOutlined, PhoneOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  EnvironmentOutlined,
+  LinkOutlined,
+  MessageOutlined,
+  PhoneOutlined,
+} from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
 
 import {
@@ -7,18 +13,34 @@ import {
   Card,
   ConfigProvider,
   Flex,
+  Image,
   Switch,
   Typography,
 } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function RichcardNode({ data, selected }) {
-  console.log(data);
-
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
+  useEffect(() => {
+  }, [nodes]);
+
+  const getImageWidth = () => {
+    if (alldata?.data?.size === "short") {
+      return 80;
+    } else if (alldata?.data?.size === "medium") {
+      return 120;
+    } else if (alldata?.data?.size === "tall") {
+      return 180;
+    } else {
+      return 150;
+    }
+  };
+
+  console.log("richcard data-->", alldata);
+
   return (
     <ConfigProvider
       theme={{
@@ -36,7 +58,7 @@ function RichcardNode({ data, selected }) {
         style={{ marginTop: -30 }}
       >
         <Card
-          title={data.templateName || "Rich Card"}
+          title={alldata?.data?.templateName || "Rich Card"}
           extra={<Switch size="small" />}
           size="small"
           bodyStyle={{ padding: "10px" }}
@@ -48,69 +70,76 @@ function RichcardNode({ data, selected }) {
           }}
         >
           <Handle type="target" position={Position.Left} />
-          {/* <Typography.Text>{data.label}</Typography.Text><br/> */}
           <Typography.Text>
-            <strong>{data.label}</strong>
+            <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
           </Typography.Text>
           <br />
-          <Typography.Text>{data.description}</Typography.Text>
-          <img
-            style={{ width: "100%" }}
+          <Typography.Text>
+            {alldata?.data?.description ?? "Message"}
+          </Typography.Text>
+          <br />
+          <center>
+          <Image
+            preview={false}
+            // style={{ width: getImageWidth() }}
+            width={getImageWidth() + 0}
             alt="example"
             src={
-              data.imageUrl ||
+              alldata?.data?.mediaUrl ||
               "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
             }
           />
-           {alldata?.data?.actions?.length > 0 ? (
-              <>
-                {alldata?.data?.actions?.map((btn, i) => (
-                  <Button
-                    key={i}
-                    size="small"
-                    block
-                    style={{
-                      background: "#adafce",
-                      color: "black",
-                      marginBottom: 5,
-                    }}
-                    icon={
-                      <>
-                        {btn?.type === "quick" && <MessageOutlined />}
-                        {btn?.type === "call" && <PhoneOutlined />}
-                        {btn?.type === "url" && <LinkOutlined />}
-                        {btn?.type === "location" && <EnvironmentOutlined />}
-                        {btn?.type === "calendar" && <CalendarOutlined />}
-                      </>
-                    }
-                  >
-                    {btn.type === "quick" && (
-                      <Handle
-                        type="source"
-                        position={Position.Right}
-                        isConnectable={true}
-                      />
-                    )}
-                    <Typography.Text>
-                      {btn?.title ?? "Deafult Button"}
-                    </Typography.Text>
-                  </Button>
-                ))}
-              </>
-            ) : (
-              <Button
-                size="small"
-                block
-                style={{ background: "#adafce", color: "black" }}
-              >
-                <Handle
-                  type="source"
-                  position={Position.Right}
-                  isConnectable={true}
-                />
-                <Typography.Text>Deafult Button</Typography.Text>
-              </Button>
-            )}
+          </center>
+          {/* <br/> */}
+          {alldata?.data?.actions?.length > 0 ? (
+            <>
+              {alldata?.data?.actions?.map((btn, i) => (
+                <Button
+                  key={i}
+                  size="small"
+                  block
+                  style={{
+                    background: "#adafce",
+                    color: "black",
+                    marginBottom: 5,
+                  }}
+                  icon={
+                    <>
+                      {btn?.type === "quick" && <MessageOutlined />}
+                      {btn?.type === "call" && <PhoneOutlined />}
+                      {btn?.type === "url" && <LinkOutlined />}
+                      {btn?.type === "location" && <EnvironmentOutlined />}
+                      {btn?.type === "calendar" && <CalendarOutlined />}
+                    </>
+                  }
+                >
+                  {btn.type === "quick" && (
+                    <Handle
+                      type="source"
+                      position={Position.Right}
+                      isConnectable={true}
+                    />
+                  )}
+                  <Typography.Text>
+                    {btn?.title ?? "Deafult Button"}
+                  </Typography.Text>
+                </Button>
+              ))}
+            </>
+          ) : (
+            <Button
+              size="small"
+              block
+              style={{ background: "#adafce", color: "black" }}
+            >
+              <Handle
+                type="source"
+                position={Position.Right}
+                isConnectable={true}
+              />
+              <Typography.Text>Deafult Button</Typography.Text>
+            </Button>
+          )}
         </Card>
       </Badge.Ribbon>
     </ConfigProvider>

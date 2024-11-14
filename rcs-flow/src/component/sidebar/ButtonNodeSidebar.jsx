@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Input,
   Button,
@@ -54,18 +54,36 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
   });
 
   const handleTemplateNameChange = (e) => {
-    const newTemplateName = e.target.value;
-    setTemplateName(newTemplateName);
-    updateNodeData(node.id, { templateName: newTemplateName });
+    const value = e.target.value;
+    setTemplateName(value);
+    const data = { selectedNode, value, key: "templateName" };
     dispatch(setUpdateNodeData(data));
   };
 
   const handleMessageNameChange = (e) => {
-    const MessageName = e.target.value;
-    setMessageName(MessageName);
-    updateNodeData(node.id, { label: MessageName });
+    const value = e.target.value;
+    setMessageName(value);
+    const data = { selectedNode, value, key: "label" };
     dispatch(setUpdateNodeData(data));
   };
+
+  useEffect(() => {
+    const initValues = data?.actions?.reduce((acc, button, i) => {
+      acc[`button-type-${i}`] = button.type;
+      acc[`button-title-${i}`] = button.title;
+      acc[`button-payload-${i}`] = button.payload;
+      acc[`button-phoneNumber-${i}`] = button.phoneNumber;
+      acc[`button-url-${i}`] = button.url;
+      acc[`button-label-${i}`] = button.label;
+      acc[`button-latitude-${i}`] = button.latitude;
+      acc[`button-longitude-${i}`] = button.longitude;
+      acc[`button-startDate-${i}`] = button.startDate;
+      acc[`button-endDate-${i}`] = button.endDate;
+      acc[`button-description-${i}`] = button.description;
+      return acc;
+    }, {});
+    form.setFieldsValue(initValues);
+  }, [data?.actions]);
 
   const handleImageUpload = (info) => {
     if (info.file.status === "uploading") {

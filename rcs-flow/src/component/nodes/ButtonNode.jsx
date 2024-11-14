@@ -17,24 +17,14 @@ const ButtonNode = ({ data, selected }) => {
 console.log("data-->",data);
 
   const id = data.id;
-  // const nodes = useSelector((state) => state.nodes.nodes);
-  // const alldata = nodes.find((item) => item.id === id);
-  // const [enabled, setEnabled] = useState(true);
-  // console.log("alldata-->",nodes);
-  console.log("id:", id);
-  const [enabled, setEnabled] = useState(true);
   const nodes = useSelector((state) => state.nodes.nodes);
-  console.log("nodes:", nodes);
   const alldata = nodes.find((item) => item.id === id);
-
-console.log("alldata-->",alldata);
 
   // Force re-render when nodes change
   useEffect(() => {
     // This will run when 'nodes' in Redux store changes
   }, [nodes]);
 
-  console.log("Node Data:", alldata);
   return (
     <ConfigProvider
       theme={{
