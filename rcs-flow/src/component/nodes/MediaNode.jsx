@@ -43,8 +43,15 @@ function MediaNode({ data, selected }) {
             border: selected ? "1px solid#ADC0A7" : "none",
           }}
         >
-          <Typography.Text>
-            <strong>{data.label}</strong>
+          <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
+            {data.label
+              ? data.label.split("\n").map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))
+              : "No label available."}
           </Typography.Text>
           <Handle type="target" position={Position.Left} />
           {/* <Title level={5} style={{ margin: "0px" }}>

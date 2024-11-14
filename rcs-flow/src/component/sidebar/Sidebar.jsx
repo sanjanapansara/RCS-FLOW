@@ -21,10 +21,10 @@ function Sidebar() {
     { id: 5, text: "Media", type: "media", bgColor: "#857b7b" },
   ];
   return (
-    <Layout>
+    <Layout >
       <Sider
         width="305px"
-        style={{ backgroundImage: `url(${image})`, backgroundSize: "cover" }}
+        style={{ backgroundImage: `url(${image})`, backgroundSize: "cover", overflow:"auto",height:"99vh",scrollbarWidth:"none" }}
       >
         <Row gutter={[10, 10]}>
           {cards.map((card) => (

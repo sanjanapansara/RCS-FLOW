@@ -11,10 +11,16 @@ import {
   Typography,
 } from "antd";
 import { useSelector } from "react-redux";
-import { CalendarOutlined, EnvironmentOutlined, LinkOutlined, MessageOutlined, PhoneOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  EnvironmentOutlined,
+  LinkOutlined,
+  MessageOutlined,
+  PhoneOutlined,
+} from "@ant-design/icons";
 
 const ButtonNode = ({ data, selected }) => {
-console.log("data-->",data);
+  console.log("data-->", data);
 
   const id = data.id;
   // const nodes = useSelector((state) => state.nodes.nodes);
@@ -27,7 +33,7 @@ console.log("data-->",data);
   console.log("nodes:", nodes);
   const alldata = nodes.find((item) => item.id === id);
 
-console.log("alldata-->",alldata);
+  console.log("alldata-->", alldata);
 
   // Force re-render when nodes change
   useEffect(() => {
@@ -64,7 +70,16 @@ console.log("alldata-->",alldata);
           }}
         >
           <Handle type="target" position={Position.Left} />
-          <Typography.Text>{data.label}</Typography.Text>
+          <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
+            {data.label
+              ? data.label.split("\n").map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))
+              : "No label available."}
+          </Typography.Text>
           {/* <Flex justify="space-around"> */}
           {alldata?.data?.actions?.length > 0 ? (
             <>

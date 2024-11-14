@@ -29,7 +29,7 @@ import {
   FlagOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Dropdown, Menu, Popconfirm, Row, Space } from "antd";
+import { Dropdown, Menu, message, Popconfirm, Row, Space, Typography } from "antd";
 import TextNode from "./component/nodes/TextNode";
 import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
 import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
@@ -81,17 +81,18 @@ const DnDFlow = () => {
   const alldata = nodeData.find((item) => item?.id === selectedNode);
 
   const updateNodeData = (nodeId, newData) => {
-    setNodes((nds) =>
-      nds.map((node) =>
-        node.id === nodeId
-          ? { ...node, data: { ...node.data, ...newData } }
-          : node
-      )
-      nds.map((node) =>
-        node.id === nodeId
-          ? { ...node, data: { ...node.data, ...newData } }
-          : node
-      )
+    setNodes(
+      (nds) =>
+        nds.map((node) =>
+          node.id === nodeId
+            ? { ...node, data: { ...node.data, ...newData } }
+            : node
+        )
+      // nds.map((node) =>
+      //   node.id === nodeId
+      //     ? { ...node, data: { ...node.data, ...newData } }
+      //     : node
+      // )
     );
   };
 
@@ -154,26 +155,97 @@ const DnDFlow = () => {
     console.log("Delete icon clicked for node", id);
   };
 
-  const menu = (
-    <>
-      <Row align="middle">
-        <Menu style={{ margin: "-130px", marginBlock: "auto" }}>
-          <Menu.Item key="unsetStartNode">
-            <Space>
-              <DisconnectOutlined style={{ fontSize: "20px" }} />
-              Unset start node
-            </Space>
-          </Menu.Item>
-          <Menu.Item key="setStartNode">
-            <Space>
-              <FlagOutlined style={{ fontSize: "20px" }} />
-              Set start node
-            </Space>
-          </Menu.Item>
-        </Menu>
-      </Row>
-    </>
-  );
+
+  const handleUnsetStart = (e) => {
+    e.preventDefault();
+    if (
+      nodeData.length > 1 &&
+      alldata.id === selectedNode &&
+      alldata?.data?.isStartNode
+    ) {
+      const data = { selectedNode, value: false, key: "isStartNode" };
+      dispatch(setUpdateNodeData(data));
+      setSelectedNode(selectedNode);
+    } else if (
+      nodeData.length === 1 &&
+      alldata.id === selectedNode &&
+      alldata?.data?.isStartNode
+    ) {
+      message.info("Please add one more Node");
+      return;
+    } else {
+      message.info("First Set this node to Start");
+      return;
+    }
+  };
+
+  const handleSetStart = (e) => {
+    e.preventDefault();
+    if (!Array.isArray(nodeData)) {
+      message.error("Data is not available.");
+      return;
+    }
+
+    const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+
+    if (existingStartNode && existingStartNode.id === selectedNode) {
+      message.info("This node is already set as the start node.");
+      return;
+    }
+
+    if (existingStartNode) {
+      message.info("Another node is already set as the start node.");
+      return;
+    }
+    const data = { selectedNode, value: true, key: "isStartNode" };
+    dispatch(setUpdateNodeData(data));
+    setSelectedNode(selectedNode);
+  };
+
+
+  // const menu = (
+  //   <>
+  //     <Row align="middle">
+  //       <Menu style={{ margin: "-130px", marginBlock: "auto" }}>
+  //         <Menu.Item key="unsetStartNode">
+  //           <Space>
+  //             <DisconnectOutlined style={{ fontSize: "20px" }} />
+  //             Unset start node
+  //           </Space>
+  //         </Menu.Item>
+  //         <Menu.Item key="setStartNode">
+  //           <Space>
+  //             <FlagOutlined style={{ fontSize: "20px" }} />
+  //             Set start node
+  //           </Space>
+  //         </Menu.Item>
+  //       </Menu>
+  //     </Row>
+  //   </>
+  // );
+
+
+  
+  const items = [
+    {
+      key: "unsetStartNode",
+      label: (
+        <Typography onClick={handleUnsetStart}>
+          <DisconnectOutlined style={{ fontSize: "20px" }} />
+          Unset start node
+        </Typography>
+      ),
+    },
+    {
+      key: "setStartNode",
+      label: (
+        <Typography onClick={handleSetStart}>
+          <FlagOutlined style={{ fontSize: "20px" }} />
+          Set start node
+        </Typography>
+      ),
+    },
+  ];
 
   const onNodesDelete = useCallback(
     (deleted) => {
@@ -260,8 +332,6 @@ const DnDFlow = () => {
     [setEdges]
   );
 
-
-
   const handleCopyNode = (node) => {
     const newNode = {
       ...node,
@@ -273,12 +343,11 @@ const DnDFlow = () => {
     };
     setNodes((nds) => nds.concat(newNode));
   };
-  
 
   return (
     <div className="dndflow" style={{ display: "flex" }}>
       <div
-        style={{ height: "99vh", width: "100%" }}
+        style={{ height: "99vh", width: "100%",}}
         ref={reactFlowWrapper}
         onClick={onFlowClick}
       >
@@ -329,7 +398,13 @@ const DnDFlow = () => {
                   />
                 </Space>
               </Popconfirm>
-              <Dropdown overlay={menu} trigger={["click"]} placement="topLeft">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                trigger={["click"]}
+                placement="topLeft"
+              >
                 <MoreOutlined
                   onClick={(e) => e.stopPropagation()}
                   style={{ fontSize: "20px", cursor: "pointer" }}

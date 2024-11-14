@@ -59,6 +59,16 @@ export const nodesSlice = createSlice({
           : node;
       });
     },
+    setRichCardNodeCarousleData: (state, action) => {
+      const { selectedNode, value, key } = action.payload;
+      console.log("Carousle--->",action.payload);
+      
+      state.nodes = state.nodes.map((node) => {
+        return node.id === selectedNode
+          ? { ...node, data: { ...node.data, [key]: value } }
+          : node;
+      });
+    },
     setDeleteNodeState: (state, action) => {
       state.nodes = state.nodes.filter((node) => node.id !== action.payload);
     },
@@ -71,5 +81,6 @@ export const {
   setUpdateNodeData,
   setDeleteNodeState,
   setRichCardNodeData,
+  setRichCardNodeCarousleData,
 } = nodesSlice.actions;
 export default nodesSlice.reducer;

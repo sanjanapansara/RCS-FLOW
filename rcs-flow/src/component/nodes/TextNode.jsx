@@ -43,7 +43,17 @@ const TextNode = ({ data, selected }) => {
         >
           <Handle type="target" position={Position.Left} />
           {/* <Handle type="target" position={Position.Right} /> */}
-          <Typography.Text>{data.label}</Typography.Text>
+          {/* <Typography.Text>{data.label}</Typography.Text> */}
+          <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
+            {data.label
+              ? data.label.split("\n").map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))
+              : "No label available."}
+          </Typography.Text>
         </Card>
       </Badge.Ribbon>
     </ConfigProvider>
