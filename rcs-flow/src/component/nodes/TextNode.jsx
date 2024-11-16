@@ -28,11 +28,11 @@ const TextNode = ({ data, selected }) => {
         >
           <Card
             // title={data.templateName || "Send Message"}
-            title={alldata?.data?.templateName ?? "Send Message"}
+            title={data?.templateName ?? "Send Message"}
             extra={
               <Switch
                 size="small"
-                disabled={alldata?.data?.isStartNode && true}
+                disabled
                 checked={enabled}
                 value={enabled}
                 onChange={() => setEnabled(!enabled)}
@@ -93,7 +93,7 @@ const TextNode = ({ data, selected }) => {
           extra={
             <Switch
               size="small"
-              disabled={alldata?.data?.isStartNode && true}
+              disabled
               checked={enabled}
               value={enabled}
               onChange={() => setEnabled(!enabled)}

@@ -72,6 +72,7 @@ const ButtonNode = ({ data, selected }) => {
               border: selected ? "1px solid #8f91a8" : "none",
             }}
           >
+            <Typography.Text>{alldata?.data?.label}</Typography.Text>
             {/* <Handle type="target" position={Position.Left} /> */}
             {alldata?.data?.isStartNode ? (
               <Handle
