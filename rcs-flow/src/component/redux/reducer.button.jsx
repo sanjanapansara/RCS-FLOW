@@ -41,8 +41,8 @@ export const nodesSlice = createSlice({
     },
     setUpdateNodeData: (state, action) => {
       const { selectedNode, value, key } = action.payload;
-      console.log("123--->",action.payload);
-      
+      console.log("123--->", action.payload);
+
       state.nodes = state.nodes.map((node) => {
         return node.id === selectedNode
           ? { ...node, data: { ...node.data, [key]: value } }
@@ -51,8 +51,8 @@ export const nodesSlice = createSlice({
     },
     setRichCardNodeData: (state, action) => {
       const { selectedNode, value, key } = action.payload;
-      console.log("456--->",action.payload);
-      
+      console.log("456--->", action.payload);
+
       state.nodes = state.nodes.map((node) => {
         return node.id === selectedNode
           ? { ...node, data: { ...node.data, [key]: value } }

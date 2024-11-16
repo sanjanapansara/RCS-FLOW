@@ -21,7 +21,7 @@ const TextNode = ({ data, selected }) => {
         style={{ marginTop: -30 }}
       >
         <Card
-          title={data.templateName || "Send Message"}
+          title={data?.templateName ?? "Send Message"}
           extra={
             <Switch
               size="small"
@@ -43,7 +43,7 @@ const TextNode = ({ data, selected }) => {
         >
           <Handle type="target" position={Position.Left} />
           {/* <Handle type="target" position={Position.Right} /> */}
-          <Typography.Text>{data.label}</Typography.Text>
+          <Typography.Text>{data?.label}</Typography.Text>
         </Card>
       </Badge.Ribbon>
     </ConfigProvider>

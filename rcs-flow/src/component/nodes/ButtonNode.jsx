@@ -42,7 +42,7 @@ console.log("data-->",data);
         style={{ marginTop: -30 }}
       >
         <Card
-          title={data.templateName ?? "Send Button Message"}
+          title={alldata?.data?.templateName ?? "Send Button Message"}
           extra={<Switch size="small" />}
           size="small"
           bodyStyle={{ padding: "10px" }}
@@ -54,7 +54,7 @@ console.log("data-->",data);
           }}
         >
           <Handle type="target" position={Position.Left} />
-          <Typography.Text>{data.label}</Typography.Text>
+          <Typography.Text>{alldata?.data?.label}</Typography.Text>
           {/* <Flex justify="space-around"> */}
           {alldata?.data?.actions?.length > 0 ? (
             <>

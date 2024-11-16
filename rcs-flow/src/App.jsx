@@ -51,18 +51,18 @@ import {
 
 // import { useStore } from "zustand";
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
 const initialNodes = [
   {
-    id: "0",
+    id: "1",
     type: "button",
     data: {
-      label: "Text with Button",
+      label: "wow, that was a great video",
       isInitial: true,
-      id: "0",
+      button: {
+        label: "Start",
+      },
     },
-    position: { x: 0, y: 50 },
+    position: { x: 300, y: 400 },
   },
 ];
 
@@ -100,6 +100,37 @@ const DnDFlow = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  // const onDrop = useCallback(
+  //   (event) => {
+  //     event.preventDefault();
+  //     if (!type) return;
+  //     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+  //     if (
+  //       event.clientX < reactFlowBounds.left ||
+  //       event.clientX > reactFlowBounds.right ||
+  //       event.clientY < reactFlowBounds.top ||
+  //       event.clientY > reactFlowBounds.bottom
+  //     ) {
+  //       return;
+  //     }
+  //     const position = screenToFlowPosition({
+  //       x: event.clientX - reactFlowBounds.left,
+  //       y: event.clientY - reactFlowBounds.top,
+  //     });
+  //     const newId = uuidv4();
+
+  //     const newNode = {
+  //       id: newId,
+  //       type,
+  //       position,
+  //       data: { id: newId, label: `${type} node`, isStartNode: false },
+  //     };
+  //     setNodes((nds) => nds.concat(newNode));
+  //     dispatch(setNodesState(newNode));
+  //   },
+  //   [screenToFlowPosition, setNodes, type]
+  // );
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -118,7 +149,6 @@ const DnDFlow = () => {
         y: event.clientY - reactFlowBounds.top,
       });
       const newId = uuidv4();
-
       const newNode = {
         id: newId,
         type,
@@ -254,7 +284,7 @@ const DnDFlow = () => {
   return (
     <div className="dndflow" style={{ display: "flex" }}>
       <div
-        style={{ height: "99vh", width: "100%" }}
+        style={{ height: "98vh", width: "100%" }}
         ref={reactFlowWrapper}
         onClick={onFlowClick}
       >
@@ -305,7 +335,7 @@ const DnDFlow = () => {
                   />
                 </Space>
               </Popconfirm>
-              <Dropdown overlay={menu} trigger={["click"]} placement="topLeft">
+              <Dropdown overlay={menu} trigger={["click"]} placement="topRight">
                 <MoreOutlined
                   onClick={(e) => e.stopPropagation()}
                   style={{ fontSize: "20px", cursor: "pointer" }}
