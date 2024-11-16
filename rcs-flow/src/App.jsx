@@ -60,6 +60,18 @@ const initialNodes = [
   //   },
   //   position: { x: 0, y: 50 },
   // },
+  {
+    id: "1",
+    type: "button",
+    data: {
+      label: "wow, that was a great video",
+      isInitial: true,
+      button: {
+        label: "Start",
+      },
+    },
+    position: { x: 300, y: 400 },
+  },
 ];
 
 const DnDFlow = () => {
@@ -97,6 +109,37 @@ const DnDFlow = () => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
+
+  // const onDrop = useCallback(
+  //   (event) => {
+  //     event.preventDefault();
+  //     if (!type) return;
+  //     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+  //     if (
+  //       event.clientX < reactFlowBounds.left ||
+  //       event.clientX > reactFlowBounds.right ||
+  //       event.clientY < reactFlowBounds.top ||
+  //       event.clientY > reactFlowBounds.bottom
+  //     ) {
+  //       return;
+  //     }
+  //     const position = screenToFlowPosition({
+  //       x: event.clientX - reactFlowBounds.left,
+  //       y: event.clientY - reactFlowBounds.top,
+  //     });
+  //     const newId = uuidv4();
+
+  //     const newNode = {
+  //       id: newId,
+  //       type,
+  //       position,
+  //       data: { id: newId, label: `${type} node`, isStartNode: false },
+  //     };
+  //     setNodes((nds) => nds.concat(newNode));
+  //     dispatch(setNodesState(newNode));
+  //   },
+  //   [screenToFlowPosition, setNodes, type]
+  // );
 
   const onDrop = useCallback(
     (event) => {
@@ -347,7 +390,7 @@ const DnDFlow = () => {
   return (
     <div className="dndflow" style={{ display: "flex" }}>
       <div
-        style={{ height: "99vh", width: "100%" }}
+        style={{ height: "98vh", width: "100%" }}
         ref={reactFlowWrapper}
         onClick={onFlowClick}
       >
@@ -397,13 +440,7 @@ const DnDFlow = () => {
                   />
                 </Space>
               </Popconfirm>
-              <Dropdown
-                menu={{
-                  items,
-                }}
-                trigger={["click"]}
-                placement="topLeft"
-              >
+              <Dropdown overlay={menu} trigger={["click"]} placement="topRight">
                 <MoreOutlined
                   onClick={(e) => e.stopPropagation()}
                   style={{ fontSize: "20px", cursor: "pointer" }}

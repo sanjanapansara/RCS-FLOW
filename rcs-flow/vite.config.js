@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: 'localhost', // Explicitly use localhost (IPv4)
-    port: 3000,        // Specify a different port if needed
+    port: 3007,        // Specify a different port if needed
     open: true,        // Optional: Opens the browser automatically
   },
 });
