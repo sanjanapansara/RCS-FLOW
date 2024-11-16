@@ -21,7 +21,6 @@ import Sider from "antd/es/layout/Sider";
 import React, { useEffect, useState } from "react";
 import {
   CloseOutlined,
-  LeftOutlined,
   LoadingOutlined,
   PlusOutlined,
 } from "@ant-design/icons";

@@ -4,7 +4,11 @@
   padding: 2rem;
   text-align: center;
 } */
-
+ /* body{
+  overflow: hidden;
+  height: 99vh;
+  scrollbar-width: none;
+} */
 .logo {
   height: 6em;
   padding: 1.5em;

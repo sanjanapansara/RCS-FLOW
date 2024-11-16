@@ -19,19 +19,15 @@ const initialState = {
   nodes: [],
 };
 
-// create slice
 export const nodesSlice = createSlice({
   name: "nodes",
   initialState: initialState,
   reducers: {
     setNodesState: (state, action) => {
       const newNode = action.payload;
-
-      // Check if the node already exists in the state
-      const nodeExists = state.nodes.some((node) => node.id === newNode.id); // Assuming each node has a unique 'id'
-
+      const nodeExists = state.nodes.some((node) => node.id === newNode.id);
       if (!nodeExists) {
-        state.nodes.push(newNode); // Add the new node only if it doesn't exist
+        state.nodes.push(newNode);
       } else {
         state.nodes = [...state.nodes, newNode];
       }
@@ -41,8 +37,7 @@ export const nodesSlice = createSlice({
     },
     setUpdateNodeData: (state, action) => {
       const { selectedNode, value, key } = action.payload;
-      console.log("123--->", action.payload);
-
+      console.log("123--->",action.payload);
       state.nodes = state.nodes.map((node) => {
         return node.id === selectedNode
           ? { ...node, data: { ...node.data, [key]: value } }
@@ -51,15 +46,23 @@ export const nodesSlice = createSlice({
     },
     setRichCardNodeData: (state, action) => {
       const { selectedNode, value, key } = action.payload;
-      console.log("456--->", action.payload);
-
+      console.log("456--->",action.payload);
       state.nodes = state.nodes.map((node) => {
         return node.id === selectedNode
           ? { ...node, data: { ...node.data, [key]: value } }
           : node;
       });
     },
-    setDeleteNodeState: (state, action) => {
+    setRichCardNodeCarousleData: (state, action) => {
+      const { selectedNode, value, key } = action.payload;
+      console.log("Carousle--->",action);
+      state.nodes = state.nodes.map((node) => {
+        return node.id === selectedNode
+          ? { ...node, data: { ...node.data, [key]: value } }
+          : node;
+      });
+    },
+    setDeleteNodeState: (state,action) => {
       state.nodes = state.nodes.filter((node) => node.id !== action.payload);
     },
   },
@@ -71,5 +74,6 @@ export const {
   setUpdateNodeData,
   setDeleteNodeState,
   setRichCardNodeData,
+  setRichCardNodeCarousleData,
 } = nodesSlice.actions;
 export default nodesSlice.reducer;

@@ -29,7 +29,7 @@ import {
   FlagOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Dropdown, Menu, Popconfirm, Space } from "antd";
+import { Dropdown, message, Popconfirm, Space, Typography } from "antd";
 import TextNode from "./component/nodes/TextNode";
 import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
 import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
@@ -44,26 +44,22 @@ import MediaSidebar from "./component/sidebar/MediaSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setDeleteNodeState,
-  setEmptyState,
   setNodesState,
   setUpdateNodeData,
 } from "./component/redux/reducer.button";
 
-// import { useStore } from "zustand";
-
+let id = 0;
 const initialNodes = [
-  {
-    id: "1",
-    type: "button",
-    data: {
-      label: "wow, that was a great video",
-      isInitial: true,
-      button: {
-        label: "Start",
-      },
-    },
-    position: { x: 300, y: 400 },
-  },
+  // {
+  //   id: "0",
+  //   type: "button",
+  //   data: {
+  //     label: "Text with Button",
+  //     isInitial: true,
+  //     id: "0",
+  //   },
+  //   position: { x: 0, y: 50 },
+  // },
 ];
 
 const DnDFlow = () => {
@@ -81,12 +77,14 @@ const DnDFlow = () => {
   const alldata = nodeData.find((item) => item?.id === selectedNode);
 
   const updateNodeData = (nodeId, newData) => {
-    setNodes((nds) =>
-      nds.map((node) =>
-        node.id === nodeId
-          ? { ...node, data: { ...node.data, ...newData } }
-          : node
-      )
+    setNodes(
+      (nds) =>
+        nds.map((node) =>
+          node.id === nodeId
+            ? { ...node, data: { ...node.data, ...newData } }
+            : node
+        )
+      //     ? { ...node, data: { ...node.data, ...newData } }
     );
   };
 
@@ -135,6 +133,7 @@ const DnDFlow = () => {
     (event) => {
       event.preventDefault();
       if (!type) return;
+
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       if (
         event.clientX < reactFlowBounds.left ||
@@ -144,10 +143,12 @@ const DnDFlow = () => {
       ) {
         return;
       }
+
       const position = screenToFlowPosition({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
+
       const newId = uuidv4();
       const newNode = {
         id: newId,
@@ -155,16 +156,26 @@ const DnDFlow = () => {
         position,
         data: { id: newId, label: `${type} node`, isStartNode: false },
       };
-      setNodes((nds) => nds.concat(newNode));
-      dispatch(setNodesState(newNode));
-    },
-    [screenToFlowPosition, setNodes, type]
-  );
 
-  // const onNodeClick = (event, node) => {
-  //   event.stopPropagation();
-  //   setSelectedNode(node.id);
-  // };
+      setNodes((nds) => {
+        console.log("Existing Nodes in State:", nds);
+        console.log("Existing Node Data:", nodeData);
+
+        const isFirstNode = nds.length === 0;
+        console.log("Is First Node:", isFirstNode);
+
+        const updatedNode = {
+          ...newNode,
+          data: { ...newNode.data, isStartNode: isFirstNode },
+        };
+
+        dispatch(setNodesState(updatedNode));
+
+        return nds.concat(updatedNode);
+      });
+    },
+    [screenToFlowPosition, setNodes, type, dispatch]
+  );
 
   const onNodeClick = (event, node) => {
     event.stopPropagation();
@@ -176,25 +187,78 @@ const DnDFlow = () => {
   };
 
   const handleDeleteClick = (id) => {
-    console.log("Delete icon clicked for node", id);
+    if (alldata?.data?.isStartNode) {
+      message.error("Start Node Can't be deleted");
+      return;
+    } else {
+      setNodes((prev) => {
+        const node = prev.filter((nd) => nd.id !== id);
+        dispatch(setDeleteNodeState(id));
+        console.log("Delete", id);
+        return node;
+      });
+    }
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="unsetStartNode">
-        <Space>
+  const handleUnsetStart = (e) => {
+    e.preventDefault();
+    if (nodeData.length > 1) {
+      if (alldata.id === selectedNode && alldata?.data?.isStartNode) {
+        const data = { selectedNode, value: false, key: "isStartNode" };
+        dispatch(setUpdateNodeData(data));
+      } else {
+        message.info("First set this node as the start node.");
+      }
+    } else {
+      message.info(
+        "You cannot unset the start node when there is only one node."
+      );
+    }
+  };
+
+  const handleSetStart = (e) => {
+    e.preventDefault();
+    if (!Array.isArray(nodeData)) {
+      message.error("Data is not available.");
+      return;
+    }
+    const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+    if (existingStartNode && existingStartNode.id === selectedNode) {
+      message.info("This node is already set as the start node.");
+      return;
+    }
+    if (existingStartNode) {
+      const data = {
+        selectedNode: existingStartNode.id,
+        value: false,
+        key: "isStartNode",
+      };
+      dispatch(setUpdateNodeData(data));
+    }
+    const data = { selectedNode, value: true, key: "isStartNode" };
+    dispatch(setUpdateNodeData(data));
+  };
+
+  const items = [
+    {
+      key: "unsetStartNode",
+      label: (
+        <Typography onClick={handleUnsetStart}>
           <DisconnectOutlined style={{ fontSize: "20px" }} />
           Unset start node
-        </Space>
-      </Menu.Item>
-      <Menu.Item key="setStartNode">
-        <Space>
+        </Typography>
+      ),
+    },
+    {
+      key: "setStartNode",
+      label: (
+        <Typography onClick={handleSetStart}>
           <FlagOutlined style={{ fontSize: "20px" }} />
           Set start node
-        </Space>
-      </Menu.Item>
-    </Menu>
-  );
+        </Typography>
+      ),
+    },
+  ];
 
   const onNodesDelete = useCallback(
     (deleted) => {
@@ -281,6 +345,36 @@ const DnDFlow = () => {
     [setEdges]
   );
 
+  const createCopyNode = (event) => {
+    event.preventDefault();
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    if (
+      event.clientX < reactFlowBounds.left ||
+      event.clientX > reactFlowBounds.right ||
+      event.clientY < reactFlowBounds.top ||
+      event.clientY > reactFlowBounds.bottom
+    ) {
+      return;
+    }
+    const position = screenToFlowPosition({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top - 35,
+    });
+
+    const newId = uuidv4();
+    const newNode = {
+      id: newId,
+      type: alldata.type,
+      position,
+      data: {
+        ...alldata.data,
+        id: newId,
+        isStartNode: false,
+      },
+    };
+    setNodes((nds) => nds.concat(newNode));
+    dispatch(setNodesState(newNode));
+  };
   return (
     <div className="dndflow" style={{ display: "flex" }}>
       <div
@@ -319,23 +413,28 @@ const DnDFlow = () => {
             >
               <CopyOutlined
                 style={{ fontSize: "20px", cursor: "pointer" }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={createCopyNode}
               />
               <Popconfirm
                 title="Delete the Node"
                 description="Are you sure to delete this Node?"
-                onConfirm={() => handleDeleteClick(id)}
+                onConfirm={() => handleDeleteClick(selectedNode)}
                 okText="Yes"
                 cancelText="No"
               >
                 <Space onClick={(e) => e.stopPropagation()}>
                   <DeleteOutlined
                     style={{ fontSize: "20px" }}
-                    onClick={() => handleDeleteClick(id)}
                   />
                 </Space>
               </Popconfirm>
-              <Dropdown overlay={menu} trigger={["click"]} placement="topRight">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                trigger={["click"]}
+                placement="topLeft"
+              >
                 <MoreOutlined
                   onClick={(e) => e.stopPropagation()}
                   style={{ fontSize: "20px", cursor: "pointer" }}
@@ -352,7 +451,6 @@ const DnDFlow = () => {
     </div>
   );
 };
-
 export default () => (
   <ReactFlowProvider>
     <DnDProvider>
