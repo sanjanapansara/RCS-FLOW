@@ -9,7 +9,6 @@ import {
   Typography,
   ConfigProvider,
   Form,
-  Upload,
   Col,
   Select,
   InputNumber,
@@ -34,8 +33,6 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
   const alldata = nodes.find((item) => item.id === selectedNode);
 
   const [form] = Form.useForm();
-  const { Dragger } = Upload;
-  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
   const [loading, setLoading] = useState(false);
   const [templateName, setTemplateName] = useState(
     alldata?.data?.templateName ?? ""
@@ -84,18 +81,6 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
     form.setFieldsValue(initValues);
   }, [data?.actions]);
 
-  const handleImageUpload = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
-      setImageUrl(newImageUrl);
-      setLoading(false);
-      updateNodeData(node.id, { imageUrl: newImageUrl });
-    }
-  };
   const handleChange = (index, key, val) => {
     setData((prev) => {
       const actions = [...prev.actions];
@@ -131,7 +116,7 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
     }
   };
 
-   const deleteCard = (index) => {
+const deleteCard = (index) => {
     if (data.actions.length > 1) {
       setData((prev) => {
         const value = [...prev.actions]
@@ -146,24 +131,6 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
     }
   };
 
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
   return (
     <Layout>
       <Sider width="305px">

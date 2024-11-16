@@ -98,7 +98,7 @@ function RichCardCarouselSidebar({
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
   const [options, setOptions] = useState(["Card 1", "Card 2"]);
   const [cardIndex, setCardIndex] = useState(0);
-  const [richCardCarousels, setRichCardCarousels] = useState(initialCards);
+  const [richCardCarousels, setRichCardCarousels] = useState([]);
   const [previewImage, setPreviewImage] = useState([]);
   const [value, setValue] = useState(alldata?.data?.size ?? "medium");
   const [templateName, setTemplateName] = useState(
@@ -248,6 +248,7 @@ function RichCardCarouselSidebar({
     }
   };
 
+  console.log("datta",richCardCarousels);
   useEffect(() => {
     const initValues = richCardCarousels?.reduce((acc, cards, i) => {
       acc[`title${i}`] = cards.title;
