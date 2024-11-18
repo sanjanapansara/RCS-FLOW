@@ -26,6 +26,18 @@ function RichcardNode({ data, selected }) {
   const alldata = nodes.find((item) => item.id === id);
   useEffect(() => {}, [nodes]);
 
+  const getImageWidth = () => {
+    if (alldata?.data?.size === "short") {
+      return 80;
+    } else if (alldata?.data?.size === "medium") {
+      return 120;
+    } else if (alldata?.data?.size === "tall") {
+      return 180;
+    } else {
+      return 150;
+    }
+  };
+
   console.log("richcard data-->", alldata);
 
   return (
@@ -61,10 +73,10 @@ function RichcardNode({ data, selected }) {
             <Typography.Text>
               <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
             </Typography.Text>
-            <br />
-            <Typography.Text>
+          
+            {/* <Typography.Text>
               {alldata?.data?.description ?? "Message"}
-            </Typography.Text>
+            </Typography.Text> */}
             <br />
             <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
               {data.description
@@ -76,14 +88,17 @@ function RichcardNode({ data, selected }) {
                   ))
                 : "No description available."}
             </Typography.Text>
-            <img
-              style={{ width: "100%" }}
+            <center>
+            <Image
+              preview={false}
+              width={getImageWidth() + 0}
               alt="example"
               src={
                 alldata?.data?.mediaUrl ||
                 "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
               }
             />
+            </center>
             {/* </center> */}
             {/* <br/> */}
             {alldata?.data?.actions?.length > 0 ? (

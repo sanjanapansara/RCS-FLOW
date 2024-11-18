@@ -48,6 +48,8 @@ function RichcardNodeSidebar({
     alldata?.data?.templateName ?? ""
   );
   const [messagename, setMessageName] = useState(alldata?.data?.label ?? "");
+  console.log("all data", alldata);
+  
   const [description, setDescription] = useState(
     alldata?.data?.description ?? ""
   );

@@ -31,7 +31,8 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
   const dispatch = useDispatch();
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === selectedNode);
-
+  console.log("alldata-->", alldata);
+  
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [templateName, setTemplateName] = useState(
@@ -51,8 +52,10 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
 
   const handleTemplateNameChange = (e) => {
     const value = e.target.value;
+    
     setTemplateName(value);
     const data = { selectedNode, value, key: "templateName" };
+    console.log("template name-->",data);
     dispatch(setUpdateNodeData(data));
   };
 
