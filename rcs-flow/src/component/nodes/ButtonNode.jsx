@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   ConfigProvider,
-  Flex,
   Switch,
   Typography,
 } from "antd";
@@ -29,9 +28,7 @@ const ButtonNode = ({ data, selected }) => {
 
   console.log("alldata-->", alldata);
 
-  // Force re-render when nodes change
   useEffect(() => {
-    // This will run when 'nodes' in Redux store changes
   }, [nodes]);
 
   return (
@@ -52,7 +49,6 @@ const ButtonNode = ({ data, selected }) => {
           style={{ marginTop: -30 }}
         >
           <Card
-            // title={data.templateName ?? "Send Button Message"}
             title={alldata?.data?.templateName ?? "Send Button Message"}
             extra={
               <Switch
@@ -73,7 +69,6 @@ const ButtonNode = ({ data, selected }) => {
             }}
           >
             <Typography.Text>{alldata?.data?.label}</Typography.Text>
-            {/* <Handle type="target" position={Position.Left} /> */}
             {alldata?.data?.isStartNode ? (
               <Handle
                 type={alldata?.data?.isStartNode ? "source" : "target"}
@@ -108,7 +103,6 @@ const ButtonNode = ({ data, selected }) => {
                   ))
                 : "No label available."}
             </Typography.Text>
-            {/* <Flex justify="space-around"> */}
             {alldata?.data?.actions?.length > 0 ? (
               <>
                 {alldata?.data?.actions?.map((btn, i) => (
@@ -158,7 +152,6 @@ const ButtonNode = ({ data, selected }) => {
                 <Typography.Text>Deafult Button</Typography.Text>
               </Button>
             )}
-            {/* </Flex> */}
           </Card>
         </Badge.Ribbon>
       ) : (
@@ -182,7 +175,6 @@ const ButtonNode = ({ data, selected }) => {
             border: selected ? "1px solid #8f91a8" : "none",
           }}
         >
-          {/* <Handle type="target" position={Position.Left} /> */}
           {alldata?.data?.isStartNode ? (
               <Handle
                 type={alldata?.data?.isStartNode ? "source" : "target"}
@@ -217,7 +209,6 @@ const ButtonNode = ({ data, selected }) => {
                 ))
               : "No label available."}
           </Typography.Text>
-          {/* <Flex justify="space-around"> */}
           {alldata?.data?.actions?.length > 0 ? (
             <>
               {alldata?.data?.actions?.map((btn, i) => (
@@ -267,7 +258,6 @@ const ButtonNode = ({ data, selected }) => {
               <Typography.Text>Deafult Button</Typography.Text>
             </Button>
           )}
-          {/* </Flex> */}
         </Card>
       )}
     </ConfigProvider>

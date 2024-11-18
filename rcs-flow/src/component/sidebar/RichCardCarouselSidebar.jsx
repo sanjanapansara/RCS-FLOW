@@ -20,7 +20,6 @@ import TextArea from "antd/es/input/TextArea";
 import Dragger from "antd/es/upload/Dragger";
 import {
   CloseOutlined,
-  LeftOutlined,
   LoadingOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -39,7 +38,7 @@ const props = {
       console.log(info.file, info.fileList);
     }
     if (status === "done") {
-      setImageUrl(info.file);
+      setImageUrl (info.file);
       const value = info.file.response.url;
       const data = { selectedNode, value, key: "mediaUrl" };
       dispatch(setRichCardNodeCarousleData(data));
@@ -50,36 +49,6 @@ const props = {
   },
 };
 
-const initialCards = [
-  {
-    title: "Card 1",
-    description: "",
-    media: "",
-    // mediaHeight: value1,
-    button: [
-      {
-        id: 1,
-        type: "quick",
-        title: "Button 1",
-        payload: "",
-      },
-    ],
-  },
-  {
-    title: "Card 2",
-    description: "",
-    media: "",
-    // mediaHeight: value1,
-    button: [
-      {
-        id: 1,
-        type: "quick",
-        title: "Button 1",
-        payload: "",
-      },
-    ],
-  },
-];
 function RichCardCarouselSidebar({
   node,
   // form,
@@ -100,7 +69,7 @@ function RichCardCarouselSidebar({
   const [cardIndex, setCardIndex] = useState(0);
   const [richCardCarousels, setRichCardCarousels] = useState([]);
   const [previewImage, setPreviewImage] = useState([]);
-  const [value, setValue] = useState(alldata?.data?.size ?? "medium");
+  const [value, setValue] = useState(alldata?.data?.value ?? "short");
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
@@ -119,7 +88,6 @@ function RichCardCarouselSidebar({
 
   const onChange = (e) => {
     const value = e.target.value;
-    // console.log("radio checked", e.target.value);
     setValue(value);
     const data = { selectedNode, value, key: "size" };
     dispatch(setRichCardNodeCarousleData(data));
@@ -248,7 +216,7 @@ function RichCardCarouselSidebar({
     }
   };
 
-  console.log("datta",richCardCarousels);
+  console.log("datta", richCardCarousels);
   useEffect(() => {
     const initValues = richCardCarousels?.reduce((acc, cards, i) => {
       acc[`title${i}`] = cards.title;
@@ -482,6 +450,7 @@ function RichCardCarouselSidebar({
                   // }
                 >
                   <Radio.Group
+                    defaultValue="short"
                     onChange={onChange}
                     value={value}
                     style={{ width: "100%" }}

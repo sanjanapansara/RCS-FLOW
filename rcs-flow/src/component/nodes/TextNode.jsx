@@ -88,7 +88,7 @@ const TextNode = ({ data, selected }) => {
         </Badge.Ribbon>
       ) : (
         <Card
-        title={alldata?.data?.templateName ?? "Send Message"}
+        title={data?.templateName ?? "Send Message"}
           // title={data.templateName || "Send Message"}
           extra={
             <Switch

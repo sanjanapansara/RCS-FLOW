@@ -1,12 +1,10 @@
 import React from "react";
-// import { useDnD } from "./DnDContext";
 import { Card, Col, Layout, Row, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useDnD } from "./DnDContext";
 import image from "../../assets/footer-bg-1.png";
 
 const { Sider } = Layout;
-
 function Sidebar() {
   const [_, setType] = useDnD();
   const onDragStart = (event, nodeType) => {

@@ -7,16 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
 
-import {
-  Badge,
-  Button,
-  Card,
-  ConfigProvider,
-  Flex,
-  Image,
-  Switch,
-  Typography,
-} from "antd";
+import { Badge, Button, Card, ConfigProvider, Switch, Typography } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -233,5 +224,4 @@ function RichcardNode({ data, selected }) {
     </ConfigProvider>
   );
 }
-
 export default RichcardNode;
