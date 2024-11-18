@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/display-name */
+/* eslint-disable react/display-name*/
+
 import React, { useRef, useCallback, useState } from "react";
 import {
   ReactFlow,
@@ -48,7 +49,7 @@ import {
   setUpdateNodeData,
 } from "./component/redux/reducer.button";
 
-let id = 0;
+// let id = 0;
 const initialNodes = [
   // {
   //   id: "0",
@@ -73,9 +74,9 @@ const DnDFlow = () => {
   const [type] = useDnD();
   const [selectedNode, setSelectedNode] = useState(null);
   const nodeData = useSelector((state) => state.nodes.nodes);
+  console.log("dddd", nodeData);
 
   const alldata = nodeData.find((item) => item?.id === selectedNode);
-
   const updateNodeData = (nodeId, newData) => {
     setNodes(
       (nds) =>
@@ -97,37 +98,6 @@ const DnDFlow = () => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
-
-  // const onDrop = useCallback(
-  //   (event) => {
-  //     event.preventDefault();
-  //     if (!type) return;
-  //     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-  //     if (
-  //       event.clientX < reactFlowBounds.left ||
-  //       event.clientX > reactFlowBounds.right ||
-  //       event.clientY < reactFlowBounds.top ||
-  //       event.clientY > reactFlowBounds.bottom
-  //     ) {
-  //       return;
-  //     }
-  //     const position = screenToFlowPosition({
-  //       x: event.clientX - reactFlowBounds.left,
-  //       y: event.clientY - reactFlowBounds.top,
-  //     });
-  //     const newId = uuidv4();
-
-  //     const newNode = {
-  //       id: newId,
-  //       type,
-  //       position,
-  //       data: { id: newId, label: `${type} node`, isStartNode: false },
-  //     };
-  //     setNodes((nds) => nds.concat(newNode));
-  //     dispatch(setNodesState(newNode));
-  //   },
-  //   [screenToFlowPosition, setNodes, type]
-  // );
 
   const onDrop = useCallback(
     (event) => {
@@ -223,11 +193,14 @@ const DnDFlow = () => {
       return;
     }
     const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+
     if (existingStartNode && existingStartNode.id === selectedNode) {
       message.info("This node is already set as the start node.");
       return;
     }
     if (existingStartNode) {
+      message.info("Another node is already set as the start node.");
+
       const data = {
         selectedNode: existingStartNode.id,
         value: false,
@@ -378,7 +351,7 @@ const DnDFlow = () => {
   return (
     <div className="dndflow" style={{ display: "flex" }}>
       <div
-        style={{ height: "98vh", width: "100%" }}
+        style={{ height: "99vh", width: "100%" }}
         ref={reactFlowWrapper}
         onClick={onFlowClick}
       >
@@ -423,9 +396,7 @@ const DnDFlow = () => {
                 cancelText="No"
               >
                 <Space onClick={(e) => e.stopPropagation()}>
-                  <DeleteOutlined
-                    style={{ fontSize: "20px" }}
-                  />
+                  <DeleteOutlined style={{ fontSize: "20px" }} />
                 </Space>
               </Popconfirm>
               <Dropdown
