@@ -1,3 +1,4 @@
+
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/display-name*/
 
@@ -51,16 +52,16 @@ import {
 
 // let id = 0;
 const initialNodes = [
-  // {
-  //   id: "0",
-  //   type: "button",
-  //   data: {
-  //     label: "Text with Button",
-  //     isInitial: true,
-  //     id: "0",
-  //   },
-  //   position: { x: 0, y: 50 },
-  // },
+  {
+    id: "0",
+    type: "button",
+    data: {
+      label: "Text with Button",
+      isInitial: true,
+      id: "0",
+    },
+    position: { x: 0, y: 50 },
+  },
 ];
 
 const DnDFlow = () => {
@@ -193,14 +194,11 @@ const DnDFlow = () => {
       return;
     }
     const existingStartNode = nodeData.find((node) => node.data.isStartNode);
-
     if (existingStartNode && existingStartNode.id === selectedNode) {
       message.info("This node is already set as the start node.");
       return;
     }
     if (existingStartNode) {
-      message.info("Another node is already set as the start node.");
-
       const data = {
         selectedNode: existingStartNode.id,
         value: false,
