@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
 
-import { Badge, Button, Card, ConfigProvider, Switch, Typography } from "antd";
+import { Badge, Button, Card, ConfigProvider, Image, Switch, Typography } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -64,14 +64,13 @@ function RichcardNode({ data, selected }) {
             <Typography.Text>
               <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
             </Typography.Text>
-          
             {/* <Typography.Text>
               {alldata?.data?.description ?? "Message"}
             </Typography.Text> */}
             <br />
             <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
-              {data.description
-                ? data.description.split("\n").map((line, index) => (
+              {alldata?.data.description
+                ?alldata?. data.description.split("\n").map((line, index) => (
                     <span key={index}>
                       {line}
                       <br />
@@ -161,13 +160,12 @@ function RichcardNode({ data, selected }) {
             <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
           </Typography.Text>
           <br />
-          <Typography.Text>
+          {/* <Typography.Text>
             {alldata?.data?.description ?? "Message"}
-          </Typography.Text>
-          <br />
+          </Typography.Text> */}
           <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
-            {data.description
-              ? data.description.split("\n").map((line, index) => (
+            {alldata?.data.description
+              ? alldata?. data.description.split("\n").map((line, index) => (
                   <span key={index}>
                     {line}
                     <br />

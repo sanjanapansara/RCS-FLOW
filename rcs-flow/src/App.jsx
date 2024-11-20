@@ -176,6 +176,7 @@ const DnDFlow = () => {
     if (nodeData.length > 1) {
       if (alldata.id === selectedNode && alldata?.data?.isStartNode) {
         const data = { selectedNode, value: false, key: "isStartNode" };
+        console.log("Unset", data);
         dispatch(setUpdateNodeData(data));
       } else {
         message.info("First set this node as the start node.");
@@ -195,6 +196,7 @@ const DnDFlow = () => {
     }
     const existingStartNode = nodeData.find((node) => node.data.isStartNode);
     if (existingStartNode && existingStartNode.id === selectedNode) {
+      console.log("exiting", existingStartNode);
       message.info("This node is already set as the start node.");
       return;
     }
@@ -204,6 +206,7 @@ const DnDFlow = () => {
         value: false,
         key: "isStartNode",
       };
+      console.log("set", data);
       dispatch(setUpdateNodeData(data));
     }
     const data = { selectedNode, value: true, key: "isStartNode" };
