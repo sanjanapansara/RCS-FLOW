@@ -173,42 +173,98 @@ const DnDFlow = () => {
 
   const handleUnsetStart = (e) => {
     e.preventDefault();
-    if (nodeData.length > 1) {
-      if (alldata.id === selectedNode && alldata?.data?.isStartNode) {
-        const data = { selectedNode, value: false, key: "isStartNode" };
-        dispatch(setUpdateNodeData(data));
-      } else {
-        message.info("First set this node as the start node.");
-      }
+    if (
+      nodeData.length > 1 &&
+      alldata.id === selectedNode &&
+      alldata?.data?.isStartNode
+    ) {
+      setNodes((prev) => {
+        const nodedata = prev.find((nd) => nd.id === selectedNode);
+        const updatedNodeData = {
+          ...nodedata, // copy the existing node data
+          data: {
+            ...nodedata.data, // copy the existing data
+            isStartNode: false, // update the property you want
+          },
+        };
+        // Return the new updated nodes array with the modified node
+        return prev.map((node) =>
+          node.id === selectedNode ? updatedNodeData : node
+        );
+      });
+      const data = { selectedNode, value: false, key: "isStartNode" };
+      dispatch(setUpdateNodeData(data));
+      setSelectedNode(selectedNode);
+    } else if (
+      nodeData.length === 1 &&
+      alldata.id === selectedNode &&
+      alldata?.data?.isStartNode
+    ) {
+      message.info("Please add one more Node");
     } else {
-      message.info(
-        "You cannot unset the start node when there is only one node."
-      );
+      message.info("First Set this node to Start");
     }
   };
 
+  // const handleSetStart = (e) => {
+  //   e.preventDefault();
+  //   if (!Array.isArray(nodeData)) {
+  //     message.error("Data is not available.");
+  //     return;
+  //   }
+  //   const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+  //   if (existingStartNode && existingStartNode.id === selectedNode) {
+  //     message.info("This node is already set as the start node.");
+  //     return;
+  //   }
+  //   if (existingStartNode) {
+  //     const data = {
+  //       selectedNode: existingStartNode.id,
+  //       value: false,
+  //       key: "isStartNode",
+  //     };
+  //     dispatch(setUpdateNodeData(data));
+  //   }
+  //   const data = { selectedNode, value: true, key: "isStartNode" };
+  //   dispatch(setUpdateNodeData(data));
+  // };
   const handleSetStart = (e) => {
-    e.preventDefault();
-    if (!Array.isArray(nodeData)) {
-      message.error("Data is not available.");
-      return;
-    }
-    const existingStartNode = nodeData.find((node) => node.data.isStartNode);
-    if (existingStartNode && existingStartNode.id === selectedNode) {
-      message.info("This node is already set as the start node.");
-      return;
-    }
-    if (existingStartNode) {
-      const data = {
-        selectedNode: existingStartNode.id,
-        value: false,
-        key: "isStartNode",
-      };
-      dispatch(setUpdateNodeData(data));
-    }
-    const data = { selectedNode, value: true, key: "isStartNode" };
-    dispatch(setUpdateNodeData(data));
-  };
+  e.preventDefault();
+  if (!Array.isArray(nodeData)) {
+    message.error("Data is not available.");
+    return;
+  }
+
+  // Check for existing start node
+  const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+console.log("existng node-->", existingStartNode);
+
+  if (existingStartNode && existingStartNode.id === selectedNode) {
+    message.info("This node is already set as the start node.");
+    return;
+  }
+
+  const test = nodeData.filter((id) => id == existingStartNode.id)
+  console.log(test , "testttt");
+  
+  // Unset the existing start node, if any
+  if (existingStartNode && existingStartNode.data.isStartNode == true && nodeData.filter((id) => id == existingStartNode.id)) {
+    const unsetData = {
+      selectedNode: existingStartNode.id,
+      value: false,
+      key: "isStartNode",
+    };
+    dispatch(setUpdateNodeData(unsetData));
+    message.info("Another node is already set as the start node.");
+    return;   
+
+  }
+
+  // Set the selected node as the start node
+  const setData = { selectedNode, value: true, key: "isStartNode" };
+  dispatch(setUpdateNodeData(setData));
+};
+
 
   const items = [
     {
