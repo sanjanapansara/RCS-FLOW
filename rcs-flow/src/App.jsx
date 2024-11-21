@@ -173,6 +173,7 @@ const DnDFlow = () => {
 
   const handleUnsetStart = (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     if (
       nodeData.length > 1 &&
       alldata.id === selectedNode &&
@@ -201,6 +202,16 @@ const DnDFlow = () => {
       alldata?.data?.isStartNode
     ) {
       message.info("Please add one more Node");
+=======
+    if (nodeData.length > 1) {
+      if (alldata.id === selectedNode && alldata?.data?.isStartNode) {
+        const data = { selectedNode, value: false, key: "isStartNode" };
+        console.log("Unset", data);
+        dispatch(setUpdateNodeData(data));
+      } else {
+        message.info("First set this node as the start node.");
+      }
+>>>>>>> main
     } else {
       message.info("First Set this node to Start");
     }
@@ -229,6 +240,7 @@ const DnDFlow = () => {
   //   dispatch(setUpdateNodeData(data));
   // };
   const handleSetStart = (e) => {
+<<<<<<< HEAD
   e.preventDefault();
   if (!Array.isArray(nodeData)) {
     message.error("Data is not available.");
@@ -265,6 +277,31 @@ console.log("existng node-->", existingStartNode);
   dispatch(setUpdateNodeData(setData));
 };
 
+=======
+    e.preventDefault();
+    if (!Array.isArray(nodeData)) {
+      message.error("Data is not available.");
+      return;
+    }
+    const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+    if (existingStartNode && existingStartNode.id === selectedNode) {
+      console.log("exiting", existingStartNode);
+      message.info("This node is already set as the start node.");
+      return;
+    }
+    if (existingStartNode) {
+      const data = {
+        selectedNode: existingStartNode.id,
+        value: false,
+        key: "isStartNode",
+      };
+      console.log("set", data);
+      dispatch(setUpdateNodeData(data));
+    }
+    const data = { selectedNode, value: true, key: "isStartNode" };
+    dispatch(setUpdateNodeData(data));
+  };
+>>>>>>> main
 
   const items = [
     {
