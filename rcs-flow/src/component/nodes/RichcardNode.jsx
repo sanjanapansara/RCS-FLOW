@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 function RichcardNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
+  console.log("richcard node",nodes);
+  
   const alldata = nodes.find((item) => item.id === id);
 
   const getImageWidth = () => {
@@ -23,7 +25,7 @@ function RichcardNode({ data, selected }) {
     return 150;
   };
 
-  console.log("richcard data-->", alldata);
+  // console.log("richcard data-->", alldata);
 
   return (
     <ConfigProvider
