@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
 
-import { Badge, Button, Card, ConfigProvider, Image, Switch, Typography } from "antd";
+import { Badge, Button, Card, ConfigProvider, Switch, Typography, Image as AntdImage } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -15,18 +15,12 @@ function RichcardNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
-  useEffect(() => {}, [nodes]);
 
   const getImageWidth = () => {
-    if (alldata?.data?.size === "short") {
-      return 80;
-    } else if (alldata?.data?.size === "medium") {
-      return 120;
-    } else if (alldata?.data?.size === "tall") {
-      return 180;
-    } else {
-      return 150;
-    }
+    if (alldata?.data?.size === "short") return 80;
+    if (alldata?.data?.size === "medium") return 120;
+    if (alldata?.data?.size === "tall") return 180;
+    return 150;
   };
 
   console.log("richcard data-->", alldata);
@@ -35,10 +29,7 @@ function RichcardNode({ data, selected }) {
     <ConfigProvider
       theme={{
         components: {
-          Card: {
-            headerBg: "#D1AFAF",
-            colorBorderSecondary: "#D1AFAF",
-          },
+          Card: { headerBg: "#D1AFAF", colorBorderSecondary: "#D1AFAF" },
         },
       }}
     >
@@ -62,11 +53,8 @@ function RichcardNode({ data, selected }) {
           >
             <Handle type="target" position={Position.Left} />
             <Typography.Text>
-              <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
+              <strong>{alldata?.data?.label ?? "Richcard"}</strong>
             </Typography.Text>
-            {/* <Typography.Text>
-              {alldata?.data?.description ?? "Message"}
-            </Typography.Text> */}
             <br />
             <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
               {alldata?.data.description
@@ -79,65 +67,53 @@ function RichcardNode({ data, selected }) {
                 : "No description available."}
             </Typography.Text>
             <center>
-            <Image
-              preview={false}
-              width={getImageWidth() + 0}
-              alt="example"
-              src={
-                alldata?.data?.mediaUrl ||
-                "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
-              }
-            />
+              <AntdImage
+                preview={false}
+                width={getImageWidth()}
+                alt="example"
+                src={
+                  alldata?.data?.mediaUrl ||
+                  "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+                }
+              />
             </center>
-            {/* </center> */}
-            {/* <br/> */}
             {alldata?.data?.actions?.length > 0 ? (
-              <>
-                {alldata?.data?.actions?.map((btn, i) => (
-                  <Button
-                    key={i}
-                    size="small"
-                    block
-                    style={{
-                      background: "#adafce",
-                      color: "black",
-                      marginBottom: 5,
-                    }}
-                    icon={
-                      <>
-                        {btn?.type === "quick" && <MessageOutlined />}
-                        {btn?.type === "call" && <PhoneOutlined />}
-                        {btn?.type === "url" && <LinkOutlined />}
-                        {btn?.type === "location" && <EnvironmentOutlined />}
-                        {btn?.type === "calendar" && <CalendarOutlined />}
-                      </>
-                    }
-                  >
-                    {btn.type === "quick" && (
-                      <Handle
-                        type="source"
-                        position={Position.Right}
-                        isConnectable={true}
-                      />
-                    )}
-                    <Typography.Text>
-                      {btn?.title ?? "Deafult Button"}
-                    </Typography.Text>
-                  </Button>
-                ))}
-              </>
+              alldata.data.actions.map((btn, i) => (
+                <Button
+                  key={i}
+                  size="small"
+                  block
+                  style={{ background: "#adafce", color: "black", marginBottom: 5 }}
+                  icon={
+                    <>
+                      {btn?.type === "quick" && <MessageOutlined />}
+                      {btn?.type === "call" && <PhoneOutlined />}
+                      {btn?.type === "url" && <LinkOutlined />}
+                      {btn?.type === "location" && <EnvironmentOutlined />}
+                      {btn?.type === "calendar" && <CalendarOutlined />}
+                    </>
+                  }
+                >
+                  {btn.type === "quick" && (
+                    <Handle
+                      type="source"
+                      position={Position.Right}
+                      isConnectable={true}
+                    />
+                  )}
+                  <Typography.Text>
+                    {btn?.title ?? "Default Button"}
+                  </Typography.Text>
+                </Button>
+              ))
             ) : (
-              <Button
-                size="small"
-                block
-                style={{ background: "#adafce", color: "black" }}
-              >
+              <Button size="small" block style={{ background: "#adafce", color: "black" }}>
                 <Handle
                   type="source"
                   position={Position.Right}
                   isConnectable={true}
                 />
-                <Typography.Text>Deafult Button</Typography.Text>
+                <Typography.Text>Default Button</Typography.Text>
               </Button>
             )}
           </Card>
@@ -157,12 +133,9 @@ function RichcardNode({ data, selected }) {
         >
           <Handle type="target" position={Position.Left} />
           <Typography.Text>
-            <strong>{alldata?.data?.label ?? "Richcard"}</strong>{" "}
+            <strong>{alldata?.data?.label ?? "Richcard"}</strong>
           </Typography.Text>
           <br />
-          {/* <Typography.Text>
-            {alldata?.data?.description ?? "Message"}
-          </Typography.Text> */}
           <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
             {alldata?.data.description
               ? alldata?. data.description.split("\n").map((line, index) => (
@@ -181,55 +154,43 @@ function RichcardNode({ data, selected }) {
               "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
             }
           />
-          {/* </center> */}
-          {/* <br/> */}
           {alldata?.data?.actions?.length > 0 ? (
-            <>
-              {alldata?.data?.actions?.map((btn, i) => (
-                <Button
-                  key={i}
-                  size="small"
-                  block
-                  style={{
-                    background: "#adafce",
-                    color: "black",
-                    marginBottom: 5,
-                  }}
-                  icon={
-                    <>
-                      {btn?.type === "quick" && <MessageOutlined />}
-                      {btn?.type === "call" && <PhoneOutlined />}
-                      {btn?.type === "url" && <LinkOutlined />}
-                      {btn?.type === "location" && <EnvironmentOutlined />}
-                      {btn?.type === "calendar" && <CalendarOutlined />}
-                    </>
-                  }
-                >
-                  {btn.type === "quick" && (
-                    <Handle
-                      type="source"
-                      position={Position.Right}
-                      isConnectable={true}
-                    />
-                  )}
-                  <Typography.Text>
-                    {btn?.title ?? "Deafult Button"}
-                  </Typography.Text>
-                </Button>
-              ))}
-            </>
+            alldata.data.actions.map((btn, i) => (
+              <Button
+                key={i}
+                size="small"
+                block
+                style={{ background: "#adafce", color: "black", marginBottom: 5 }}
+                icon={
+                  <>
+                    {btn?.type === "quick" && <MessageOutlined />}
+                    {btn?.type === "call" && <PhoneOutlined />}
+                    {btn?.type === "url" && <LinkOutlined />}
+                    {btn?.type === "location" && <EnvironmentOutlined />}
+                    {btn?.type === "calendar" && <CalendarOutlined />}
+                  </>
+                }
+              >
+                {btn.type === "quick" && (
+                  <Handle
+                    type="source"
+                    position={Position.Right}
+                    isConnectable={true}
+                  />
+                )}
+                <Typography.Text>
+                  {btn?.title ?? "Default Button"}
+                </Typography.Text>
+              </Button>
+            ))
           ) : (
-            <Button
-              size="small"
-              block
-              style={{ background: "#adafce", color: "black" }}
-            >
+            <Button size="small" block style={{ background: "#adafce", color: "black" }}>
               <Handle
                 type="source"
                 position={Position.Right}
                 isConnectable={true}
               />
-              <Typography.Text>Deafult Button</Typography.Text>
+              <Typography.Text>Default Button</Typography.Text>
             </Button>
           )}
         </Card>
@@ -237,4 +198,5 @@ function RichcardNode({ data, selected }) {
     </ConfigProvider>
   );
 }
+
 export default RichcardNode;
