@@ -14,7 +14,7 @@ const TextNode = ({ data, selected }) => {
       theme={{
         components: {
           Card: {
-            headerBg: "#cc9999",
+            headerBg: "#e5cccc",
             colorBorderSecondary: "#cc9999",
           },
         },

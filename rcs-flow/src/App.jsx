@@ -57,7 +57,7 @@ const initialNodes = [
     type: "button",
     data: {
       label: "Text with Button",
-      isInitial: true,
+      isStartNode: true, // Start node
       id: "0",
     },
     position: { x: 0, y: 50 },
