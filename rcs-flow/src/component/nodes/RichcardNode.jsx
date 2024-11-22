@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
 
-import { Badge, Button, Card, ConfigProvider, Switch, Typography, Image as AntdImage } from "antd";
+import { Badge, Button, Card, ConfigProvider, Switch, Typography, Image as AntdImage, Image } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -69,7 +69,7 @@ function RichcardNode({ data, selected }) {
                 : "No description available."}
             </Typography.Text>
             <center>
-              <AntdImage
+              <Image
                 preview={false}
                 width={getImageWidth()}
                 alt="example"
@@ -77,6 +77,7 @@ function RichcardNode({ data, selected }) {
                   alldata?.data?.mediaUrl ||
                   "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
                 }
+                about=""
               />
             </center>
             {alldata?.data?.actions?.length > 0 ? (
@@ -148,8 +149,10 @@ function RichcardNode({ data, selected }) {
                 ))
               : "No description available."}
           </Typography.Text>
-          <img
+          <Image
             style={{ width: "100%" }}
+            preview={false}
+            width={getImageWidth()+ 0}
             alt="example"
             src={
               alldata?.data?.mediaUrl ||
@@ -200,5 +203,4 @@ function RichcardNode({ data, selected }) {
     </ConfigProvider>
   );
 }
-
 export default RichcardNode;

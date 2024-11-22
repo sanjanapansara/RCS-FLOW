@@ -173,45 +173,17 @@ const DnDFlow = () => {
 
   const handleUnsetStart = (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    if (
-      nodeData.length > 1 &&
-      alldata.id === selectedNode &&
-      alldata?.data?.isStartNode
-    ) {
-      setNodes((prev) => {
-        const nodedata = prev.find((nd) => nd.id === selectedNode);
-        const updatedNodeData = {
-          ...nodedata, // copy the existing node data
-          data: {
-            ...nodedata.data, // copy the existing data
-            isStartNode: false, // update the property you want
-          },
-        };
-        // Return the new updated nodes array with the modified node
-        return prev.map((node) =>
-          node.id === selectedNode ? updatedNodeData : node
-        );
-      });
-      const data = { selectedNode, value: false, key: "isStartNode" };
-      dispatch(setUpdateNodeData(data));
-      setSelectedNode(selectedNode);
-    } else if (
-      nodeData.length === 1 &&
-      alldata.id === selectedNode &&
-      alldata?.data?.isStartNode
-    ) {
-      message.info("Please add one more Node");
-=======
+  
+    // Check if there are multiple nodes in nodeData
     if (nodeData.length > 1) {
+      // Check if the selected node is currently the start node
       if (alldata.id === selectedNode && alldata?.data?.isStartNode) {
         const data = { selectedNode, value: false, key: "isStartNode" };
-        console.log("Unset", data);
-        dispatch(setUpdateNodeData(data));
+        console.log("Unset start node", data);  // Log the action for unsetting start node
+        dispatch(setUpdateNodeData(data));  // Dispatch the action to unset start node
       } else {
         message.info("First set this node as the start node.");
       }
->>>>>>> main
     } else {
       message.info("First Set this node to Start");
     }
@@ -240,68 +212,39 @@ const DnDFlow = () => {
   //   dispatch(setUpdateNodeData(data));
   // };
   const handleSetStart = (e) => {
-<<<<<<< HEAD
-  e.preventDefault();
-  if (!Array.isArray(nodeData)) {
-    message.error("Data is not available.");
-    return;
-  }
-
-  // Check for existing start node
-  const existingStartNode = nodeData.find((node) => node.data.isStartNode);
-console.log("existng node-->", existingStartNode);
-
-  if (existingStartNode && existingStartNode.id === selectedNode) {
-    message.info("This node is already set as the start node.");
-    return;
-  }
-
-  const test = nodeData.filter((id) => id == existingStartNode.id)
-  console.log(test , "testttt");
-  
-  // Unset the existing start node, if any
-  if (existingStartNode && existingStartNode.data.isStartNode == true && nodeData.filter((id) => id == existingStartNode.id)) {
-    const unsetData = {
-      selectedNode: existingStartNode.id,
-      value: false,
-      key: "isStartNode",
-    };
-    dispatch(setUpdateNodeData(unsetData));
-    message.info("Another node is already set as the start node.");
-    return;   
-
-  }
-
-  // Set the selected node as the start node
-  const setData = { selectedNode, value: true, key: "isStartNode" };
-  dispatch(setUpdateNodeData(setData));
-};
-
-=======
     e.preventDefault();
+  
+    // Ensure nodeData is an array
     if (!Array.isArray(nodeData)) {
       message.error("Data is not available.");
       return;
     }
+  
+    // Find if there is already a start node
     const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+  
+    // If the selected node is already set as the start node
     if (existingStartNode && existingStartNode.id === selectedNode) {
-      console.log("exiting", existingStartNode);
+      console.log("Existing start node", existingStartNode);  // Log the existing start node
       message.info("This node is already set as the start node.");
       return;
     }
+  
+    // If there is an existing start node, unset it first
     if (existingStartNode) {
       const data = {
         selectedNode: existingStartNode.id,
         value: false,
         key: "isStartNode",
       };
-      console.log("set", data);
-      dispatch(setUpdateNodeData(data));
+      console.log("Unset existing start node", data);  // Log the action to unset the existing start node
+      dispatch(setUpdateNodeData(data));  // Dispatch to unset the previous start node
     }
+  
+    // Now set the current selected node as the start node
     const data = { selectedNode, value: true, key: "isStartNode" };
-    dispatch(setUpdateNodeData(data));
+    dispatch(setUpdateNodeData(data));  // Dispatch to set the current node as the start node
   };
->>>>>>> main
 
   const items = [
     {

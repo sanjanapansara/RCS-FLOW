@@ -27,9 +27,9 @@ function RichcardCarouselNode({ data, selected }) {
 
   const getImageWidth = () => {
     if (alldata?.data?.size === "short") {
-      return 100;
+      return 80;
     } else if (alldata?.data?.size === "medium") {
-      return 150;
+      return 120;
     } else if (alldata?.data?.size === "tall") {
       return 180;
     } else {
@@ -83,6 +83,7 @@ function RichcardCarouselNode({ data, selected }) {
             </Typography.Text>
             <Image
               preview={false}
+              style={{width:"100%"}}
               width={getImageWidth() + 0}
               alt="example"
               src={
