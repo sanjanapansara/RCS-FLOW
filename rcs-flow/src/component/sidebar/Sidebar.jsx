@@ -12,11 +12,11 @@ function Sidebar() {
     event.dataTransfer.effectAllowed = "move";
   };
   const cards = [
-    { id: 1, text: "Text", type: "Text", bgColor: "#cc9999" },
-    { id: 2, text: "Text With Button", type: "button", bgColor: "#8f91a8" },
-    { id: 3, text: "Richcard", type: "richcard", bgColor: "#789b74" },
-    { id: 4, text: "Richcard carosal", type: "richcard_carosal", bgColor: "#796383" },
-    { id: 5, text: "Media", type: "media", bgColor: "#857b7b" },
+    { id: 1, text: "Text", type: "Text", bgColor: "#e5cccc" },
+    { id: 2, text: "Text With Button", type: "button", bgColor: "#d4d5de" },
+    { id: 3, text: "Richcard", type: "richcard", bgColor: "#d4dfd3" },
+    { id: 4, text: "Richcard carosal", type: "richcard_carosal", bgColor: "#dbd3de" },
+    { id: 5, text: "Media", type: "media", bgColor: "#dad7d7" },
   ];
   return (
     <Layout >

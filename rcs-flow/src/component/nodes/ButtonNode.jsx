@@ -300,13 +300,13 @@ console.log("alldata", alldata);
       theme={{
         components: {
           Card: {
-            headerBg: "#ADB3E8",
+            headerBg: "#d4d5de",
             colorBorderSecondary: "#acb2e9",
           },
         },
       }}
     >
-      {alldata?.data?.isStartNode ? (
+      {alldata?.data?.isStartNode   || data?.isStartNode ? (
         <Badge.Ribbon
           text={<div className="flex justify-start m-1">Start</div>}
           placement="start"
@@ -322,6 +322,7 @@ console.log("alldata", alldata);
                 value={enabled}
                 onChange={() => setEnabled(!enabled)}
               />
+
             }
             cover={
               <>

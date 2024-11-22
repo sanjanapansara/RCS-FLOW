@@ -31,7 +31,7 @@ function RichcardNode({ data, selected }) {
     <ConfigProvider
       theme={{
         components: {
-          Card: { headerBg: "#D1AFAF", colorBorderSecondary: "#D1AFAF" },
+          Card: { headerBg: "#d4dfd3", colorBorderSecondary: "#D1AFAF" },
         },
       }}
     >

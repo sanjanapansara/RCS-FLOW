@@ -42,7 +42,7 @@ function RichcardCarouselNode({ data, selected }) {
       theme={{
         components: {
           Card: {
-            headerBg: "#796383",
+            headerBg: "#dbd3de",
             colorBorderSecondary: "#796383",
           },
         },

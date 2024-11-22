@@ -12,7 +12,7 @@ function MediaNode({ data, selected }) {
       theme={{
         components: {
           Card: {
-            headerBg: "#857b7b",
+            headerBg: "#dad7d7",
             colorBorderSecondary: "#857b7b",
           },
         },
