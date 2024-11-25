@@ -22,7 +22,7 @@ function Sidebar() {
     <Layout >
       <Sider
         width="305px"
-        style={{ backgroundImage: `url(${image})`, backgroundSize: "cover", overflow:"auto",height:"99vh",scrollbarWidth:"none" }}
+        style={{ backgroundImage: `url(${image})`, backgroundSize: "cover"}}
       >
         <Row gutter={[10, 10]}>
           {cards.map((card) => (
