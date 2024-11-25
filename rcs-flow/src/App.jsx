@@ -1,8 +1,509 @@
+// /* eslint-disable react-refresh/only-export-components */
+// /* eslint-disable react/display-name*/
+
+// import React, { useRef, useCallback, useState, useEffect } from "react";
+// import {
+//   ReactFlow,
+//   ReactFlowProvider,
+//   addEdge,
+//   useNodesState,
+//   useEdgesState,
+//   Controls,
+//   Background,
+//   NodeToolbar,
+//   Position,
+//   getIncomers,
+//   useReactFlow,
+//   getOutgoers,
+//   getConnectedEdges,
+//   reconnectEdge,
+//   MiniMap,
+//   Panel,
+// } from "@xyflow/react";
+// import "@xyflow/react/dist/style.css";
+// import "./App.css";
+// import Sidebar from "./component/sidebar/Sidebar";
+// import { DnDProvider, useDnD } from "./component/sidebar/DnDContext";
+// import {
+//   CopyOutlined,
+//   DeleteOutlined,
+//   DisconnectOutlined,
+//   FlagOutlined,
+//   MoreOutlined,
+// } from "@ant-design/icons";
+// import { Dropdown, message, Popconfirm, Space, Typography } from "antd";
+// import TextNode from "./component/nodes/TextNode";
+// import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
+// import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
+// import ButtonNode from "./component/nodes/ButtonNode";
+// import { v4 as uuidv4 } from "uuid";
+// import RichcardNode from "./component/nodes/RichcardNode";
+// import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
+// import RichcardCarouselNode from "./component/nodes/RichcardCarouselNode";
+// import RichCardCarouselSidebar from "./component/sidebar/RichCardCarouselSidebar";
+// import MediaNode from "./component/nodes/MediaNode";
+// import dagre from "@dagrejs/dagre";
+// import MediaSidebar from "./component/sidebar/MediaSidebar";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   setDeleteNodeState,
+//   setNodesState,
+//   setEmptyState,
+//   setUpdateNodeData,
+// } from "./component/redux/reducer.button";
+
+// const defaultNodePosition = {
+//   x: 250, // or any X coordinate
+//   y: 250, // or any Y coordinate
+// };
+// const newId = uuidv4();
+
+// const newNode = {
+//   id: newId,
+//   type: "button",
+//   position: defaultNodePosition,
+//   data: { id: newId, label: "Default Button Node", isStartNode: true },
+// };
+
+// const initialNodes = [newNode];
+// const initialEdges = [];
+// const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+// const nodeWidth = 300;
+// const nodeHeight = 100;
+// const getLayoutedElements = (nodes, edges, direction = "TB") => {
+//   const isHorizontal = direction === "LR";
+//   dagreGraph.setGraph({ rankdir: direction });
+//   nodes.forEach((node) => {
+//     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+//   });
+//   edges.forEach((edge) => {
+//     dagreGraph.setEdge(edge.source, edge.target);
+//   });
+//   dagre.layout(dagreGraph);
+//   const newNodes = nodes.map((node) => {
+//     const nodeWithPosition = dagreGraph.node(node.id);
+//     const newNode = {
+//       ...node,
+//       targetPosition: isHorizontal ? "left" : "top",
+//       sourcePosition: isHorizontal ? "right" : "bottom",
+//       position: {
+//         x: nodeWithPosition.x - nodeWidth / 2,
+//         y: nodeWithPosition.y - nodeHeight / 2,
+//       },
+//     };
+
+//     return newNode;
+//   });
+//   return { nodes: newNodes, edges };
+// };
+
+// const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+//   initialNodes,
+//   initialEdges
+// );
+
+// const DnDFlow = () => {
+//   const reactFlowWrapper = useRef(null);
+//   const dispatch = useDispatch();
+//   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+//   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+//   const { screenToFlowPosition } = useReactFlow();
+//   const [setReactFlowInstance] = useState(null);
+//   const [type] = useDnD();
+//   const [selectedNode, setSelectedNode] = useState(null);
+//   const nodeData = useSelector((state) => state.nodes.nodes);
+//   console.log("dddd", nodeData);
+
+//   useEffect(() => {
+//     dispatch(setEmptyState());
+//   }, [dispatch]);
+
+//   const alldata = nodeData.find((item) => item?.id === selectedNode);
+//   const updateNodeData = (nodeId, newData) => {
+//     setNodes(
+//       (nds) =>
+//         nds.map((node) =>
+//           node.id === nodeId
+//             ? { ...node, data: { ...node.data, ...newData } }
+//             : node
+//         )
+//       //     ? { ...node, data: { ...node.data, ...newData } }
+//     );
+//   };
+
+//   const onConnect = useCallback(
+//     (params) => setEdges((eds) => addEdge(params, eds)),
+//     [setEdges]
+//   );
+
+//   const onDragOver = useCallback((event) => {
+//     event.preventDefault();
+//     event.dataTransfer.dropEffect = "move";
+//   }, []);
+
+//   const onDrop = useCallback(
+//     (event) => {
+//       event.preventDefault();
+//       if (!type) return;
+//       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+//       if (
+//         event.clientX < reactFlowBounds.left ||
+//         event.clientX > reactFlowBounds.right ||
+//         event.clientY < reactFlowBounds.top ||
+//         event.clientY > reactFlowBounds.bottom
+//       ) {
+//         return;
+//       }
+//       const position = screenToFlowPosition({
+//         x: event.clientX - reactFlowBounds.left,
+//         y: event.clientY - reactFlowBounds.top,
+//       });
+//       const newId = uuidv4();
+//       const newNode = {
+//         id: newId,
+//         type,
+//         position,
+//         data: { id: newId, label: `${type} node`, isStartNode: false },
+//       };
+//       setNodes((nds) => {
+//         if (nodeData.length === 0) {
+//           delete nds[0].measured;
+//           dispatch(setNodesState(nds[0]));
+//           dispatch(setNodesState(newNode));
+//           return nds.concat(newNode);
+//         } else {
+//           dispatch(setNodesState(newNode));
+//           return nds.concat(newNode);
+//         }
+//       });
+//     },
+//     [dispatch, nodeData.length, screenToFlowPosition, setNodes, type]
+//   );
+
+//   const onNodeClick = (event, node) => {
+//     event.stopPropagation();
+//     setSelectedNode(node.id);
+//   };
+
+//   const onFlowClick = () => {
+//     setSelectedNode(null);
+//   };
+
+//   const handleDeleteClick = (id) => {
+//     if (alldata?.data?.isStartNode) {
+//       message.error("Start Node Can't be deleted");
+//       return;
+//     } else {
+//       setNodes((prev) => {
+//         const node = prev.filter((nd) => nd.id !== id);
+//         dispatch(setDeleteNodeState(id));
+//         console.log("Delete", id);
+//         return node;
+//       });
+//     }
+//   };
+
+//   const handleUnsetStart = (e) => {
+//     e.preventDefault();
+//     if (
+//       nodeData.length > 1 &&
+//       alldata.id === selectedNode &&
+//       alldata?.data?.isStartNode
+//     ) {
+//       setNodes((prev) => {
+//         const nodedata = prev.find((nd) => nd.id === selectedNode);
+//         const updatedNodeData = {
+//           ...nodedata, // copy the existing node data
+//           data: {
+//             ...nodedata.data, // copy the existing data
+//             isStartNode: false, // update the property you want
+//           },
+//         };
+//         // Return the new updated nodes array with the modified node
+//         return prev.map((node) =>
+//           node.id === selectedNode ? updatedNodeData : node
+//         );
+//       });
+//       const data = { selectedNode, value: false, key: "isStartNode" };
+//       dispatch(setUpdateNodeData(data));
+//       setSelectedNode(selectedNode);
+//     } else if (
+//       nodeData.length === 1 &&
+//       alldata.id === selectedNode &&
+//       alldata?.data?.isStartNode
+//     ) {
+//       message.info("Please add one more Node");
+//     } else {
+//       message.info("First Set this node to Start");
+//     }
+//   };
+
+//   const handleSetStart = (e) => {
+//     e.preventDefault();
+//     // Ensure alldata is an array
+//     if (!Array.isArray(nodeData)) {
+//       message.error("Data is not available.");
+//       return;
+//     }
+
+//     const existingStartNode = nodeData.find((node) => node.data.isStartNode);
+
+//     // If the selectedNode is already the start node
+//     if (existingStartNode && existingStartNode.id === selectedNode) {
+//       message.info("This node is already set as the start node.");
+//       return;
+//     }
+
+//     // If another node is already set as the start node
+//     if (existingStartNode) {
+//       message.info("Another node is already set as the start node.");
+//       return;
+//     }
+//     const data = { selectedNode, value: true, key: "isStartNode" };
+//     dispatch(setUpdateNodeData(data));
+//     setSelectedNode(selectedNode);
+//   };
+//   const items = [
+//     {
+//       key: "unsetStartNode",
+//       label: (
+//         <Typography onClick={handleUnsetStart}>
+//           <DisconnectOutlined style={{ fontSize: "20px" }} />
+//           Unset start node
+//         </Typography>
+//       ),
+//     },
+//     {
+//       key: "setStartNode",
+//       label: (
+//         <Typography onClick={handleSetStart}>
+//           <FlagOutlined style={{ fontSize: "20px" }} />
+//           Set start node
+//         </Typography>
+//       ),
+//     },
+//   ];
+
+//   const onNodesDelete = useCallback(
+//     (deleted) => {
+//       setEdges(
+//         deleted.reduce((acc, node) => {
+//           const incomers = getIncomers(node, nodes, edges);
+//           const outgoers = getOutgoers(node, nodes, edges);
+//           const connectedEdges = getConnectedEdges([node], edges);
+//           const remainingEdges = acc.filter(
+//             (edge) => !connectedEdges.includes(edge)
+//           );
+//           const createdEdges = incomers.flatMap(({ id: source }) =>
+//             outgoers.map(({ id: target }) => ({
+//               id: `${source}->${target}`,
+//               source,
+//               target,
+//             }))
+//           );
+//           return [...remainingEdges, ...createdEdges];
+//         }, edges)
+//       );
+//     },
+//     [setEdges, edges, nodes]
+//   );
+
+//   const renderSidebar = () => {
+//     if (!selectedNode) return <Sidebar className="sidebar" />;
+//     const selected = nodes.find((node) => node.id === selectedNode);
+//     if (!selected) return <Sidebar className="sidebar" />;
+//     switch (selected.type) {
+//       case "Text":
+//         return (
+//           <TextNodeSidebar
+//             node={selected}
+//             updateNodeData={updateNodeData}
+//             setSelectedNode={setSelectedNode}
+//             selectedNode={selectedNode}
+//             className="sidebar"
+//           />
+//         );
+//       case "button":
+//         return (
+//           <ButtonNodeSidebar
+//             node={selected}
+//             updateNodeData={updateNodeData}
+//             setSelectedNode={setSelectedNode}
+//             selectedNode={selectedNode}
+//             className="sidebar"
+//           />
+//         );
+//       case "richcard":
+//         return (
+//           <RichcardNodeSidebar
+//             node={selected}
+//             updateNodeData={updateNodeData}
+//             setSelectedNode={setSelectedNode}
+//             selectedNode={selectedNode}
+//             className="sidebar"
+//           />
+//         );
+//       case "richcard_carosal":
+//         return (
+//           <RichCardCarouselSidebar
+//             node={selected}
+//             updateNodeData={updateNodeData}
+//             setSelectedNode={setSelectedNode}
+//             selectedNode={selectedNode}
+//             className="sidebar"
+//           />
+//         );
+//       case "media":
+//         return (
+//           <MediaSidebar
+//             node={selected}
+//             updateNodeData={updateNodeData}
+//             setSelectedNode={setSelectedNode}
+//             selectedNode={selectedNode}
+//             className="sidebar"
+//           />
+//         );
+//       default:
+//         return <Sidebar className="sidebar" />;
+//     }
+//   };
+
+//   const onLayout = useCallback(
+//     (direction) => {
+//       const { nodes: layoutedNodes, edges: layoutedEdges } =
+//         getLayoutedElements(nodes, edges, direction);
+
+//       setNodes([...layoutedNodes]);
+//       setEdges([...layoutedEdges]);
+//     },
+//     [nodes, edges, setNodes, setEdges]
+//   );
+
+//   const onReconnect = useCallback(
+//     (oldEdge, newConnection) =>
+//       setEdges((els) => reconnectEdge(oldEdge, newConnection, els)),
+//     [setEdges]
+//   );
+
+//   const createCopyNode = (event) => {
+//     event.preventDefault();
+//     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+//     if (
+//       event.clientX < reactFlowBounds.left ||
+//       event.clientX > reactFlowBounds.right ||
+//       event.clientY < reactFlowBounds.top ||
+//       event.clientY > reactFlowBounds.bottom
+//     ) {
+//       return;
+//     }
+//     const position = screenToFlowPosition({
+//       x: event.clientX - reactFlowBounds.left,
+//       y: event.clientY - reactFlowBounds.top - 35,
+//     });
+
+//     const newId = uuidv4();
+//     const newNode = {
+//       id: newId,
+//       type: alldata.type,
+//       position,
+//       data: {
+//         ...alldata.data,
+//         id: newId,
+//         isStartNode: false,
+//       },
+//     };
+//     setNodes((nds) => nds.concat(newNode));
+//     dispatch(setNodesState(newNode));
+//   };
+//   return (
+//     <div className="dndflow" style={{ display: "flex" }}>
+//       <div
+//         style={{ height: "99vh", width: "100%" }}
+//         ref={reactFlowWrapper}
+//         onClick={onFlowClick}
+//       >
+//         <ReactFlow
+//           nodes={nodes}
+//           edges={edges}
+//           onNodesChange={onNodesChange}
+//           onEdgesChange={onEdgesChange}
+//           onConnect={onConnect}
+//           onDrop={onDrop}
+//           onDragOver={onDragOver}
+//           onReconnect={onReconnect}
+//           nodeTypes={{
+//             Text: TextNode,
+//             button: ButtonNode,
+//             richcard: RichcardNode,
+//             richcard_carosal: RichcardCarouselNode,
+//             media: MediaNode,
+//           }}
+//           fitView
+//           fitViewOptions={{ maxZoom: 1 }}
+//           onInit={setReactFlowInstance}
+//           onNodeClick={onNodeClick}
+//           onNodesDelete={onNodesDelete}
+//         >
+//           <Panel position="top-right">
+//             <button onClick={() => onLayout("LR")}>horizontal layout</button>
+//           </Panel>
+//           {selectedNode && (
+//             <NodeToolbar
+//               style={{ left: "70px", top: "9px" }}
+//               isVisible={!!selectedNode}
+//               nodeId={selectedNode}
+//               position={Position.Top}
+//             >
+//               <CopyOutlined
+//                 style={{ fontSize: "20px", cursor: "pointer" }}
+//                 onClick={createCopyNode}
+//               />
+//               <Popconfirm
+//                 title="Delete the Node"
+//                 description="Are you sure to delete this Node?"
+//                 onConfirm={() => handleDeleteClick(selectedNode)}
+//                 okText="Yes"
+//                 cancelText="No"
+//               >
+//                 <Space onClick={(e) => e.stopPropagation()}>
+//                   <DeleteOutlined style={{ fontSize: "20px" }} />
+//                 </Space>
+//               </Popconfirm>
+//               <Dropdown
+//                 menu={{
+//                   items,
+//                 }}
+//                 trigger={["click"]}
+//                 placement="topLeft"
+//               >
+//                 <MoreOutlined
+//                   onClick={(e) => e.stopPropagation()}
+//                   style={{ fontSize: "20px", cursor: "pointer" }}
+//                 />
+//               </Dropdown>
+//             </NodeToolbar>
+//           )}
+//           <Controls />
+//           <MiniMap />
+//           <Background />
+//         </ReactFlow>
+//       </div>
+//       {renderSidebar()}
+//     </div>
+//   );
+// };
+// export default () => (
+//   <ReactFlowProvider>
+//     <DnDProvider>
+//       <DnDFlow />
+//     </DnDProvider>
+//   </ReactFlowProvider>
+// );
 
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/display-name*/
-
-import React, { useRef, useCallback, useState } from "react";
+/* eslint-disable react/display-name */
+// eslint-disable-next-line no-unused-vars
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -18,12 +519,33 @@ import {
   getOutgoers,
   getConnectedEdges,
   reconnectEdge,
-  MiniMap,
+  Panel,
+  useViewport,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./App.css";
+import { v4 as uuidv4 } from "uuid";
 import Sidebar from "./component/sidebar/Sidebar";
 import { DnDProvider, useDnD } from "./component/sidebar/DnDContext";
+import TextNode from "./component/nodes/TextNode";
+import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
+import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
+import ButtonNode from "./component/nodes/ButtonNode";
+import RichcardNode from "./component/nodes/RichcardNode";
+import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
+import RichcardCarouselNode from "./component/nodes/RichcardCarouselNode";
+import RichCardCarouselSidebar from "./component/sidebar/RichCardCarouselSidebar";
+import MediaNode from "./component/nodes/MediaNode";
+import dagre from "@dagrejs/dagre";
+import MediaSidebar from "./component/sidebar/MediaSidebar";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setDeleteNodeState,
+  setNodesState,
+  setEmptyState,
+  setUpdateNodeData,
+} from "./component/redux/reducer.button";
+import { Dropdown, message, Popconfirm, Space, Typography } from "antd";
 import {
   CopyOutlined,
   DeleteOutlined,
@@ -31,70 +553,101 @@ import {
   FlagOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Dropdown, message, Popconfirm, Space, Typography } from "antd";
-import TextNode from "./component/nodes/TextNode";
-import TextNodeSidebar from "./component/sidebar/TextNodeSidebar";
-import ButtonNodeSidebar from "./component/sidebar/ButtonNodeSidebar";
-import ButtonNode from "./component/nodes/ButtonNode";
-import { v4 as uuidv4 } from "uuid";
-import RichcardNode from "./component/nodes/RichcardNode";
-import RichcardNodeSidebar from "./component/sidebar/RichcardNodeSidebar";
-import RichcardCarouselNode from "./component/nodes/RichcardCarouselNode";
-import RichCardCarouselSidebar from "./component/sidebar/RichCardCarouselSidebar";
-import MediaNode from "./component/nodes/MediaNode";
-import MediaSidebar from "./component/sidebar/MediaSidebar";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setDeleteNodeState,
-  setNodesState,
-  setUpdateNodeData,
-} from "./component/redux/reducer.button";
 
-// let id = 0;
-const initialNodes = [
-  {
-    id: "0",
-    type: "button",
-    data: {
-      label: "Text with Button",
-      isStartNode: true, // Start node
-      id: "0",
-    },
-    position: { x: 0, y: 50 },
-  },
-];
+const defaultNodePosition = {
+  x: 250, // or any X coordinate
+  y: 250, // or any Y coordinate
+};
+const newId = uuidv4();
+const newNode = {
+  id: newId,
+  type: "button",
+  position: defaultNodePosition,
+  data: { id: newId, label: "Default Button Node", isStartNode: true },
+};
+
+const initialNodes = [newNode];
+const initialEdges = [];
+const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+const nodeWidth = 300;
+const nodeHeight = 100;
+const getLayoutedElements = (nodes, edges, direction = "TB") => {
+  const isHorizontal = direction === "LR";
+  dagreGraph.setGraph({ rankdir: direction });
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+  });
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+  dagre.layout(dagreGraph);
+  const newNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    const newNode = {
+      ...node,
+      targetPosition: isHorizontal ? "left" : "top",
+      sourcePosition: isHorizontal ? "right" : "bottom",
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
+    };
+
+    return newNode;
+  });
+  return { nodes: newNodes, edges };
+};
+
+const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+  initialNodes,
+  initialEdges
+);
 
 const DnDFlow = () => {
-  const reactFlowWrapper = useRef(null);
   const dispatch = useDispatch();
-
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const reactFlowWrapper = useRef(null);
+  const nodeData = useSelector((state) => state.nodes.nodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   const { screenToFlowPosition } = useReactFlow();
   const [setReactFlowInstance] = useState(null);
   const [type] = useDnD();
   const [selectedNode, setSelectedNode] = useState(null);
-  const nodeData = useSelector((state) => state.nodes.nodes);
-  console.log("dddd", nodeData);
-
   const alldata = nodeData.find((item) => item?.id === selectedNode);
-  const updateNodeData = (nodeId, newData) => {
-    setNodes(
-      (nds) =>
-        nds.map((node) =>
-          node.id === nodeId
-            ? { ...node, data: { ...node.data, ...newData } }
-            : node
-        )
-      //     ? { ...node, data: { ...node.data, ...newData } }
-    );
-  };
+  const [toolbarWidth, setToolbarWidth] = useState(200); // Default width
+  const { x, y, zoom } = useViewport();
+
+  useEffect(() => {
+    dispatch(setEmptyState());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedNode) {
+      const selectedNodeData = nodes.find((n) => n.id === selectedNode);
+      if (selectedNodeData) {
+        const nodeWidth = 200; // Set node width to 200
+        setToolbarWidth(nodeWidth * zoom); // Adjust for zoom
+      }
+    }
+  }, [zoom, selectedNode, nodes]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
+
+  const updateNodeData = (nodeId, newData) => {
+        setNodes(
+          (nds) =>
+            nds.map((node) =>
+              node.id === nodeId
+                ? { ...node, data: { ...node.data, ...newData } }
+                : node
+            )
+          //     ? { ...node, data: { ...node.data, ...newData } }
+        );
+      };
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -104,7 +657,6 @@ const DnDFlow = () => {
     (event) => {
       event.preventDefault();
       if (!type) return;
-
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       if (
         event.clientX < reactFlowBounds.left ||
@@ -114,12 +666,10 @@ const DnDFlow = () => {
       ) {
         return;
       }
-
       const position = screenToFlowPosition({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-
       const newId = uuidv4();
       const newNode = {
         id: newId,
@@ -127,29 +677,27 @@ const DnDFlow = () => {
         position,
         data: { id: newId, label: `${type} node`, isStartNode: false },
       };
-
       setNodes((nds) => {
-        console.log("Existing Nodes in State:", nds);
-        console.log("Existing Node Data:", nodeData);
-
-        const isFirstNode = nds.length === 0;
-        console.log("Is First Node:", isFirstNode);
-
-        const updatedNode = {
-          ...newNode,
-          data: { ...newNode.data, isStartNode: isFirstNode },
-        };
-
-        dispatch(setNodesState(updatedNode));
-
-        return nds.concat(updatedNode);
+        if (nodeData.length === 0) {
+          delete nds[0].measured;
+          dispatch(setNodesState(nds[0]));
+          dispatch(setNodesState(newNode));
+          return nds.concat(newNode);
+        } else {
+          dispatch(setNodesState(newNode));
+          return nds.concat(newNode);
+        }
       });
     },
-    [screenToFlowPosition, setNodes, type, dispatch]
+    [dispatch, nodeData.length, screenToFlowPosition, setNodes, type]
   );
 
   const onNodeClick = (event, node) => {
     event.stopPropagation();
+    if (nodeData?.length === 0) {
+      delete node.measured;
+      dispatch(setNodesState(node));
+    }
     setSelectedNode(node.id);
   };
 
@@ -160,12 +708,10 @@ const DnDFlow = () => {
   const handleDeleteClick = (id) => {
     if (alldata?.data?.isStartNode) {
       message.error("Start Node Can't be deleted");
-      return;
     } else {
       setNodes((prev) => {
         const node = prev.filter((nd) => nd.id !== id);
         dispatch(setDeleteNodeState(id));
-        console.log("Delete", id);
         return node;
       });
     }
@@ -173,77 +719,63 @@ const DnDFlow = () => {
 
   const handleUnsetStart = (e) => {
     e.preventDefault();
-  
-    // Check if there are multiple nodes in nodeData
-    if (nodeData.length > 1) {
-      // Check if the selected node is currently the start node
-      if (alldata.id === selectedNode && alldata?.data?.isStartNode) {
-        const data = { selectedNode, value: false, key: "isStartNode" };
-        console.log("Unset start node", data);  // Log the action for unsetting start node
-        dispatch(setUpdateNodeData(data));  // Dispatch the action to unset start node
-      } else {
-        message.info("First set this node as the start node.");
-      }
+    if (
+      nodeData.length > 1 &&
+      alldata.id === selectedNode &&
+      alldata?.data?.isStartNode
+    ) {
+      setNodes((prev) => {
+        const nodedata = prev.find((nd) => nd.id === selectedNode);
+        const updatedNodeData = {
+          ...nodedata, // copy the existing node data
+          data: {
+            ...nodedata.data, // copy the existing data
+            isStartNode: false, // update the property you want
+          },
+        };
+        // Return the new updated nodes array with the modified node
+        return prev.map((node) =>
+          node.id === selectedNode ? updatedNodeData : node
+        );
+      });
+      const data = { selectedNode, value: false, key: "isStartNode" };
+      dispatch(setUpdateNodeData(data));
+      setSelectedNode(selectedNode);
+    } else if (
+      nodeData.length === 1 &&
+      alldata.id === selectedNode &&
+      alldata?.data?.isStartNode
+    ) {
+      message.info("Please add one more Node");
     } else {
       message.info("First Set this node to Start");
     }
   };
 
-  // const handleSetStart = (e) => {
-  //   e.preventDefault();
-  //   if (!Array.isArray(nodeData)) {
-  //     message.error("Data is not available.");
-  //     return;
-  //   }
-  //   const existingStartNode = nodeData.find((node) => node.data.isStartNode);
-  //   if (existingStartNode && existingStartNode.id === selectedNode) {
-  //     message.info("This node is already set as the start node.");
-  //     return;
-  //   }
-  //   if (existingStartNode) {
-  //     const data = {
-  //       selectedNode: existingStartNode.id,
-  //       value: false,
-  //       key: "isStartNode",
-  //     };
-  //     dispatch(setUpdateNodeData(data));
-  //   }
-  //   const data = { selectedNode, value: true, key: "isStartNode" };
-  //   dispatch(setUpdateNodeData(data));
-  // };
   const handleSetStart = (e) => {
     e.preventDefault();
-  
-    // Ensure nodeData is an array
+    // Ensure alldata is an array
     if (!Array.isArray(nodeData)) {
       message.error("Data is not available.");
       return;
     }
-  
-    // Find if there is already a start node
+
     const existingStartNode = nodeData.find((node) => node.data.isStartNode);
-  
-    // If the selected node is already set as the start node
+
+    // If the selectedNode is already the start node
     if (existingStartNode && existingStartNode.id === selectedNode) {
-      console.log("Existing start node", existingStartNode);  // Log the existing start node
       message.info("This node is already set as the start node.");
       return;
     }
-  
-    // If there is an existing start node, unset it first
+
+    // If another node is already set as the start node
     if (existingStartNode) {
-      const data = {
-        selectedNode: existingStartNode.id,
-        value: false,
-        key: "isStartNode",
-      };
-      console.log("Unset existing start node", data);  // Log the action to unset the existing start node
-      dispatch(setUpdateNodeData(data));  // Dispatch to unset the previous start node
+      message.info("Another node is already set as the start node.");
+      return;
     }
-  
-    // Now set the current selected node as the start node
     const data = { selectedNode, value: true, key: "isStartNode" };
-    dispatch(setUpdateNodeData(data));  // Dispatch to set the current node as the start node
+    dispatch(setUpdateNodeData(data));
+    setSelectedNode(selectedNode);
   };
 
   const items = [
@@ -275,7 +807,7 @@ const DnDFlow = () => {
           const outgoers = getOutgoers(node, nodes, edges);
           const connectedEdges = getConnectedEdges([node], edges);
           const remainingEdges = acc.filter(
-            (edge) => !connectedEdges.includes(edge)
+            (edge) => !connectedEdges?.includes(edge)
           );
           const createdEdges = incomers.flatMap(({ id: source }) =>
             outgoers.map(({ id: target }) => ({
@@ -292,9 +824,9 @@ const DnDFlow = () => {
   );
 
   const renderSidebar = () => {
-    if (!selectedNode) return <Sidebar />;
-    const selected = nodes.find((node) => node.id === selectedNode);
-    if (!selected) return <Sidebar />;
+    if (!selectedNode) return <Sidebar className="sidebar" />;
+    const selected = nodes.find((node) => node?.id === selectedNode);
+    if (!selected) return <Sidebar className="sidebar" />;
     switch (selected.type) {
       case "Text":
         return (
@@ -303,46 +835,45 @@ const DnDFlow = () => {
             updateNodeData={updateNodeData}
             setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
+            className="sidebar"
           />
         );
       case "button":
         return (
           <ButtonNodeSidebar
-            node={selected}
-            updateNodeData={updateNodeData}
-            setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
+            className="sidebar"
+            setSelectedNode={setSelectedNode}
           />
         );
       case "richcard":
         return (
           <RichcardNodeSidebar
-            node={selected}
-            updateNodeData={updateNodeData}
-            setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
+            className="sidebar"
+            setSelectedNode={setSelectedNode}
           />
         );
       case "richcard_carosal":
         return (
           <RichCardCarouselSidebar
-            node={selected}
-            updateNodeData={updateNodeData}
-            setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
+            className="sidebar"
+            setSelectedNode={setSelectedNode}
           />
         );
       case "media":
         return (
           <MediaSidebar
-            node={selected}
+          node={selected}
             updateNodeData={updateNodeData}
-            setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
+            className="sidebar"
+            setSelectedNode={setSelectedNode}
           />
         );
       default:
-        return <Sidebar />;
+        return <Sidebar className="sidebar" />;
     }
   };
 
@@ -350,6 +881,17 @@ const DnDFlow = () => {
     (oldEdge, newConnection) =>
       setEdges((els) => reconnectEdge(oldEdge, newConnection, els)),
     [setEdges]
+  );
+
+  const onLayout = useCallback(
+    (direction) => {
+      const { nodes: layoutedNodes, edges: layoutedEdges } =
+        getLayoutedElements(nodes, edges, direction);
+
+      setNodes([...layoutedNodes]);
+      setEdges([...layoutedEdges]);
+    },
+    [nodes, edges, setNodes, setEdges]
   );
 
   const createCopyNode = (event) => {
@@ -363,10 +905,10 @@ const DnDFlow = () => {
     ) {
       return;
     }
-    const position = screenToFlowPosition({
+    const position = {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top - 35,
-    });
+    };
 
     const newId = uuidv4();
     const newNode = {
@@ -382,10 +924,11 @@ const DnDFlow = () => {
     setNodes((nds) => nds.concat(newNode));
     dispatch(setNodesState(newNode));
   };
+
   return (
-    <div className="dndflow" style={{ display: "flex" }}>
+    <div className="dndflow" style={{ display: "flex", overflowY: "hidden" }}>
       <div
-        style={{ height: "99vh", width: "100%" }}
+        style={{ height: "98vh", width: "100%" }}
         ref={reactFlowWrapper}
         onClick={onFlowClick}
       >
@@ -411,44 +954,55 @@ const DnDFlow = () => {
           onNodeClick={onNodeClick}
           onNodesDelete={onNodesDelete}
         >
-          {selectedNode && (
-            <NodeToolbar
-              style={{ left: "70px", top: "9px" }}
-              isVisible={!!selectedNode}
-              nodeId={selectedNode}
-              position={Position.Top}
-            >
-              <CopyOutlined
-                style={{ fontSize: "20px", cursor: "pointer" }}
-                onClick={createCopyNode}
-              />
-              <Popconfirm
-                title="Delete the Node"
-                description="Are you sure to delete this Node?"
-                onConfirm={() => handleDeleteClick(selectedNode)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Space onClick={(e) => e.stopPropagation()}>
-                  <DeleteOutlined style={{ fontSize: "20px" }} />
-                </Space>
-              </Popconfirm>
-              <Dropdown
-                menu={{
-                  items,
-                }}
-                trigger={["click"]}
-                placement="topLeft"
-              >
-                <MoreOutlined
-                  onClick={(e) => e.stopPropagation()}
+          <Panel position="top-right">
+            <button onClick={() => onLayout("LR")}>horizontal layout</button>
+          </Panel>
+
+          <NodeToolbar
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "end",
+              width: toolbarWidth,
+            }}
+            nodeId={selectedNode}
+            position={Position.Top}
+          >
+            {selectedNode && (
+              <div>
+                <CopyOutlined
                   style={{ fontSize: "20px", cursor: "pointer" }}
+                  onClick={createCopyNode}
                 />
-              </Dropdown>
-            </NodeToolbar>
-          )}
+                <Popconfirm
+                  title="Delete the Node"
+                  description="Are you sure to delete this Node?"
+                  onConfirm={() => {
+                    handleDeleteClick(selectedNode);
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Space onClick={(e) => e.stopPropagation()}>
+                    <DeleteOutlined style={{ fontSize: "20px" }} />
+                  </Space>
+                </Popconfirm>
+                <Dropdown
+                  menu={{
+                    items,
+                  }}
+                  trigger={["click"]}
+                  placement="topLeft"
+                >
+                  <MoreOutlined
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ fontSize: "20px", cursor: "pointer" }}
+                  />
+                </Dropdown>
+              </div>
+            )}
+          </NodeToolbar>
           <Controls />
-          <MiniMap />
           <Background />
         </ReactFlow>
       </div>

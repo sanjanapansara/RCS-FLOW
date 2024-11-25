@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 // create an inital state
 
@@ -8,12 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 //   y: 250, // or any Y coordinate
 // };
 // const newId = uuidv4();
-// const newNode = {
-//   id: newId,
-//   type: "button", // Set the type to button
-//   position: defaultNodePosition,
-//   data: { id: newId, label: "Default Button Node", isStartNode: true },
-// };
+
 
 const initialState = {
   nodes: [],
@@ -25,9 +20,11 @@ export const nodesSlice = createSlice({
   reducers: {
     setNodesState: (state, action) => {
       const newNode = action.payload;
-      const nodeExists = state.nodes.some((node) => node.id === newNode.id);
+
+      // Check if the node already exists in the state
+      const nodeExists = state.nodes.some((node) => node.id === newNode.id); // Assuming each node has a unique 'id'
       if (!nodeExists) {
-        state.nodes.push(newNode);
+        state.nodes.push(newNode); // Add the new node only if it doesn't exist
       } else {
         state.nodes = [...state.nodes, newNode];
       }

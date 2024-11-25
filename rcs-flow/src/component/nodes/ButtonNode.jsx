@@ -294,7 +294,7 @@ const ButtonNode = ({ data, selected }) => {
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
   const [enabled, setEnabled] = useState(false);
-console.log("alldata", alldata);
+console.log("alldata", nodes);
   return (
     <ConfigProvider
       theme={{
