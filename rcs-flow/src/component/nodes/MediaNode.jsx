@@ -1,19 +1,21 @@
 import { Handle, Position } from "@xyflow/react";
-import { Badge, Card, ConfigProvider, Switch, Typography } from "antd";
-import React from "react";
+import { Badge, Card, ConfigProvider, Switch } from "antd";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+
 function MediaNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
-  console.log("media", alldata);
+  const [enabled, setEnabled] = useState(true);
+
   return (
     <ConfigProvider
       theme={{
         components: {
           Card: {
-            headerBg: "#dad7d7",
-            colorBorderSecondary: "#857b7b",
+            headerBg: !enabled ? "#f0f0f0" :"#CACACA",
+            colorBorderSecondary: "#ADC0A7",
           },
         },
       }}
@@ -25,16 +27,23 @@ function MediaNode({ data, selected }) {
           style={{ marginTop: -30 }}
         >
           <Card
-            title={alldata?.data.templateName || "Media"}
+            title={alldata?.data?.templateName ?? "Media"}
             size="small"
-            extra={<Switch size="small" />}
+            extra={
+              <Switch
+                size="small"
+                disabled={alldata?.data?.isStartNode && true}
+                checked={enabled}
+                value={enabled}
+                onChange={() => setEnabled(!enabled)}
+              />
+            }
             cover={
               <img
-                style={{ width: "100%" }}
                 alt="example"
                 src={
-                  alldata?.data.imageUrl ||
-                  "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+                  alldata?.data?.mediaUrl ??
+                   "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
                 }
               />
             }
@@ -46,30 +55,57 @@ function MediaNode({ data, selected }) {
               border: selected ? "1px solid#ADC0A7" : "none",
             }}
           >
-            <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
-              {alldata?.data.label
-                ?alldata?. data.label.split("\n").map((line, index) => (
-                    <span key={index}>
-                      {line}
-                      <br />
-                    </span>
-                  ))
-                : "No label available."}
-            </Typography.Text>
-            <Handle type="target" position={Position.Left} />
+            {alldata?.data?.isStartNode ? (
+              <Handle
+                type={alldata?.data?.isStartNode ? "source" : "target"}
+                position={
+                  alldata?.data?.isStartNode ? Position.Right : Position.Left
+                }
+                isConnectable={true}
+              />
+            ) : (
+              <>
+                <Handle
+                  type="target"
+                  position={Position.Left}
+                  isConnectable={true}
+                />
+                {!enabled && (
+                  <Handle
+                    type="source"
+                    position={Position.Right}
+                    isConnectable={true}
+                  />
+                )}
+              </>
+            )}
+            <div
+              style={{ display: "flex", flexDirection: "column" }}
+              dangerouslySetInnerHTML={{
+                __html:
+                  alldata?.data?.label?.replace(/\n/g, "<br/>") || "message",
+              }}
+            />
           </Card>
         </Badge.Ribbon>
       ) : (
         <Card
-          title={data.templateName || "Media"}
+          title={alldata?.data?.templateName ?? "Media"}
           size="small"
-          extra={<Switch size="small" />}
+          extra={
+            <Switch
+              size="small"
+              disabled={alldata?.data?.isStartNode && true}
+              checked={enabled}
+              value={enabled}
+              onChange={() => setEnabled(!enabled)}
+            />
+          }
           cover={
             <img
-              style={{ width: "100%" }}
               alt="example"
               src={
-                data.imageUrl ||
+                alldata?.data?.mediaUrl ??
                 "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
               }
             />
@@ -79,20 +115,25 @@ function MediaNode({ data, selected }) {
             width: 200,
             padding: "1px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-            border: selected ? "1px solid#ADC0A7" : "none",
+            border: selected ? "1px solid #ADC0A7" : "none",
+            backgroundColor: !enabled ? "#f0f0f0" : "white", // Gray background when disabled
+            color: !enabled ? "#aaa" : "black", // Gray text color when disabled
           }}
         >
-          <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
-            {data.label
-              ? data.label.split("\n").map((line, index) => (
-                  <span key={index}>
-                    {line}
-                    <br />
-                  </span>
-                ))
-              : "No label available."}
-          </Typography.Text>
-          <Handle type="target" position={Position.Left} />
+          {enabled && (
+            <Handle
+              type="target"
+              position={Position.Left}
+              isConnectable={true}
+            />
+          )}
+          <div
+            style={{ display: "flex", flexDirection: "column" }}
+            dangerouslySetInnerHTML={{
+              __html:
+                alldata?.data?.label?.replace(/\n/g, "<br/>") || "message",
+            }}
+          />
         </Card>
       )}
     </ConfigProvider>

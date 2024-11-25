@@ -1,29 +1,123 @@
-import React, { useState } from "react";
-import {
-  Card,
-  ConfigProvider,
-  Flex,
-  Form,
-  Input,
-  Layout,
-  Row,
-  Typography,
-  Upload,
-} from "antd";
-import {  LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { ConfigProvider, Form, Input, Layout, message, Upload } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import SideBarHeader from "./SideBarHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { setUpdateNodeData } from "../redux/reducer.button";
 const { Sider } = Layout;
-const MediaSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
-  console.log("node", node);
+
+const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const nodes = useSelector((state) => state.nodes.nodes);
+  const alldata = nodes.find((item) => item.id === selectedNode);
   const { Dragger } = Upload;
-  const [loading, setLoading] = useState(false);
-  const [tempaltename, setTemplateName] = useState(
-    node?.data?.templateName || ""
+  const [loading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(alldata?.data?.mediaUrl ?? "");
+  const [message1, setMessage] = useState(alldata?.data?.label ?? "");
+  const [templateName, setTemplateName] = useState(
+    alldata?.data?.templateName ?? ""
   );
-  const [messagename, setMessageName] = useState(node?.data?.label || "");
-  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
+
+  const [data, setData] = useState({
+    actions: alldata?.data?.actions ?? [
+      {
+        id: 0,
+        type: "quick",
+        title: "",
+        payload: "",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    const initValues = data?.actions?.reduce((acc, button, i) => {
+      acc[`button-type-${i}`] = button.type;
+      acc[`button-title-${i}`] = button.title;
+      acc[`button-payload-${i}`] = button.payload;
+      acc[`button-phoneNumber-${i}`] = button.phoneNumber;
+      acc[`button-url-${i}`] = button.url;
+      acc[`button-label-${i}`] = button.label;
+      acc[`button-latitude-${i}`] = button.latitude;
+      acc[`button-longitude-${i}`] = button.longitude;
+      acc[`button-startDate-${i}`] = button.startDate;
+      acc[`button-endDate-${i}`] = button.endDate;
+      acc[`button-description-${i}`] = button.description;
+      return acc;
+    }, {});
+    form.setFieldsValue(initValues);
+  }, [data?.actions]);
+
+  const handleChange = (index, key, val) => {
+    setData((prev) => {
+      const actions = [...prev.actions];
+      if (key === "type") {
+        actions[index] = { id: index, title: actions[index].title, [key]: val };
+      } else {
+        actions[index] = { ...actions[index], [key]: val };
+      }
+      const { actions: value } = { actions };
+      const data = { selectedNode, value, key: "actions" };
+      dispatch(setUpdateNodeData(data));
+      return { ...prev, actions };
+    });
+  };
+
+  const addNewCard = () => {
+    if (data.actions.length < 11) {
+      setData((prev) => {
+        const value = {
+          ...prev,
+          actions: [
+            ...prev.actions,
+            {
+              id: prev.actions.length,
+              type: "quick",
+              title: "",
+              payload: "",
+            },
+          ],
+        };
+        const data = { selectedNode, value: value.actions, key: "actions" };
+        dispatch(setUpdateNodeData(data));
+        return value;
+      });
+    } else {
+      message.warning("Cannot add more than 11 buttons");
+    }
+  };
+
+  const deleteCard = (index) => {
+    if (data.actions.length > 1) {
+      setData((prev) => {
+        const value = [...prev.actions]
+          .filter((_, i) => i !== index)
+          .map((item, i) => ({ ...item, id: i }));
+        const data = { selectedNode, value, key: "actions" };
+        dispatch(setUpdateNodeData(data));
+        return { ...prev, actions: value };
+      });
+    } else {
+      message.warning("Buttons must be greater than 1");
+    }
+  };
+
+  const handleTemplateNameChange = (e) => {
+    const value = e.target.value;
+    setTemplateName(value);
+    const data = { selectedNode, value, key: "templateName" };
+    dispatch(setUpdateNodeData(data));
+  };
+
+  const handleMessageChange = (e) => {
+    const value = e.target.value;
+    setMessage(value);
+
+    const data = { selectedNode, value, key: "label" };
+    dispatch(setUpdateNodeData(data));
+  };
+
   const uploadButton = (
     <button
       style={{
@@ -42,52 +136,41 @@ const MediaSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
       </div>
     </button>
   );
-  const handleTemplateNameChange = (e) => {
-    const newTemplateName = e.target.value;
-    setTemplateName(newTemplateName);
-    updateNodeData(node.id, { templateName: newTemplateName });
-  };
-  const handleMessageNameChange = (e) => {
-    const MessageName = e.target.value;
-    setMessageName(MessageName);
-    updateNodeData(node.id, { label: MessageName });
+
+  const props = {
+    name: "file",
+    multiple: false,
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        setImageUrl(info.file);
+        const value = info.file.response.url;
+        const data = { selectedNode, value, key: "mediaUrl" };
+        dispatch(setUpdateNodeData(data));
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
   };
 
-  const handleImageUpload = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      const newImageUrl = URL.createObjectURL(info.file.originFileObj);
-      setImageUrl(newImageUrl);
-      setLoading(false);
-      updateNodeData(node.id, { imageUrl: newImageUrl });
-    }
+  const customUpload = ({ file, onSuccess, onError }) => {
+    setTimeout(() => {
+      if (file) {
+        onSuccess({ url: URL.createObjectURL(file) });
+      } else {
+        onError(new Error("Upload failed"));
+      }
+    }, 1000);
   };
+
   return (
     <Layout>
       <Sider width="305px">
-        <Row>
-          <Card
-            bodyStyle={{ padding: 5 }}
-            style={{ width: "100%" }}
-            bordered={false}
-          >
-            <Row align="middle">
-              <Flex align="center" gap={20}>
-                <SideBarHeader
-                  setSelectedNode={setSelectedNode}
-                  title={title}
-                />
-                <Typography.Title level={5} style={{ margin: "0px" }}>
-                  {" "}
-                  Media
-                </Typography.Title>
-              </Flex>
-            </Row>
-          </Card>
-        </Row>
+        <SideBarHeader setSelectedNode={setSelectedNode} title={title} />
         <br />
         <ConfigProvider
           theme={{
@@ -103,24 +186,20 @@ const MediaSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
             <Form.Item label="Template Name">
               <Input
                 placeholder="Enter Template Name"
-                value={tempaltename}
+                value={templateName}
                 onChange={handleTemplateNameChange}
               />
             </Form.Item>
             <Form.Item label="Media" required>
-              <Dragger
-                showUploadList={false}
-                customRequest={({ onSuccess }) => {
-                  setTimeout(() => onSuccess("ok"), 0);
-                }}
-                onChange={handleImageUpload}
-              >
+              <Dragger {...props} customRequest={customUpload}>
                 {imageUrl ? (
                   <img
-                    src={imageUrl}
+                    src={imageUrl?.response?.url || imageUrl}
                     alt="avatar"
                     style={{
+                      objectFit: "scale-down",
                       width: "100%",
+                      height: 50,
                     }}
                   />
                 ) : (
@@ -132,8 +211,8 @@ const MediaSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
               <TextArea
                 rows={4}
                 placeholder="Enter Message"
-                value={messagename}
-                onChange={handleMessageNameChange}
+                onChange={handleMessageChange}
+                value={message1}
               />
             </Form.Item>
           </Form>
@@ -142,4 +221,5 @@ const MediaSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
     </Layout>
   );
 };
-export default MediaSidebar;
+
+export default MediaNodeSider;
