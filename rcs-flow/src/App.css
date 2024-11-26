@@ -11,6 +11,31 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  overflow-y: auto; /* Allow scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: #fff;
+}
+
+/* Hide scrollbar in Chrome/Safari */
+.sidebar::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Hide scrollbar in Firefox */
+.sidebar {
+  scrollbar-width: thin; 
+  scrollbar-color: transparent transparent;
+}
+
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

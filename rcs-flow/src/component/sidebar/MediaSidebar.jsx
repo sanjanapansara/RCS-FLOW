@@ -49,60 +49,6 @@ const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
     form.setFieldsValue(initValues);
   }, [data?.actions]);
 
-  const handleChange = (index, key, val) => {
-    setData((prev) => {
-      const actions = [...prev.actions];
-      if (key === "type") {
-        actions[index] = { id: index, title: actions[index].title, [key]: val };
-      } else {
-        actions[index] = { ...actions[index], [key]: val };
-      }
-      const { actions: value } = { actions };
-      const data = { selectedNode, value, key: "actions" };
-      dispatch(setUpdateNodeData(data));
-      return { ...prev, actions };
-    });
-  };
-
-  const addNewCard = () => {
-    if (data.actions.length < 11) {
-      setData((prev) => {
-        const value = {
-          ...prev,
-          actions: [
-            ...prev.actions,
-            {
-              id: prev.actions.length,
-              type: "quick",
-              title: "",
-              payload: "",
-            },
-          ],
-        };
-        const data = { selectedNode, value: value.actions, key: "actions" };
-        dispatch(setUpdateNodeData(data));
-        return value;
-      });
-    } else {
-      message.warning("Cannot add more than 11 buttons");
-    }
-  };
-
-  const deleteCard = (index) => {
-    if (data.actions.length > 1) {
-      setData((prev) => {
-        const value = [...prev.actions]
-          .filter((_, i) => i !== index)
-          .map((item, i) => ({ ...item, id: i }));
-        const data = { selectedNode, value, key: "actions" };
-        dispatch(setUpdateNodeData(data));
-        return { ...prev, actions: value };
-      });
-    } else {
-      message.warning("Buttons must be greater than 1");
-    }
-  };
-
   const handleTemplateNameChange = (e) => {
     const value = e.target.value;
     setTemplateName(value);

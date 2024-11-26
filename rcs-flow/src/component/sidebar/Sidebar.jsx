@@ -1,9 +1,12 @@
 import React from "react";
 import { Card, Col, Layout, Row, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  BarChartOutlined,
+  FileImageOutlined,
+  FileTextOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { useDnD } from "./DnDContext";
-import image from "../../assets/footer-bg-1.png";
-
 const { Sider } = Layout;
 function Sidebar() {
   const [_, setType] = useDnD();
@@ -12,18 +15,45 @@ function Sidebar() {
     event.dataTransfer.effectAllowed = "move";
   };
   const cards = [
-    { id: 1, text: "Text", type: "Text", bgColor: "#e5cccc" },
-    { id: 2, text: "Text With Button", type: "button", bgColor: "#d4d5de" },
-    { id: 3, text: "Richcard", type: "richcard", bgColor: "#d4dfd3" },
-    { id: 4, text: "Richcard carosal", type: "richcard_carosal", bgColor: "#dbd3de" },
-    { id: 5, text: "Media", type: "media", bgColor: "#dad7d7" },
+    {
+      id: 1,
+      text: "Text",
+      type: "Text",
+      bgColor: "#e5cccc",
+      icons: <FileTextOutlined style={{ fontSize: "30px" }} />,
+    },
+    {
+      id: 2,
+      text: "Text With Button",
+      type: "button",
+      bgColor: "#d4d5de",
+      icons: <PlusOutlined style={{ fontSize: "30px" }} />,
+    },
+    {
+      id: 3,
+      text: "Richcard",
+      type: "richcard",
+      bgColor: "#d4dfd3",
+      icons: <BarChartOutlined style={{ fontSize: "30px" }} />,
+    },
+    {
+      id: 4,
+      text: "Richcard carosal",
+      type: "richcard_carosal",
+      bgColor: "#dbd3de",
+      icons: <BarChartOutlined style={{ fontSize: "30px" }} />,
+    },
+    {
+      id: 5,
+      text: "Media",
+      type: "media",
+      bgColor: "#dad7d7",
+      icons: <FileImageOutlined style={{ fontSize: "30px" }} />,
+    },
   ];
   return (
-    <Layout >
-      <Sider
-        width="305px"
-        style={{ backgroundImage: `url(${image})`, backgroundSize: "cover"}}
-      >
+    <Layout>
+      <Sider width="310px">
         <Row gutter={[10, 10]}>
           {cards.map((card) => (
             <Col key={card.id} span={12}>
@@ -47,9 +77,7 @@ function Sidebar() {
                   }}
                   hoverable
                 >
-                  <Row justify={"center"}>
-                    <PlusOutlined style={{ fontSize: "30px", color: "black" }} />
-                  </Row>
+                  <Row justify={"center"}>{card.icons}</Row>
                   <Row justify={"center"} gutter={[16, 24]} align="middle">
                     <Typography.Text
                       style={{ textAlign: "center", paddingTop: "10px" }}

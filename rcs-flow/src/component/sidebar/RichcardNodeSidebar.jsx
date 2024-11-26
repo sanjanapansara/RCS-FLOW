@@ -203,16 +203,6 @@ function RichcardNodeSidebar({
     }
   };
   
-
-  // const customUpload = ({ file, onSuccess, onError }) => {
-  //   setTimeout(() => {
-  //     if (file) {
-  //       onSuccess({ url: URL.createObjectURL(file) });
-  //     } else {
-  //       onError(new Error("Upload failed"));
-  //     }
-  //   }, 1000);
-  // };
   return (
     <>
       <Layout>

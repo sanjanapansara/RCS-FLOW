@@ -21,6 +21,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./App.css";
+import "./index.css";
 import { v4 as uuidv4 } from "uuid";
 import Sidebar from "./component/sidebar/Sidebar";
 import { DnDProvider, useDnD } from "./component/sidebar/DnDContext";
@@ -134,17 +135,15 @@ const DnDFlow = () => {
     [setEdges]
   );
 
-
   const updateNodeData = (nodeId, newData) => {
-        setNodes(
-          (nds) =>
-            nds.map((node) =>
-              node.id === nodeId
-                ? { ...node, data: { ...node.data, ...newData } }
-                : node
-            )
-        );
-      };
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === nodeId
+          ? { ...node, data: { ...node.data, ...newData } }
+          : node
+      )
+    );
+  };
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -323,47 +322,52 @@ const DnDFlow = () => {
     switch (selected.type) {
       case "Text":
         return (
-          <TextNodeSidebar
-            node={selected}
-            updateNodeData={updateNodeData}
-            setSelectedNode={setSelectedNode}
-            selectedNode={selectedNode}
-            className="sidebar"
-          />
+          <div className="sidebar">
+            <TextNodeSidebar
+              node={selected}
+              updateNodeData={updateNodeData}
+              setSelectedNode={setSelectedNode}
+              selectedNode={selectedNode}
+            />
+          </div>
         );
       case "button":
         return (
-          <ButtonNodeSidebar
-            selectedNode={selectedNode}
-            className="sidebar"
-            setSelectedNode={setSelectedNode}
-          />
+          <div className="sidebar">
+            <ButtonNodeSidebar
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
+          </div>
         );
       case "richcard":
         return (
-          <RichcardNodeSidebar
-            selectedNode={selectedNode}
-            className="sidebar"
-            setSelectedNode={setSelectedNode}
-          />
+          <div className="sidebar">
+            <RichcardNodeSidebar
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
+          </div>
         );
       case "richcard_carosal":
         return (
-          <RichCardCarouselSidebar
-            selectedNode={selectedNode}
-            className="sidebar"
-            setSelectedNode={setSelectedNode}
-          />
+          <div className="sidebar">
+            <RichCardCarouselSidebar
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
+          </div>
         );
       case "media":
         return (
-          <MediaSidebar
-          node={selected}
-            updateNodeData={updateNodeData}
-            selectedNode={selectedNode}
-            className="sidebar"
-            setSelectedNode={setSelectedNode}
-          />
+          <div className="sidebar">
+            <MediaSidebar
+              node={selected}
+              updateNodeData={updateNodeData}
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
+          </div>
         );
       default:
         return <Sidebar className="sidebar" />;
