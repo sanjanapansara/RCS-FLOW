@@ -12,6 +12,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   nodes: [],
+  richCardCarousels: []
 };
 
 export const nodesSlice = createSlice({
@@ -52,13 +53,41 @@ export const nodesSlice = createSlice({
     },
     setRichCardNodeCarousleData: (state, action) => {
       const { selectedNode, value, key } = action.payload;
-      console.log("Carousle--->",action);
-      state.nodes = state.nodes.map((node) => {
-        return node.id === selectedNode
-          ? { ...node, data: { ...node.data, [key]: value } }
-          : node;
+      console.log("Carousle--->",action.payload);
+      console.log("state nodes2-->",state.nodes);
+
+      const checked =  state.nodes = state.nodes.map((node) => {
+         return node.id === selectedNode? { ...node, data: { ...node.data, [key]: value } }: node;
       });
+       console.log("checked data",checked)
+        //  const data =  state.nodes?.filter((element)=>element);
+          //  console.log("CHECLKED DATA",data);
     },
+  
+    
+    
+    // setRichCardNodeCarousleData: (state, action) => {
+    //   const { selectedNode, value, key } = action.payload;
+    
+    //   console.log("Carousle--->", action.payload);
+    //   console.log("state nodes2-->", JSON.parse(JSON.stringify(state)));
+    //   // Check if state.nodes and state.richCardCarousels exist
+    //   if (state.nodes && state.richCardCarousels) {
+    //     state.nodes = state.nodes.map((node) => {
+    //       return node.id === selectedNode
+    //         ? { ...node, data: { ...node.data, [key]: value } }
+    //         : node;
+    //     });
+    //   }
+    
+    //   console.log("state nodes-->", JSON.parse(JSON.stringify(state.nodes)));
+
+    // },
+    
+    
+    
+    
+    
     setDeleteNodeState: (state,action) => {
       state.nodes = state.nodes.filter((node) => node.id !== action.payload);
     },

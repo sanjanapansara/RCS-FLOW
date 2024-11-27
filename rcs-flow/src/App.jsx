@@ -856,10 +856,17 @@ const DnDFlow = () => {
         );
       case "richcard_carosal":
         return (
+          // <RichCardCarouselSidebar
+          //   selectedNode={selectedNode}
+          //   className="sidebar"
+          //   setSelectedNode={setSelectedNode}
+          // />
           <RichCardCarouselSidebar
+            node={selected}
+            updateNodeData={updateNodeData}
+            setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
             className="sidebar"
-            setSelectedNode={setSelectedNode}
           />
         );
       case "media":
