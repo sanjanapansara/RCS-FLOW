@@ -19,6 +19,10 @@ const CustomSegment = ({
   const [selectedValue, setSelectedValue] = useState(0);
 
   const dispatch = useDispatch();
+  const nodes = useSelector((state) => state.nodes.nodes);
+  console.log("nodes", selectedNode);
+  const alldata = nodes?.find((element) => element?.id == selectedNode);
+  console.log("isExist", alldata);
 
   const handleSelect = (option) => {
     if (close === false) {
@@ -140,7 +144,7 @@ const CustomSegment = ({
                   borderRadius: 5,
                 }}
               >
-                {option}
+               {`Card ${index + 1}`}
               </Tag>
             </Space>
           </Col>

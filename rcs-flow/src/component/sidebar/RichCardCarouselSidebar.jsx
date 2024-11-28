@@ -46,11 +46,17 @@ function RichCardCarouselSidebar({
   console.log("nodes", selectedNode);
   const alldata = nodes?.find((element) => element?.id == selectedNode);
   console.log("isExist", alldata);
+  const [cardIndex, setCardIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
-  const [options, setOptions] = useState(["Card 1", "Card 2"]);
+  // const [options, setOptions] = useState(alldata?.data?.richCardCarousels?.cards ?? ["Card 1", "Card 2"]);
+  const [options, setOptions] = useState(
+    alldata?.data?.richCardCarousels?.cards ?? [
+      { size: "short", templateName: "", title: "Card 1", description: "", media: "" },
+      { size: "short", templateName: "", title: "Card 2", description: "", media: "" },
+    ]
+  );
   console.log("options", options);
-  const [cardIndex, setCardIndex] = useState(0);
   console.log("cardIndex", cardIndex);
   const [richCardCarousels, setRichCardCarousels] = useState({
     cards: alldata?.data?.richCardCarousels?.cards ?? [
