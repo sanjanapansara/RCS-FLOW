@@ -293,11 +293,15 @@ function RichCardCarouselSidebar({
     }
   };
 
+
+
+
+
   const addNewCard = () => {
-    if (richCardCarousels.cards.length < 10) {
-      setRichCardCarousels((prev) => {
-        const updatedCards = prev.cards.map((card, index) => {
-          if (index === cardIndex) {
+    setRichCardCarousels((prev) => {
+      const updatedCards = prev.cards.map((card, index) => {
+        if (index === cardIndex) {
+          if (card.actions.length < 11) {
             const updatedActions = [
               ...card.actions,
               {
@@ -308,23 +312,58 @@ function RichCardCarouselSidebar({
               },
             ];
             return { ...card, actions: updatedActions };
+          } else {
+            message.warning("Cannot add more than 11 actions to a card");
+            return card; // No changes if limit reached
           }
-          return card;
-        });
-
-        const data = {
-          selectedNode,
-          value: { ...prev, cards: updatedCards },
-          key: "richCardCarousels",
-        };
-        dispatch(setRichCardNodeCarousleData(data));
-
-        return { ...prev, cards: updatedCards };
+        }
+        return card;
       });
-    } else {
-      message.warning("Cannot add more than 10 cards");
-    }
+  
+      const data = {
+        selectedNode,
+        value: { ...prev, cards: updatedCards },
+        key: "richCardCarousels",
+      };
+      dispatch(setRichCardNodeCarousleData(data));
+  
+      return { ...prev, cards: updatedCards };
+    });
   };
+
+  
+  // const addNewCard = () => {
+  //   if (richCardCarousels.cards.length < 11) {
+  //     setRichCardCarousels((prev) => {
+  //       const updatedCards = prev.cards.map((card, index) => {
+  //         if (index === cardIndex) {
+  //           const updatedActions = [
+  //             ...card.actions,
+  //             {
+  //               id: card.actions.length,
+  //               type: "quick",
+  //               title: "",
+  //               payload: "",
+  //             },
+  //           ];
+  //           return { ...card, actions: updatedActions };
+  //         }
+  //         return card;
+  //       });
+
+  //       const data = {
+  //         selectedNode,
+  //         value: { ...prev, cards: updatedCards },
+  //         key: "richCardCarousels",
+  //       };
+  //       dispatch(setRichCardNodeCarousleData(data));
+
+  //       return { ...prev, cards: updatedCards };
+  //     });
+  //   } else {
+  //     message.warning("Cannot add more than 11 cards");
+  //   }
+  // };
 
   const deleteCard = (index) => {
     if (richCardCarousels?.cards[cardIndex]?.actions?.length > 1) {
