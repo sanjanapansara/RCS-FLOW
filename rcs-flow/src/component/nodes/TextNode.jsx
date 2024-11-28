@@ -27,7 +27,6 @@ const TextNode = ({ data, selected }) => {
           style={{ marginTop: -30 }}
         >
           <Card
-            // title={data.templateName || "Send Message"}
             title={data?.templateName ?? "Send Message"}
             extra={
               <Switch
@@ -47,9 +46,7 @@ const TextNode = ({ data, selected }) => {
               boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
               border: selected ? "1px solid #D1AFAF" : "none",
             }}
-          >
-            {/* <Handle type="target" position={Position.Left} />
-             */}
+          >      
               {alldata?.data?.isStartNode ? (
               <Handle
                 type={alldata?.data?.isStartNode ? "source" : "target"}
@@ -89,7 +86,6 @@ const TextNode = ({ data, selected }) => {
       ) : (
         <Card
         title={data?.templateName ?? "Send Message"}
-          // title={data.templateName || "Send Message"}
           extra={
             <Switch
               size="small"
@@ -109,7 +105,6 @@ const TextNode = ({ data, selected }) => {
             border: selected ? "1px solid #D1AFAF" : "none",
           }}
         >
-          {/* <Handle type="target" position={Position.Left} /> */}
           {alldata?.data?.isStartNode ? (
             <Handle
               type={alldata?.data?.isStartNode ? "source" : "target"}
@@ -134,8 +129,6 @@ const TextNode = ({ data, selected }) => {
               )}
             </>
           )}
-          {/* <Handle type="target" position={Position.Right} /> */}
-          {/* <Typography.Text>{data.label}</Typography.Text> */}
           <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
             {data.label
               ? data.label.split("\n").map((line, index) => (

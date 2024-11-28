@@ -116,8 +116,8 @@ function MediaNode({ data, selected }) {
             padding: "1px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
             border: selected ? "1px solid #ADC0A7" : "none",
-            backgroundColor: !enabled ? "#f0f0f0" : "white", // Gray background when disabled
-            color: !enabled ? "#aaa" : "black", // Gray text color when disabled
+            backgroundColor: !enabled ? "#f0f0f0" : "white",
+            color: !enabled ? "#aaa" : "black",
           }}
         >
           {enabled && (

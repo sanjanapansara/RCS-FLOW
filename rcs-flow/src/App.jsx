@@ -450,7 +450,7 @@ const DnDFlow = () => {
           <NodeToolbar
             style={{
               display: "flex",
-              alignItems: "center",
+              // alignItems: "center",
               justifyContent: "end",
               width: toolbarWidth,
             }}
