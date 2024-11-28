@@ -31,69 +31,34 @@ const CustomSegment = ({
       console.log("Selected value", option);
     }
   };
-
-  // const handleClose = (index) => {
-  //   if (options.length > 2) {
-  //     const cards = options.filter((_, i) => i !== index);
-  //     const filteredCards = richCardCarousels.filter((_, i) => i !== index);
-  //     const images = previewImage.filter((_, i) => i !== index);
-
-  //     setRichCardCarousels(filteredCards);
-  //     setPreviewImage(images);
-  //     setOptions(cards.map((_, i) => `Card ${i + 1}`));
-
-  //     if (index === 0 && value === index) {
-  //       onChange(index);
-  //     } else if (value < index) {
-  //       onChange(value);
-  //     } else if (index < value) {
-  //       onChange(value - 1);
-  //     } else if (value === index && options.length - 1 === index) {
-  //       onChange(value - 1);
-  //     } else if (value === index) {
-  //       onChange(value);
-  //     }
-  //   }
-  // };
-
   const handleClose = (index) => {
     if (options.length > 2) {
-      // Safely update options, richCardCarousels.cards, and previewImage
       const updatedOptions = options.filter((_, i) => i !== index);
       const updatedCards =
         richCardCarousels?.cards?.filter((_, i) => i !== index) || [];
       const updatedImages = previewImage.filter((_, i) => i !== index);
-
-      // Update the states with the modified data
       setOptions(updatedOptions.map((_, i) => `Card ${i + 1}`));
       setRichCardCarousels((prev) => ({
         ...prev,
         cards: updatedCards,
       }));
       setPreviewImage(updatedImages);
-
-      // Adjust the selected card value
       if (updatedOptions.length === 0) {
-        onChange(null); // Reset selection if no cards remain
+        onChange(null); 
       } else if (value === index) {
-        onChange(index === 0 ? 0 : index - 1); // Adjust to the previous card
+        onChange(index === 0 ? 0 : index - 1); 
       } else if (value < index) {
         onChange(value);
       } else {
         onChange(value - 1);
       }
-
-      // Prepare data for Redux update
       const data = {
         selectedNode,
-        value: { ...richCardCarousels, cards: updatedCards }, // Update cards while keeping other properties intact
+        value: { ...richCardCarousels, cards: updatedCards }, 
         key: "richCardCarousels",
       };
-
-      // Dispatch the updated data to Redux store
       dispatch(setRichCardNodeCarousleData(data));
     } else {
-      // Show a warning message if fewer than two cards would remain
       message.warning("At least two cards must remain.");
     }
   };

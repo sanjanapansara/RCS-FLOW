@@ -49,7 +49,6 @@ function RichCardCarouselSidebar({
   const [cardIndex, setCardIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
-  // const [options, setOptions] = useState(alldata?.data?.richCardCarousels?.cards ?? ["Card 1", "Card 2"]);
   const [options, setOptions] = useState(
     alldata?.data?.richCardCarousels?.cards ?? [
       { size: "short", templateName: "", title: "Card 1", description: "", media: "" },
@@ -183,7 +182,7 @@ function RichCardCarouselSidebar({
     dispatch(setRichCardNodeCarousleData(data));
   };
   const handleMessageNameChange = (e, index, key) => {
-    const newMessageName = e.target.value; // Access the value from the event
+    const newMessageName = e.target.value;
     setMessageName(newMessageName);
 
     setRichCardCarousels((prev) => {
@@ -320,7 +319,7 @@ function RichCardCarouselSidebar({
             return { ...card, actions: updatedActions };
           } else {
             message.warning("Cannot add more than 11 actions to a card");
-            return card; // No changes if limit reached
+            return card;
           }
         }
         return card;
@@ -336,40 +335,6 @@ function RichCardCarouselSidebar({
       return { ...prev, cards: updatedCards };
     });
   };
-
-  
-  // const addNewCard = () => {
-  //   if (richCardCarousels.cards.length < 11) {
-  //     setRichCardCarousels((prev) => {
-  //       const updatedCards = prev.cards.map((card, index) => {
-  //         if (index === cardIndex) {
-  //           const updatedActions = [
-  //             ...card.actions,
-  //             {
-  //               id: card.actions.length,
-  //               type: "quick",
-  //               title: "",
-  //               payload: "",
-  //             },
-  //           ];
-  //           return { ...card, actions: updatedActions };
-  //         }
-  //         return card;
-  //       });
-
-  //       const data = {
-  //         selectedNode,
-  //         value: { ...prev, cards: updatedCards },
-  //         key: "richCardCarousels",
-  //       };
-  //       dispatch(setRichCardNodeCarousleData(data));
-
-  //       return { ...prev, cards: updatedCards };
-  //     });
-  //   } else {
-  //     message.warning("Cannot add more than 11 cards");
-  //   }
-  // };
 
   const deleteCard = (index) => {
     if (richCardCarousels?.cards[cardIndex]?.actions?.length > 1) {
@@ -529,7 +494,7 @@ function RichCardCarouselSidebar({
                   ""
                 }
                 id="message"
-                onChange={(e) => handleMessageNameChange(e, cardIndex, "title")} // Pass cardIndex and "title" as key
+                onChange={(e) => handleMessageNameChange(e, cardIndex, "title")}
               />
             </Form.Item>
             <Form.Item
@@ -546,10 +511,9 @@ function RichCardCarouselSidebar({
                   alldata?.data?.richCardCarousels?.cards[cardIndex]
                     ?.description || ""
                 }
-                // value={description}
                 onChange={(e) =>
                   handleDescriptionNameChange(e, cardIndex, "description")
-                } // Pass cardIndex and "description
+                } 
               />
             </Form.Item>
             <Row>
@@ -568,7 +532,7 @@ function RichCardCarouselSidebar({
                     {...props}
                     showUploadList={false}
                     customRequest={({ onSuccess }) => {
-                      setTimeout(() => onSuccess("ok"), 0); // Mock success
+                      setTimeout(() => onSuccess("ok"), 0); 
                     }}
                     onChange={(info) =>
                       handleImageUpload(info, cardIndex, "media")
