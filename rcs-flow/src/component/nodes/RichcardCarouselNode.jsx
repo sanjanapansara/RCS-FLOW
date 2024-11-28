@@ -243,11 +243,7 @@ import { useSelector } from "react-redux";
 function RichcardCarouselNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
-
-  // Find the current node data based on its ID
   const alldata = nodes?.find((element) => element?.id === id);
-
-  // Default cards
   const defaultCards = [
     {
       title: "Card Title",
@@ -263,24 +259,16 @@ function RichcardCarouselNode({ data, selected }) {
     },
   ];
 
-  // Determine the cards to render
   const cardsToShow =
     alldata?.data?.richCardCarousels?.cards?.length > 0
       ? alldata?.data?.richCardCarousels?.cards
       : defaultCards;
 
-  // Function to determine image width based on size
-  const getImageWidth = () => {
-    switch (alldata?.data?.size) {
-      case "short":
-        return 80;
-      case "medium":
-        return 120;
-      case "tall":
-        return 180;
-      default:
-        return 150;
-    }
+  const getImageWidth = (size) => {
+    if (size === "short") return 80;
+    if (size === "medium") return 120;
+    if (size === "tall") return 180;
+    return 150;
   };
 
   return (
@@ -294,95 +282,219 @@ function RichcardCarouselNode({ data, selected }) {
         },
       }}
     >
-      
+      {alldata?.data?.isStartNode ? (
+        <Badge.Ribbon
+          text={<div className="flex justify-start m-1">Start</div>}
+          placement="start"
+          style={{ marginTop: -30 }}
+        >
+          <Card
+            title={alldata?.data?.templateName || "Default Card"}
+            size="small"
+            bodyStyle={{ padding: "10px" }}
+            style={{
+              width: 400,
+              padding: "0px",
+              marginBottom: "10px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+              border: selected ? "1px solid #796383" : "none",
+            }}
+          >
+            <Flex direction="column" align="center">
+              {cardsToShow.map((card, index) => (
+                <div key={index}>
+                  <Handle type="target" position={Position.Left} />
+                  <Typography.Text>
+                    <strong>{card?.title || "Card Title"}</strong>
+                  </Typography.Text>
+                  <br />
+                  <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
+                    {card?.description
+                      ? card?.description.split("\n").map((line, index) => (
+                          <span key={index}>
+                            {line}
+                            <br />
+                          </span>
+                        ))
+                      : "Card description"}
+                  </Typography.Text>
+                  <br />
+                  <Image
+                    preview={false}
+                    width={getImageWidth(card.size)}
+                    alt="example"
+                    src={
+                      card?.media ||
+                      "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+                    }
+                  />
+                  <div style={{ marginTop: 10 }}>
+                    {card?.actions?.length > 0 ? (
+                      card.actions.map((action, actionIndex) => (
+                        <Button
+                          key={actionIndex}
+                          size="small"
+                          block
+                          style={{
+                            background: "#adafce",
+                            color: "black",
+                            marginTop: 5,
+                          }}
+                          icon={
+                            <>
+                              {action?.type === "quick" && <MessageOutlined />}
+                              {action?.type === "call" && <PhoneOutlined />}
+                              {action?.type === "url" && <LinkOutlined />}
+                              {action?.type === "location" && (
+                                <EnvironmentOutlined />
+                              )}
+                              {action?.type === "calendar" && (
+                                <CalendarOutlined />
+                              )}
+                            </>
+                          }
+                        >
+                          {action.type === "quick" && (
+                            <Handle
+                              type="source"
+                              position={Position.Right}
+                              isConnectable={true}
+                            />
+                          )}
+                          <Typography.Text>
+                            {action?.title || "Default Action"}
+                          </Typography.Text>
+                        </Button>
+                      ))
+                    ) : (
+                      <Button
+                        size="small"
+                        block
+                        style={{
+                          background: "#adafce",
+                          color: "black",
+                          marginTop: 5,
+                        }}
+                      >
+                        <Handle
+                          type="source"
+                          position={Position.Right}
+                          isConnectable={true}
+                        />
+                        <Typography.Text>Default Action</Typography.Text>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </Flex>
+          </Card>
+        </Badge.Ribbon>
+      ) : (
         <Card
-         
-          title={data?.title || "Default Card"}
+          title={alldata?.data?.templateName || "Default Card"}
           size="small"
           bodyStyle={{ padding: "10px" }}
           style={{
-            // width: 250,
+            width: 400,
             padding: "0px",
             marginBottom: "10px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
             border: selected ? "1px solid #796383" : "none",
           }}
         >
-          <Flex direaction="column" align="center">
-          {cardsToShow.map((card, index) => (
-            <div key={index}>
-          <Handle type="target" position={Position.Left} />
-          <Typography.Text>
-            <strong>{card?.title || "Card Title"}</strong>
-          </Typography.Text>
-          <br />
-          <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
-               {card?.description
-                 ? card?.description.split("\n").map((line, index) => (
-                     <span key={index}>
-                      {line}
-                       <br />
-                     </span>
-                   ))
-                 : "Card description"}
-            </Typography.Text>
-<br/>
-          <Image
-            preview={false}
-            width={getImageWidth()}
-            alt="example"
-            src={
-              card?.media ||
-              "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
-            }
-          />
-          <div style={{ marginTop: 10 }}>
-            {card?.actions?.length > 0 ? (
-              card.actions.map((action, actionIndex) => (
-                <Button
-                  key={actionIndex}
-                  size="small"
-                  block
-                  style={{
-                    background: "#adafce",
-                    color: "black",
-                    marginTop: 5,
-                  }}
-                  icon={
-                    <>
-                      {action?.type === "quick" && <MessageOutlined />}
-                      {action?.type === "call" && <PhoneOutlined />}
-                      {action?.type === "url" && <LinkOutlined />}
-                      {action?.type === "location" && <EnvironmentOutlined />}
-                      {action?.type === "calendar" && <CalendarOutlined />}
-                    </>
+          <Flex direction="column" align="center">
+            {cardsToShow.map((card, index) => (
+              <div key={index}>
+                <Handle type="target" position={Position.Left} />
+                <Typography.Text>
+                  <strong>{card?.title || "Card Title"}</strong>
+                </Typography.Text>
+                <br />
+                <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
+                  {card?.description
+                    ? card?.description.split("\n").map((line, index) => (
+                        <span key={index}>
+                          {line}
+                          <br />
+                        </span>
+                      ))
+                    : "Card description"}
+                </Typography.Text>
+                <br />
+                <Image
+                  preview={false}
+                  width={getImageWidth(card.size)}
+                  alt="example"
+                  src={
+                    card?.media ||
+                    "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
                   }
-                >
-                  {action?.title || "Default Action"}
-                </Button>
-              ))
-            ) : (
-              <Button
-                size="small"
-                block
-                style={{
-                  background: "#adafce",
-                  color: "black",
-                  marginTop: 5,
-                }}
-              >
-                <Typography.Text>Default Action</Typography.Text>
-              </Button>
-            )}
-          </div>
-          </div>
-             ))}
-             </Flex>
+                />
+                <div style={{ marginTop: 10 }}>
+                  {card?.actions?.length > 0 ? (
+                    card.actions.map((action, actionIndex) => (
+                      <Button
+                        key={actionIndex}
+                        size="small"
+                        block
+                        style={{
+                          background: "#adafce",
+                          color: "black",
+                          marginTop: 5,
+                        }}
+                        icon={
+                          <>
+                            {action?.type === "quick" && <MessageOutlined />}
+                            {action?.type === "call" && <PhoneOutlined />}
+                            {action?.type === "url" && <LinkOutlined />}
+                            {action?.type === "location" && (
+                              <EnvironmentOutlined />
+                            )}
+                            {action?.type === "calendar" && (
+                              <CalendarOutlined />
+                            )}
+                          </>
+                        }
+                      >
+                        {action.type === "quick" && (
+                          <Handle
+                            type="source"
+                            position={Position.Right}
+                            isConnectable={true}
+                          />
+                        )}
+                        <Typography.Text>
+                          {action?.title || "Default Action"}
+                        </Typography.Text>
+                      </Button>
+                    ))
+                  ) : (
+                    <Button
+                      size="small"
+                      block
+                      style={{
+                        background: "#adafce",
+                        color: "black",
+                        marginTop: 5,
+                      }}
+                    >
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={true}
+                      />
+                      <Typography.Text>Default Action</Typography.Text>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </Flex>
         </Card>
-   
+      )}
     </ConfigProvider>
   );
 }
 
 export default RichcardCarouselNode;
-

@@ -7,15 +7,24 @@ import {
 } from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
 
-import { Badge, Button, Card, ConfigProvider, Switch, Typography, Image as AntdImage, Image } from "antd";
+import {
+  Badge,
+  Button,
+  Card,
+  ConfigProvider,
+  Switch,
+  Typography,
+  Image as AntdImage,
+  Image,
+} from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function RichcardNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
-  console.log("richcard node",nodes);
-  
+  console.log("richcard node", nodes);
+
   const alldata = nodes.find((item) => item.id === id);
 
   const getImageWidth = () => {
@@ -60,7 +69,7 @@ function RichcardNode({ data, selected }) {
             <br />
             <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
               {alldata?.data.description
-                ?alldata?. data.description.split("\n").map((line, index) => (
+                ? alldata?.data.description.split("\n").map((line, index) => (
                     <span key={index}>
                       {line}
                       <br />
@@ -86,7 +95,11 @@ function RichcardNode({ data, selected }) {
                   key={i}
                   size="small"
                   block
-                  style={{ background: "#adafce", color: "black", marginBottom: 5 }}
+                  style={{
+                    background: "#adafce",
+                    color: "black",
+                    marginBottom: 5,
+                  }}
                   icon={
                     <>
                       {btn?.type === "quick" && <MessageOutlined />}
@@ -110,7 +123,11 @@ function RichcardNode({ data, selected }) {
                 </Button>
               ))
             ) : (
-              <Button size="small" block style={{ background: "#adafce", color: "black" }}>
+              <Button
+                size="small"
+                block
+                style={{ background: "#adafce", color: "black" }}
+              >
                 <Handle
                   type="source"
                   position={Position.Right}
@@ -141,7 +158,7 @@ function RichcardNode({ data, selected }) {
           <br />
           <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
             {alldata?.data.description
-              ? alldata?. data.description.split("\n").map((line, index) => (
+              ? alldata?.data.description.split("\n").map((line, index) => (
                   <span key={index}>
                     {line}
                     <br />
@@ -152,7 +169,7 @@ function RichcardNode({ data, selected }) {
           <Image
             style={{ width: "100%" }}
             preview={false}
-            width={getImageWidth()+ 0}
+            width={getImageWidth() + 0}
             alt="example"
             src={
               alldata?.data?.mediaUrl ||
@@ -165,7 +182,11 @@ function RichcardNode({ data, selected }) {
                 key={i}
                 size="small"
                 block
-                style={{ background: "#adafce", color: "black", marginBottom: 5 }}
+                style={{
+                  background: "#adafce",
+                  color: "black",
+                  marginBottom: 5,
+                }}
                 icon={
                   <>
                     {btn?.type === "quick" && <MessageOutlined />}
@@ -189,7 +210,11 @@ function RichcardNode({ data, selected }) {
               </Button>
             ))
           ) : (
-            <Button size="small" block style={{ background: "#adafce", color: "black" }}>
+            <Button
+              size="small"
+              block
+              style={{ background: "#adafce", color: "black" }}
+            >
               <Handle
                 type="source"
                 position={Position.Right}

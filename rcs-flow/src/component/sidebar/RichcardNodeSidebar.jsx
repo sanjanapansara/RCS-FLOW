@@ -67,8 +67,7 @@ function RichcardNodeSidebar({
     const value = e.target.value;
     setTemplateName(value);
     const data = { selectedNode, value, key: "templateName" };
-    dispatch(setRichCardNodeData(data));
-  };
+    dispatch(setRichCardNodeData(data));};
 
   const handleMessageNameChange = (e) => {
     const value = e.target.value;
@@ -117,6 +116,8 @@ function RichcardNodeSidebar({
       return { ...prev, actions };
     });
   };
+
+  
   const addNewCard = () => {
     if (data.actions.length < 11) {
       setData((prev) => {

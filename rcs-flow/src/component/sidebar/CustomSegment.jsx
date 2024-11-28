@@ -16,11 +16,15 @@ const CustomSegment = ({
   value,
 }) => {
   const [close, setClose] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(0);
+
   const dispatch = useDispatch();
 
   const handleSelect = (option) => {
-    if (!close) {
+    if (close === false) {
+      setSelectedValue(option);
       onChange(option);
+      console.log("Selected value", option);
     }
   };
 
@@ -50,42 +54,45 @@ const CustomSegment = ({
 
   const handleClose = (index) => {
     if (options.length > 2) {
-      // Remove the card from options, richCardCarousels, and previewImage
+      // Safely update options, richCardCarousels.cards, and previewImage
       const updatedOptions = options.filter((_, i) => i !== index);
-      const updatedCards = richCardCarousels?.cards.filter((_, i) => i !== index);
+      const updatedCards =
+        richCardCarousels?.cards?.filter((_, i) => i !== index) || [];
       const updatedImages = previewImage.filter((_, i) => i !== index);
-      console.log("updated option",updatedOptions);
-      console.log("updatedCards",richCardCarousels?.cards.filter((_, i) => i !== index));
-      setRichCardCarousels(updatedCards);
-      setPreviewImage(updatedImages);
+
+      // Update the states with the modified data
       setOptions(updatedOptions.map((_, i) => `Card ${i + 1}`));
-  
-      // Adjust the selected value based on the new list of options
+      setRichCardCarousels((prev) => ({
+        ...prev,
+        cards: updatedCards,
+      }));
+      setPreviewImage(updatedImages);
+
+      // Adjust the selected card value
       if (updatedOptions.length === 0) {
-        onChange(null);  // Reset selection if no cards remain
-      } else if (value === index && updatedOptions.length > 0) {
-        onChange(index === 0 ? 0 : index - 1);  // Adjust to previous card
+        onChange(null); // Reset selection if no cards remain
+      } else if (value === index) {
+        onChange(index === 0 ? 0 : index - 1); // Adjust to the previous card
       } else if (value < index) {
         onChange(value);
       } else {
         onChange(value - 1);
       }
-  
-      // Dispatch updated data to Redux store
+
+      // Prepare data for Redux update
       const data = {
         selectedNode,
-        value: { ...richCardCarousels, cards: updatedCards }, // Keep other data intact, update cards
-        key: "richCardCarousels",  // You can use whatever key is needed to update this part of the state
+        value: { ...richCardCarousels, cards: updatedCards }, // Update cards while keeping other properties intact
+        key: "richCardCarousels",
       };
-      console.log("handle clode data-->",data);
-      
-      dispatch(setRichCardNodeCarousleData(data)); // Dispatch the updated data
-  
+
+      // Dispatch the updated data to Redux store
+      dispatch(setRichCardNodeCarousleData(data));
     } else {
+      // Show a warning message if fewer than two cards would remain
       message.warning("At least two cards must remain.");
     }
   };
-  
 
   const cancel = (e) => {
     console.log(e);
@@ -98,6 +105,8 @@ const CustomSegment = ({
           <Col md={6} key={option}>
             <Space size="large">
               <Tag
+                key={option}
+                defaultChecked={selectedValue}
                 onClick={() => {
                   setClose(false);
                   handleSelect(index);
