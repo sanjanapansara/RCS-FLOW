@@ -1,27 +1,19 @@
 import React, { useState } from "react";
-import {
-  Card,
-  ConfigProvider,
-  Flex,
-  Form,
-  Input,
-  Layout,
-  Row,
-  Typography,
-} from "antd";
+import {Card,ConfigProvider,Flex,Form,Input,Layout,Row,Typography,} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import SideBarHeader from "./SideBarHeader";
 const { Sider } = Layout;
 const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
-  const [form] = Form.useForm();
-  const [templateName, setTemplateName] = useState(
-    node?.data?.templateName || ""
+const [form] = Form.useForm();
+const [templateName, setTemplateName] = useState(
+  node?.data?.templateName || ""
   );
   const [messagename, setMessageName] = useState(node?.data?.label || "");
 
   const handleTemplateNameChange = (e) => {
     const newTemplateName = e.target.value;
     setTemplateName(newTemplateName);
+
     updateNodeData(node.id, { templateName: newTemplateName });
   };
 
@@ -30,7 +22,6 @@ const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
     setMessageName(MessageName);
     updateNodeData(node.id, { label: MessageName });
   };
-
   return (
     <Layout>
       <Sider width="305px">
@@ -38,8 +29,7 @@ const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
           <Card
             bodyStyle={{ padding: 5 }}
             style={{ width: "100%" }}
-            bordered={false}
-          >
+            bordered={false}>
             <Row align="middle">
               <Flex align="center" gap={20}>
                 <SideBarHeader
@@ -54,7 +44,7 @@ const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
             </Row>
           </Card>
         </Row>
-        <br />
+        <br/>
         <ConfigProvider
           theme={{
             components: {
@@ -63,8 +53,7 @@ const TextNodeSidebar = ({ node, updateNodeData, setSelectedNode, title }) => {
                 itemMarginBottom: 5,
               },
             },
-          }}
-        >
+          }}>
           <Form form={form} layout="vertical">
             <Form.Item label="Template Name">
               <Input

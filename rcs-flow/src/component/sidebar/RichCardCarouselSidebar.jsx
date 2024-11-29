@@ -47,7 +47,7 @@ function RichCardCarouselSidebar({
   const alldata = nodes?.find((element) => element?.id == selectedNode);
   console.log("isExist", alldata);
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
+  const [setImageUrl] = useState(node?.data?.imageUrl || "");
   const [options, setOptions] = useState(["Card 1", "Card 2"]);
   console.log("options", options);
   const [cardIndex, setCardIndex] = useState(0);
@@ -91,20 +91,10 @@ function RichCardCarouselSidebar({
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
-  const [messagename, setMessageName] = useState(
+  const [setMessageName] = useState(
     alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ?? ""
   );
-  const [description, setDescription] = useState("");
-  const [data, setData] = useState({
-    actions: alldata?.data?.actions ?? [
-      {
-        id: 0,
-        type: "quick",
-        title: "",
-        payload: "",
-      },
-    ],
-  });
+  const [setDescription] = useState("");
 
   useEffect(() => {
     const initValues = richCardCarousels?.cards?.[cardIndex]?.actions?.reduce(

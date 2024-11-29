@@ -18,6 +18,7 @@ import {
   getConnectedEdges,
   reconnectEdge,
   useViewport,
+  Panel,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./App.css";
@@ -43,7 +44,7 @@ import {
   setEmptyState,
   setUpdateNodeData,
 } from "./component/redux/reducer.button";
-import { Dropdown, message, Popconfirm, Space, Typography } from "antd";
+import { Button, Dropdown, message, Popconfirm, Space, Typography } from "antd";
 import {
   CopyOutlined,
   DeleteOutlined,
@@ -96,6 +97,10 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
   });
   return { nodes: newNodes, edges };
 };
+
+
+
+
 
 const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
   initialNodes,
@@ -357,12 +362,12 @@ const DnDFlow = () => {
           //   setSelectedNode={setSelectedNode}
           // />
           <div className="sidebar">
-          <RichCardCarouselSidebar
-            node={selected}
-            updateNodeData={updateNodeData}
-            setSelectedNode={setSelectedNode}
-            selectedNode={selectedNode}
-          />
+            <RichCardCarouselSidebar
+              node={selected}
+              updateNodeData={updateNodeData}
+              setSelectedNode={setSelectedNode}
+              selectedNode={selectedNode}
+            />
           </div>
         );
       case "media":
@@ -386,6 +391,21 @@ const DnDFlow = () => {
       setEdges((els) => reconnectEdge(oldEdge, newConnection, els)),
     [setEdges]
   );
+
+
+  const onLayout = useCallback(
+    (direction) => {
+      const { nodes: layoutedNodes, edges: layoutedEdges } =
+        getLayoutedElements(nodes, edges, direction);
+
+      setNodes([...layoutedNodes]);
+      setEdges([...layoutedEdges]);
+    },
+    [nodes, edges, setNodes, setEdges]
+  );
+
+
+
 
   const createCopyNode = (event) => {
     event.preventDefault();
@@ -447,10 +467,13 @@ const DnDFlow = () => {
           onNodeClick={onNodeClick}
           onNodesDelete={onNodesDelete}
         >
+           <Panel position="top-right">
+            <button onClick={() => onLayout("LR")}>horizontal layout</button>
+          </Panel>
           <NodeToolbar
             style={{
               display: "flex",
-              // alignItems: "center",
+              alignItems: "center",
               justifyContent: "end",
               width: toolbarWidth,
             }}
