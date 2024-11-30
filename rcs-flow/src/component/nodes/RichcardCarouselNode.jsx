@@ -13,14 +13,17 @@ import {
   ConfigProvider,
   Flex,
   Image,
+  Switch,
   Typography,
 } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 function RichcardCarouselNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
+  const [enabled, setEnabled] = useState(true);
+
   const alldata = nodes?.find((element) => element?.id === id);
   const defaultCards = [
     {
@@ -60,8 +63,20 @@ function RichcardCarouselNode({ data, selected }) {
         },
       }}
     >
+       {alldata?.data?.isStartNode && (
+          <Badge.Ribbon
+            text={<div className="flex justify-start m-1">Start</div>}
+            placement="start"
+            style={{ marginTop: -30 }}
+          />
+        )}
       <Card
         title={alldata?.data?.templateName || "Default Card"}
+        extra={<Switch size="small" 
+                
+          checked={enabled}
+          value={enabled}
+          onChange={(value) => setEnabled(value)}  />}
         size="small"
         bodyStyle={{ padding: "10px" }}
         style={{
@@ -72,13 +87,7 @@ function RichcardCarouselNode({ data, selected }) {
           border: selected ? "1px solid #796383" : "none",
         }}
       >
-        {alldata?.data?.isStartNode && (
-          <Badge.Ribbon
-            text={<div className="flex justify-start m-1">Start</div>}
-            placement="start"
-            style={{ marginTop: -30 }}
-          />
-        )}
+       
         <Flex Direction="column" alignItems="center" gap={7}>
           {cardsToShow.map((card, index) => (
             <div

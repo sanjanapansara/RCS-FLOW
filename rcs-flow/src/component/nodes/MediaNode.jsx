@@ -35,7 +35,7 @@ function MediaNode({ data, selected }) {
                 disabled={alldata?.data?.isStartNode && true}
                 checked={enabled}
                 value={enabled}
-                onChange={() => setEnabled(!enabled)}
+                onChange={(value) => setEnabled(value)}
               />
             }
             cover={
@@ -98,7 +98,7 @@ function MediaNode({ data, selected }) {
               disabled={alldata?.data?.isStartNode && true}
               checked={enabled}
               value={enabled}
-              onChange={() => setEnabled(!enabled)}
+              onChange={(value) => setEnabled(value)}
             />
           }
           cover={

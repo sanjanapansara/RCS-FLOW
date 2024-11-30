@@ -306,7 +306,7 @@ function RichCardCarouselSidebar({
     setRichCardCarousels((prev) => {
       const updatedCards = prev.cards.map((card, index) => {
         if (index === cardIndex) {
-          if (card.actions.length < 11) {
+          if (card.actions.length < 4) {
             const updatedActions = [
               ...card.actions,
               {
@@ -318,7 +318,7 @@ function RichCardCarouselSidebar({
             ];
             return { ...card, actions: updatedActions };
           } else {
-            message.warning("Cannot add more than 11 actions to a card");
+            message.warning("Cannot add more than 4 actions to a card");
             return card;
           }
         }
