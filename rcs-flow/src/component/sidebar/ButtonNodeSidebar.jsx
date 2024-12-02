@@ -244,6 +244,13 @@ const deleteCard = (index) => {
                       <Form.Item
                         name={`button-phoneNumber-${index}`}
                         label="Phone Number"
+                        rules={[
+                          {
+                            required: true,
+                            type: "string",
+                            message: "Please enter Phone Number",
+                          },
+                        ]}
                       >
                         <Input
                           value={btn.phoneNumber}
@@ -257,7 +264,9 @@ const deleteCard = (index) => {
                   )}
                   {btn.type === "url" && (
                     <Col md={24}>
-                      <Form.Item name={`button-url-${index}`} label="URL">
+                      <Form.Item name={`button-url-${index}`} label="URL"
+                        
+                      >
                         <Input
                           value={btn.payload}
                           onChange={(e) =>
