@@ -31,6 +31,7 @@ const CustomSegment = ({
       console.log("Selected value", option);
     }
   };
+  
   const handleClose = (index) => {
     if (options.length > 2) {
       const updatedOptions = options.filter((_, i) => i !== index);
