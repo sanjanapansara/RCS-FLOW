@@ -39,12 +39,12 @@ const ButtonNode = ({ data, selected }) => {
             extra={
               <Switch
                 size="small"
-                // disabled={
-                //   (alldata?.data?.isStartNode || data.isStartNode) && true
-                // }
+                disabled={
+                  (alldata?.data?.isStartNode || data.isStartNode) && true
+                }
                 checked={enabled}
                 value={enabled}
-                onChange={(value) => setEnabled(value)}
+                onChange={() => setEnabled(!enabled)}
               />
             }
             cover={
@@ -128,7 +128,7 @@ const ButtonNode = ({ data, selected }) => {
           extra={
             <Switch
               size="small"
-              // disabled={alldata?.data?.isStartNode && true}
+              disabled={alldata?.data?.isStartNode && true}
               checked={enabled}
               value={enabled}
               onChange={() => setEnabled(!enabled)}
