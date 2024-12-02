@@ -4,7 +4,7 @@ import { Badge, Card, ConfigProvider, Switch, Typography } from "antd";
 import { useSelector } from "react-redux";
 
 const TextNode = ({ data, selected }) => {
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === id);
@@ -31,10 +31,10 @@ const TextNode = ({ data, selected }) => {
             extra={
               <Switch
                 size="small"
-                
+                disabled
                 checked={enabled}
                 value={enabled}
-                onChange={(value) => setEnabled(value)}
+                onChange={() => setEnabled(!enabled)}
               />
             }
             size="small"
@@ -51,7 +51,7 @@ const TextNode = ({ data, selected }) => {
               <Handle
                 type={alldata?.data?.isStartNode ? "source" : "target"}
                 position={
-                   Position.Left
+                  alldata?.data?.isStartNode ? Position.Right : Position.Left
                 }
                 isConnectable={true}
               />
@@ -65,7 +65,7 @@ const TextNode = ({ data, selected }) => {
                 {!enabled && (
                   <Handle
                     type="source"
-                    position={Position.Left}
+                    position={Position.Right}
                     isConnectable={true}
                   />
                 )}
@@ -89,7 +89,7 @@ const TextNode = ({ data, selected }) => {
           extra={
             <Switch
               size="small"
-              
+              disabled
               checked={enabled}
               value={enabled}
               onChange={() => setEnabled(!enabled)}
@@ -109,7 +109,7 @@ const TextNode = ({ data, selected }) => {
             <Handle
               type={alldata?.data?.isStartNode ? "source" : "target"}
               position={
-                 Position.Left
+                alldata?.data?.isStartNode ? Position.Right : Position.Left
               }
               isConnectable={true}
             />
@@ -123,7 +123,7 @@ const TextNode = ({ data, selected }) => {
               {!enabled && (
                 <Handle
                   type="source"
-                  position={Position.Left}
+                  position={Position.Right}
                   isConnectable={true}
                 />
               )}

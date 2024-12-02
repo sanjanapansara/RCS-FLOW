@@ -119,7 +119,7 @@ function RichcardNodeSidebar({
 
   
   const addNewCard = () => {
-    if (data.actions.length < 4) {
+    if (data.actions.length < 11) {
       setData((prev) => {
         const value = {
           ...prev,
@@ -138,7 +138,7 @@ function RichcardNodeSidebar({
         return value;
       });
     } else {
-      message.warning("Cannot add more than 4 buttons");
+      message.warning("Cannot add more than 11 buttons");
     }
   };
   const deleteCard = (index) => {

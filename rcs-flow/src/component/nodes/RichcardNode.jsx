@@ -17,14 +17,13 @@ import {
   Image as AntdImage,
   Image,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function RichcardNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   console.log("richcard node", nodes);
-  const [enabled, setEnabled] = useState(true);
 
   const alldata = nodes.find((item) => item.id === id);
 
@@ -53,11 +52,7 @@ function RichcardNode({ data, selected }) {
         >
           <Card
             title={alldata?.data?.templateName || "Rich Card"}
-            extra={<Switch size="small" 
-                
-              checked={enabled}
-              value={enabled}
-              onChange={() => setEnabled(!enabled)}  />}
+            extra={<Switch size="small" />}
             size="small"
             bodyStyle={{ padding: "10px" }}
             style={{
@@ -146,11 +141,7 @@ function RichcardNode({ data, selected }) {
       ) : (
         <Card
           title={alldata?.data?.templateName || "Rich Card"}
-          extra={<Switch size="small" 
-                
-            checked={enabled}
-            value={enabled}
-            onChange={(value) => setEnabled(value)}  />}
+          extra={<Switch size="small" />}
           size="small"
           bodyStyle={{ padding: "10px" }}
           style={{
