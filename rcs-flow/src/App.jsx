@@ -116,7 +116,7 @@ const DnDFlow = () => {
   const { screenToFlowPosition } = useReactFlow();
   const [setReactFlowInstance] = useState(null);
   const [type] = useDnD();
-  const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedNode, setSelectedNode] = useState("button");
   const alldata = nodeData.find((item) => item?.id === selectedNode);
   const [toolbarWidth, setToolbarWidth] = useState(200); // Default width
   const { x, y, zoom } = useViewport();
@@ -129,7 +129,7 @@ const DnDFlow = () => {
     if (selectedNode) {
       const selectedNodeData = nodes.find((n) => n.id === selectedNode);
       if (selectedNodeData) {
-        const nodeWidth = 200;
+        const nodeWidth = 350;
         setToolbarWidth(nodeWidth * zoom);
       }
     }
@@ -319,7 +319,7 @@ const DnDFlow = () => {
     },
     [setEdges, edges, nodes]
   );
-
+  const selected = nodes.find((node) => node?.id === selectedNode);
   const renderSidebar = () => {
     if (!selectedNode) return <Sidebar className="sidebar" />;
     const selected = nodes.find((node) => node?.id === selectedNode);
@@ -432,6 +432,8 @@ const DnDFlow = () => {
     setNodes((nds) => nds.concat(newNode));
     dispatch(setNodesState(newNode));
   };
+  console.log("type",selected);
+  
 
   return (
     <div className="dndflow" style={{ display: "flex", overflowY: "hidden" }}>
@@ -470,7 +472,8 @@ const DnDFlow = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "end",
-              width: toolbarWidth,
+              // width: toolbarWidth,
+              width: selected?.type === "richcard_carosal" ? "26%" : "15%",
             }}
             nodeId={selectedNode}
             position={Position.Top}
