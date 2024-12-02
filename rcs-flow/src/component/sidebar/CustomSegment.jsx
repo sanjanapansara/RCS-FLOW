@@ -28,9 +28,9 @@ const CustomSegment = ({
     if (close === false) {
       setSelectedValue(option);
       onChange(option);
-      console.log("Selected value", option);
     }
   };
+  console.log("Selected value", options);
   const handleClose = (index) => {
     if (options.length > 2) {
       const updatedOptions = options.filter((_, i) => i !== index);
@@ -71,7 +71,7 @@ const CustomSegment = ({
     <div>
       <Row gutter={[16, 24]}>
         {options.map((option, index) => (
-          <Col md={6} key={option}>
+          <Col md={6} key={index}>
             <Space size="large">
               <Tag
                 key={option}
