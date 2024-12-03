@@ -45,119 +45,44 @@ function RichcardNode({ data, selected }) {
         },
       }}
     >
-      {alldata?.data?.isStartNode ? (
+      {alldata?.data?.isStartNode && (
         <Badge.Ribbon
           text={<div className="flex justify-start m-1">Start</div>}
           placement="start"
           style={{ marginTop: -30 }}
-        >
-          <Card
-            title={alldata?.data?.templateName || "Rich Card"}
-            extra={<Switch size="small" 
-                
-              checked={enabled}
-              value={enabled}
-              onChange={() => setEnabled(!enabled)}  />}
+        />
+      )}
+
+      <Card
+        title={alldata?.data?.templateName || "Rich Card"}
+        extra={
+          <Switch
             size="small"
-            bodyStyle={{ padding: "10px" }}
-            style={{
-              width: 200,
-              padding: "0px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-              border: selected ? "1px solid #ADB3E8" : "none",
-            }}
-          >
-            <Handle type="target" position={Position.Left} />
-            <Typography.Text>
-              <strong>{alldata?.data?.label ?? "Richcard"}</strong>
-            </Typography.Text>
-            <br />
-            <Typography.Text style={{ whiteSpace: "pre-wrap" }}>
-              {alldata?.data.description
-                ? alldata?.data.description.split("\n").map((line, index) => (
-                    <span key={index}>
-                      {line}
-                      <br />
-                    </span>
-                  ))
-                : "No description available."}
-            </Typography.Text>
-            <center>
-              <Image
-                preview={false}
-                width={getImageWidth()}
-                alt="example"
-                src={
-                  alldata?.data?.mediaUrl ||
-                  "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
-                }
-                about=""
-              />
-            </center>
-            {alldata?.data?.actions?.length > 0 ? (
-              alldata.data.actions.map((btn, i) => (
-                <Button
-                  key={i}
-                  size="small"
-                  block
-                  style={{
-                    background: "#adafce",
-                    color: "black",
-                    marginBottom: 5,
-                  }}
-                  icon={
-                    <>
-                      {btn?.type === "quick" && <MessageOutlined />}
-                      {btn?.type === "call" && <PhoneOutlined />}
-                      {btn?.type === "url" && <LinkOutlined />}
-                      {btn?.type === "location" && <EnvironmentOutlined />}
-                      {btn?.type === "calendar" && <CalendarOutlined />}
-                    </>
-                  }
-                >
-                  {btn.type === "quick" && (
-                    <Handle
-                      type="source"
-                      position={Position.Right}
-                      isConnectable={true}
-                    />
-                  )}
-                  <Typography.Text>
-                    {btn?.title ?? "Default Button"}
-                  </Typography.Text>
-                </Button>
-              ))
-            ) : (
-              <Button
-                size="small"
-                block
-                style={{ background: "#adafce", color: "black" }}
-              >
-                <Handle
-                  type="source"
-                  position={Position.Right}
-                  isConnectable={true}
-                />
-                <Typography.Text>Default Button</Typography.Text>
-              </Button>
-            )}
-          </Card>
-        </Badge.Ribbon>
-      ) : (
-        <Card
-          title={alldata?.data?.templateName || "Rich Card"}
-          extra={<Switch size="small" 
-                
             checked={enabled}
             value={enabled}
-            onChange={(value) => setEnabled(value)}  />}
-          size="small"
-          bodyStyle={{ padding: "10px" }}
+            onChange={(value) => setEnabled(value)}
+          />
+        }
+        size="small"
+        bodyStyle={{ padding: "10px" }}
+        style={{
+          width: 220,
+          padding: "0px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+          border: selected ? "1px solid #ADB3E8" : "none",
+        }}
+      >
+        <div
+          
           style={{
-            width: 200,
-            padding: "0px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-            border: selected ? "1px solid #ADB3E8" : "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            // width: "100%",
+            border: "1px solid #d9d9d9",
+            borderRadius: "8px",
+            padding: "15px",
+            backgroundColor: "#f9f9f9",
           }}
         >
           <Handle type="target" position={Position.Left} />
@@ -174,7 +99,7 @@ function RichcardNode({ data, selected }) {
                   </span>
                 ))
               : "No description available."}
-          </Typography.Text>
+          </Typography.Text><br />
           <Image
             style={{ width: "100%" }}
             preview={false}
@@ -184,7 +109,7 @@ function RichcardNode({ data, selected }) {
               alldata?.data?.mediaUrl ||
               "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
             }
-          />
+          /><br/>
           {alldata?.data?.actions?.length > 0 ? (
             alldata.data.actions.map((btn, i) => (
               <Button
@@ -229,11 +154,11 @@ function RichcardNode({ data, selected }) {
                 position={Position.Right}
                 isConnectable={true}
               />
-              <Typography.Text>Default Button</Typography.Text>
+              <Typography.Text>Default Buttoncedcvrfv</Typography.Text>
             </Button>
           )}
-        </Card>
-      )}
+        </div>
+      </Card>
     </ConfigProvider>
   );
 }
