@@ -43,8 +43,11 @@ function MediaNode({ data, selected }) {
             bodyStyle={{ padding: "10px" }}
             style={{
               width: 200,
+              padding: "0px",
+              borderRadius: 10,
               boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-              border: selected ? "1px solid#CACACA" : "none",
+              border: selected ? "1px solid #D1AFAF" : "none",
+              opacity:"0.9"
             }}
           >
             {alldata?.data?.isStartNode ? (

@@ -55,13 +55,13 @@ function RichcardCarouselNode({ data, selected }) {
         components: {
           Card: {
             headerBg: "#dbd3de",
-            colorBorderSecondary: "#796383",
+            // colorBorderSecondary: "#796383",
           },
         },
       }}
     >
       <Card
-        title={alldata?.data?.templateName || "Default Card"}
+        title={alldata?.data?.templateName || "Richcard Carousels"}
         size="small"
         bodyStyle={{ padding: "10px" }}
         style={{
@@ -69,7 +69,8 @@ function RichcardCarouselNode({ data, selected }) {
           padding: "0px",
           marginBottom: "10px",
           boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-          border: selected ? "1px solid #796383" : "none",
+          border: selected ? "1px solid #dbd3de" : "none",
+          opacity:"0.9"
         }}
       >
         {alldata?.data?.isStartNode && (

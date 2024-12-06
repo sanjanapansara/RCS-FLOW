@@ -319,6 +319,7 @@ const DnDFlow = () => {
     },
     [setEdges, edges, nodes]
   );
+  const selected = nodes.find((node) => node?.id === selectedNode);
 
   const renderSidebar = () => {
     if (!selectedNode) return <Sidebar className="sidebar" />;

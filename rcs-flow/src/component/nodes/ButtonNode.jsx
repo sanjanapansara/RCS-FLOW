@@ -54,6 +54,7 @@ const ButtonNode = ({ data, selected }) => {
               padding: "0px",
               boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
               border: selected ? "1px solid #8f91a8" : "none",
+              opacity:"0.9"
             }}
           >
              <center>
@@ -136,6 +137,7 @@ const ButtonNode = ({ data, selected }) => {
             padding: "0px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
             border: selected ? "1px solid #ADB3E8" : "none",
+            opacity:"0.9"
           }}
         >
           {enabled && (
