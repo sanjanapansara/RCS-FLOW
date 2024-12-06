@@ -44,7 +44,7 @@ function RichcardNode({ data, selected }) {
         },
       }}
     >
-      {alldata?.data?.isStartNode ? (
+      {alldata?.data?.isStartNode && (
         <Badge.Ribbon
           text={<div className="flex justify-start m-1">Start</div>}
           placement="start"
@@ -145,10 +145,14 @@ function RichcardNode({ data, selected }) {
           size="small"
           bodyStyle={{ padding: "10px" }}
           style={{
-            width: 200,
-            padding: "0px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-            border: selected ? "1px solid #ADB3E8" : "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            // width: "100%",
+            border: "1px solid #d9d9d9",
+            borderRadius: "8px",
+            padding: "15px",
+            backgroundColor: "#f9f9f9",
           }}
         >
           <Handle type="target" position={Position.Left} />
@@ -165,7 +169,7 @@ function RichcardNode({ data, selected }) {
                   </span>
                 ))
               : "No description available."}
-          </Typography.Text>
+          </Typography.Text><br />
           <Image
             style={{ width: "100%" }}
             preview={false}
@@ -175,7 +179,7 @@ function RichcardNode({ data, selected }) {
               alldata?.data?.mediaUrl ||
               "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
             }
-          />
+          /><br/>
           {alldata?.data?.actions?.length > 0 ? (
             alldata.data.actions.map((btn, i) => (
               <Button
@@ -220,11 +224,11 @@ function RichcardNode({ data, selected }) {
                 position={Position.Right}
                 isConnectable={true}
               />
-              <Typography.Text>Default Button</Typography.Text>
+              <Typography.Text>Default Buttoncedcvrfv</Typography.Text>
             </Button>
           )}
-        </Card>
-      )}
+        </div>
+      </Card>
     </ConfigProvider>
   );
 }
