@@ -51,8 +51,8 @@ function RichCardCarouselSidebar({
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
   const [options, setOptions] = useState(
     alldata?.data?.richCardCarousels?.cards ?? [
-      { size: "short", templateName: "", title: "Card 1", description: "", media: "" },
-      { size: "short", templateName: "", title: "Card 2", description: "", media: "" },
+      { size: "medium", templateName: "", title: "Card 1", description: "", media: "" },
+      { size: "medium", templateName: "", title: "Card 2", description: "", media: "" },
     ]
   );
   console.log("options", options);
@@ -60,7 +60,7 @@ function RichCardCarouselSidebar({
   const [richCardCarousels, setRichCardCarousels] = useState({
     cards: alldata?.data?.richCardCarousels?.cards ?? [
       {
-        size: "short",
+        size: "medium",
         templateName: "Rich Card Carousels",
         title: "Card 1 Title",
         description: "Card 1 Description",
@@ -75,7 +75,7 @@ function RichCardCarouselSidebar({
         ],
       },
       {
-        size: "short",
+        size: "medium",
         templateName: "Rich Card Carousels",
         title: "Card 2 Title",
         description: "Card 2 Description",
@@ -92,7 +92,7 @@ function RichCardCarouselSidebar({
     ],
   });
   const [previewImage, setPreviewImage] = useState([]);
-  const [value, setValue] = useState(alldata?.data?.value ?? "short");
+  const [value, setValue] = useState(alldata?.data?.value ?? "medium");
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
@@ -556,7 +556,7 @@ function RichCardCarouselSidebar({
                   <Radio.Group
                     defaultValue={
                       alldata?.data?.richCardCarousels?.cards[cardIndex]
-                        ?.size || "short"
+                        ?.size || "medium"
                     }
                     onChange={(e) => onChange(e, cardIndex, "size")}
                     value={value}

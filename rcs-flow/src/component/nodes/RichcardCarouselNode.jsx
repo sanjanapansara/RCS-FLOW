@@ -13,6 +13,7 @@ import {
   ConfigProvider,
   Flex,
   Image,
+  Switch,
   Typography,
 } from "antd";
 import React from "react";
@@ -49,6 +50,23 @@ function RichcardCarouselNode({ data, selected }) {
     return 150;
   };
 
+  const getCardStyle = (size) => {
+    switch (size) {
+      case "short":
+        return { height: 120, fontSize: 10,description: 8, padding: 8, imageWidth: 80 };
+      case "medium":
+        return { height: 160, fontSize: 16, description: 12,padding: 12, imageWidth: 120 };
+      case "tall":
+        return { height: 200, fontSize: 22,description: 14, padding: 16, imageWidth: 180 };
+      default:
+        return { height: 160, fontSize: 16,description: 12, padding: 12, imageWidth: 120 };
+    }
+  };
+  console.log("card size-->",cardsToShow);
+  
+
+  const cardStyle = getCardStyle();
+
   return (
     <ConfigProvider
       theme={{
@@ -63,7 +81,8 @@ function RichcardCarouselNode({ data, selected }) {
       <Card
         title={alldata?.data?.templateName || "Richcard Carousels"}
         size="small"
-        bodyStyle={{ padding: "10px" }}
+        extra={<Switch size="small" />}
+        bodyStyle={{ padding: cardStyle.padding }}
         style={{
           // width: 1700,
           padding: "0px",
@@ -81,7 +100,9 @@ function RichcardCarouselNode({ data, selected }) {
           />
         )}
         <Flex Direction="column" alignItems="center" gap={7}>
-          {cardsToShow.map((card, index) => (
+        {cardsToShow.map((card, index) => {
+            const cardStyle = getCardStyle(card.size);
+            return (
             <div
               key={index}
               style={{
@@ -98,7 +119,7 @@ function RichcardCarouselNode({ data, selected }) {
               <Handle type="target" position={Position.Left} />
               <Typography.Title
                 level={5}
-                style={{ margin: "0 0 10px", textAlign: "center" }}
+                style={{ margin: "0 0 10px", textAlign: "center",fontSize:cardStyle.fontSize }}
               >
                 {card?.title || "Card Title"}
               </Typography.Title>
@@ -108,6 +129,7 @@ function RichcardCarouselNode({ data, selected }) {
                   textAlign: "center",
                   whiteSpace: "pre-wrap",
                   marginBottom: "10px",
+                  fontSize: cardStyle.description,
                 }}
               >
                 {card?.description
@@ -122,7 +144,7 @@ function RichcardCarouselNode({ data, selected }) {
 
               <Image
                 preview={false}
-                width={getImageWidth(card.size)}
+                width={cardStyle.imageWidth}
                 alt="example"
                 src={
                   card?.media ||
@@ -192,7 +214,8 @@ function RichcardCarouselNode({ data, selected }) {
                 )}
               </div>
             </div>
-          ))}
+            )
+          })}
         </Flex>
       </Card>
     </ConfigProvider>
