@@ -46,7 +46,7 @@ function MediaNode({ data, selected }) {
               padding: "0px",
               borderRadius: 10,
               boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-              border: selected ? "1px solid #D1AFAF" : "none",
+              border: selected ? "1px solid #CACACA" : "none",
               opacity:"0.9"
             }}
           >
@@ -74,13 +74,7 @@ function MediaNode({ data, selected }) {
                 )}
               </>
             )}
-            <div
-              style={{ display: "flex", flexDirection: "column" }}
-              // dangerouslySetInnerHTML={{
-              //   __html:
-              //     alldata?.data?.label?.replace(/\n/g, "<br/>") || "message",
-              // }}
-            >
+           
               <div
                 style={{
                   display: "flex",
@@ -117,7 +111,7 @@ function MediaNode({ data, selected }) {
               : "No description available."}
           </Typography.Text>
               </div>
-            </div>
+         
           </Card>
        
      
