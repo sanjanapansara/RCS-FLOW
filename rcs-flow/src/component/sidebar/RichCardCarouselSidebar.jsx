@@ -96,10 +96,10 @@ function RichCardCarouselSidebar({
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
-  const [setMessageName] = useState(
+  const [messageName,setMessageName] = useState(
     alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ?? ""
   );
-  const [setDescription] = useState("");
+  const [description,setDescription] = useState("");
 
   useEffect(() => {
     const initValues = richCardCarousels?.cards?.[cardIndex]?.actions?.reduce(
@@ -296,7 +296,7 @@ function RichCardCarouselSidebar({
     setRichCardCarousels((prev) => {
       const updatedCards = prev.cards.map((card, index) => {
         if (index === cardIndex) {
-          if (card.actions.length < 11) {
+          if (card.actions.length < 4) {
             const updatedActions = [
               ...card.actions,
               {
@@ -308,7 +308,7 @@ function RichCardCarouselSidebar({
             ];
             return { ...card, actions: updatedActions };
           } else {
-            message.warning("Cannot add more than 11 actions to a card");
+            message.warning("Cannot add more than 4 actions to a card");
             return card;
           }
         }
@@ -481,7 +481,7 @@ function RichCardCarouselSidebar({
                 placeholder="Title"
                 defaultValue={
                   alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ||
-                  ""
+                  messageName
                 }
                 id="message"
                 onChange={(e) => handleMessageNameChange(e, cardIndex, "title")}
@@ -497,9 +497,10 @@ function RichCardCarouselSidebar({
                 size="small"
                 placeholder="Description"
                 rows={4}
+                // value={description}
                 defaultValue={
                   alldata?.data?.richCardCarousels?.cards[cardIndex]
-                    ?.description || ""
+                    ?.description || description
                 }
                 onChange={(e) =>
                   handleDescriptionNameChange(e, cardIndex, "description")
