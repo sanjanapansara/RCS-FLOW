@@ -51,8 +51,20 @@ function RichCardCarouselSidebar({
   const [imageUrl, setImageUrl] = useState(node?.data?.imageUrl || "");
   const [options, setOptions] = useState(
     alldata?.data?.richCardCarousels?.cards ?? [
-      { size: "medium", templateName: "", title: "Card 1", description: "", media: "" },
-      { size: "medium", templateName: "", title: "Card 2", description: "", media: "" },
+      {
+        size: "medium",
+        templateName: "",
+        title: "Card 1",
+        description: "",
+        media: "",
+      },
+      {
+        size: "medium",
+        templateName: "",
+        title: "Card 2",
+        description: "",
+        media: "",
+      },
     ]
   );
   console.log("options", options);
@@ -69,7 +81,7 @@ function RichCardCarouselSidebar({
           {
             id: 0,
             type: "quick",
-            title: "Card 1 Action Title",
+            title: "Card 1  Title",
             payload: "",
           },
         ],
@@ -84,7 +96,7 @@ function RichCardCarouselSidebar({
           {
             id: 0,
             type: "quick",
-            title: "Card 2 Action Title",
+            title: "Card 2  Title",
             payload: "",
           },
         ],
@@ -96,10 +108,11 @@ function RichCardCarouselSidebar({
   const [templateName, setTemplateName] = useState(
     node?.data?.templateName || ""
   );
-  const [messageName,setMessageName] = useState(
+  const [messageName, setMessageName] = useState(
     alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ?? ""
   );
-  const [description,setDescription] = useState("");
+  const [description, setDescription] = useState("");
+  const [cardWidth, setCardWidth] = useState(0);
 
   useEffect(() => {
     const initValues = richCardCarousels?.cards?.[cardIndex]?.actions?.reduce(
@@ -256,7 +269,7 @@ function RichCardCarouselSidebar({
 
   const handleAddCardsTemplate = () => {
     if (options.length < 10) {
-      console.log("please selectP", options.length)
+      console.log("please selectP", options.length);
       const newCard = {
         size: value,
         templateName: "",
@@ -288,10 +301,6 @@ function RichCardCarouselSidebar({
     }
   };
 
-
-
-
-
   const addNewCard = () => {
     setRichCardCarousels((prev) => {
       const updatedCards = prev.cards.map((card, index) => {
@@ -314,14 +323,14 @@ function RichCardCarouselSidebar({
         }
         return card;
       });
-  
+
       const data = {
         selectedNode,
         value: { ...prev, cards: updatedCards },
         key: "richCardCarousels",
       };
       dispatch(setRichCardNodeCarousleData(data));
-  
+
       return { ...prev, cards: updatedCards };
     });
   };
@@ -381,6 +390,14 @@ function RichCardCarouselSidebar({
   const handleCardChange = (newValue) => {
     setCardIndex(newValue);
   };
+
+  const handlecardwidth = (e) => {
+    const value = e.target.value;
+    setCardWidth(value);
+    const data = { selectedNode, value, key: "cardWidth" };
+    dispatch(setRichCardNodeCarousleData(data));
+  };
+
   return (
     <Layout>
       <Sider width="305px">
@@ -423,6 +440,38 @@ function RichCardCarouselSidebar({
                 value={templateName}
                 onChange={handleTemplateNameChange}
               />
+            </Form.Item>
+            <Form.Item
+              name={"rich_card_carousel_width"}
+              label="Width"
+              rules={[{ required: true, message: "Width is required" }]}
+            >
+              <Radio.Group
+                defaultValue={cardWidth}
+                size="small"
+                style={{ display: "flex", gap: 20 }}
+                onChange={(e)=>handlecardwidth(e)}
+              >
+                <div
+                  style={{
+                    border: "1px solid #D9D9D9",
+                    padding: "10px 15px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Radio value={0}>{"small"}</Radio>
+                </div>
+
+                <div
+                  style={{
+                    border: "1px solid #D9D9D9",
+                    padding: "10px 15px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Radio value={1}>{"medium"}</Radio>
+                </div>
+              </Radio.Group>
             </Form.Item>
             <Row>
               <Col md={24}>
@@ -504,7 +553,7 @@ function RichCardCarouselSidebar({
                 }
                 onChange={(e) =>
                   handleDescriptionNameChange(e, cardIndex, "description")
-                } 
+                }
               />
             </Form.Item>
             <Row>
@@ -523,7 +572,7 @@ function RichCardCarouselSidebar({
                     {...props}
                     showUploadList={false}
                     customRequest={({ onSuccess }) => {
-                      setTimeout(() => onSuccess("ok"), 0); 
+                      setTimeout(() => onSuccess("ok"), 0);
                     }}
                     onChange={(info) =>
                       handleImageUpload(info, cardIndex, "media")

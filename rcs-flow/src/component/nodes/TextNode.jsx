@@ -47,7 +47,7 @@ const TextNode = ({ data, selected }) => {
               borderRadius: 10,
               boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
               border: selected ? "1px solid #D1AFAF" : "none",
-              opacity:"0.9"
+              background: "rgba(255, 255, 255, 0.8)", 
             }}
           >      
               {alldata?.data?.isStartNode ? (

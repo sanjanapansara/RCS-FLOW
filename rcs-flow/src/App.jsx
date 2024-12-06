@@ -512,7 +512,7 @@ const DnDFlow = () => {
             )}
           </NodeToolbar>
           <Controls />
-          <Background />
+          <Background style={{background:"#f2f2f2"}} color="#999999" />
         </ReactFlow>
       </div>
       {renderSidebar()}

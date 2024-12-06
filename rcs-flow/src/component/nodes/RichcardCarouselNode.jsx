@@ -23,6 +23,7 @@ function RichcardCarouselNode({ data, selected }) {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes?.find((element) => element?.id === id);
+  console.log("alldata",alldata);
   const defaultCards = [
     {
       title: "Card Title",
@@ -43,11 +44,10 @@ function RichcardCarouselNode({ data, selected }) {
       ? alldata?.data?.richCardCarousels?.cards
       : defaultCards;
 
-  const getImageWidth = (size) => {
-    if (size === "short") return 80;
-    if (size === "medium") return 120;
-    if (size === "tall") return 180;
-    return 150;
+  const getImageWidth = () => {
+    if (alldata?.data?.cardWidth == "0") return 120;
+    if (alldata?.data?.cardWidth == "1") return 170;
+    return 120;
   };
 
   const getCardStyle = (size) => {
@@ -65,7 +65,7 @@ function RichcardCarouselNode({ data, selected }) {
   console.log("card size-->",cardsToShow);
   
 
-  const cardStyle = getCardStyle();
+  // const cardStyle = getCardStyle();
 
   return (
     <ConfigProvider
@@ -81,15 +81,16 @@ function RichcardCarouselNode({ data, selected }) {
       <Card
         title={alldata?.data?.templateName || "Richcard Carousels"}
         size="small"
+        
         extra={<Switch size="small" />}
-        bodyStyle={{ padding: cardStyle.padding }}
+        bodyStyle={{ padding:"15px" }}
         style={{
-          // width: 1700,
+          
           padding: "0px",
           marginBottom: "10px",
           boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
           border: selected ? "1px solid #dbd3de" : "none",
-          opacity:"0.9"
+          background: "rgba(255, 255, 255, 0.8)", 
         }}
       >
         {alldata?.data?.isStartNode && (
@@ -109,7 +110,7 @@ function RichcardCarouselNode({ data, selected }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                // width: "100%",
+                width:getImageWidth(),
                 border: "1px solid #d9d9d9",
                 borderRadius: "8px",
                 padding: "15px",
@@ -119,7 +120,7 @@ function RichcardCarouselNode({ data, selected }) {
               <Handle type="target" position={Position.Left} />
               <Typography.Title
                 level={5}
-                style={{ margin: "0 0 10px", textAlign: "center",fontSize:cardStyle.fontSize }}
+                style={{ margin: "0 0 10px", textAlign: "center", }}
               >
                 {card?.title || "Card Title"}
               </Typography.Title>
@@ -129,7 +130,6 @@ function RichcardCarouselNode({ data, selected }) {
                   textAlign: "center",
                   whiteSpace: "pre-wrap",
                   marginBottom: "10px",
-                  fontSize: cardStyle.description,
                 }}
               >
                 {card?.description
