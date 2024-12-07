@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Handle, Position } from "@xyflow/react";
-import { Badge, Button, Card, ConfigProvider, Switch, Typography } from "antd";
+import { Badge, Button, Card, ConfigProvider, Divider, Switch, Typography } from "antd";
 import { useSelector } from "react-redux";
 import {
   CalendarOutlined,
@@ -10,6 +10,7 @@ import {
   MessageOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
+import Meta from "antd/es/card/Meta";
 const ButtonNode = ({ data, selected }) => {
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
@@ -23,7 +24,7 @@ const ButtonNode = ({ data, selected }) => {
         components: {
           Card: {
             headerBg: "#8f91a8",
-            colorBorderSecondary: "#8f91a8",
+            // colorBorderSecondary: "#8f91a8",
           },
         },
       }}
@@ -40,7 +41,7 @@ const ButtonNode = ({ data, selected }) => {
               <Switch
                 size="small"
                 disabled={
-                  (alldata?.data?.isStartNode || data.isStartNode) && true
+                  true
                 }
                 checked={enabled}
                 value={enabled}
@@ -57,16 +58,94 @@ const ButtonNode = ({ data, selected }) => {
               background: "rgba(255, 255, 255, 0.8)", 
             }}
           >
-             <center>
-            <div
+            <Card
+          bodyStyle={{ padding: "10px" }}
+          
+        >
+          <Meta
+            title=""
+            
+            description={
+              <Typography.Text >{
+              alldata?.data.label
+                ? alldata?.data.label.split("\n").map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))
+                : data.label}
+                </Typography.Text>
+            }
+          /><br/>
+            {alldata?.data?.actions?.length > 0 ? (
+              alldata.data.actions.map((btn, i) => (
+                <>
+                  <Divider style={{ margin: "0px" }} />
+                  <Button key={i} size="small" block type="text">
+                    {btn?.type === "quick" && (
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={true}
+                      />
+                    )}
+
+                    {btn.type === "quick" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <MessageOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+
+                    {btn.type === "call" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <PhoneOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                    {btn.type === "url" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <LinkOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                    {btn.type === "location" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <EnvironmentOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                    {btn.type === "calendar" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <CalendarOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                  </Button>
+                </>
+              ))
+            ) : (
+              <>
+                <Divider style={{ margin: "0px" }} />
+                <Button size="small" type="text" block>
+                  <Handle
+                    type="source"
+                    position={Position.Right}
+                    isConnectable={true}
+                  />
+                  <Typography.Text strong>
+                    <MessageOutlined />
+                    Default Button
+                  </Typography.Text>
+                </Button>
+              </>
+            )}
+        </Card>
+            {/* <div
               style={{ display: "flex", flexDirection: "column" }}
               dangerouslySetInnerHTML={{
                 __html:
                   alldata?.data?.label?.replace(/\n/g, "<br/>") || data.label,
               }}
-            />
+            /> */}
 
-            {alldata?.data?.actions?.length > 0 ? (
+            {/* {alldata?.data?.actions?.length > 0 ? (
               <>
                 {alldata?.data?.actions?.map((btn, i) => (
                   <Button
@@ -114,8 +193,7 @@ const ButtonNode = ({ data, selected }) => {
                 />
                 <Typography.Text>Deafult Button</Typography.Text>
               </Button>
-            )}
-            </center>
+            )} */}
           </Card>
         </Badge.Ribbon>
       ) : (
@@ -148,16 +226,27 @@ const ButtonNode = ({ data, selected }) => {
             />
           )}
 
-          <center>
-            <div
-              style={{ display: "flex", flexDirection: "column" }}
-              dangerouslySetInnerHTML={{
-                __html:
-                  alldata?.data?.label?.replace(/\n/g, "<br/>") || "message",
-              }}
-            />
-
-            {alldata?.data?.actions?.length > 0 ? (
+<Card
+          bodyStyle={{ padding: "10px" }}
+          
+        >
+          <Meta
+            title=""
+            
+            description={
+              <Typography.Text >{
+              alldata?.data.label
+                ? alldata?.data.label.split("\n").map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))
+                : data.label}
+                </Typography.Text>
+            }
+          /><br/>
+           {alldata?.data?.actions?.length > 0 ? (
               <>
                 {alldata?.data?.actions?.map((btn, i) => (
                   <Button
@@ -206,7 +295,7 @@ const ButtonNode = ({ data, selected }) => {
                 <Typography.Text>Deafult Button</Typography.Text>
               </Button>
             )}
-          </center>
+        </Card>
         </Card>
       )}
     </ConfigProvider>

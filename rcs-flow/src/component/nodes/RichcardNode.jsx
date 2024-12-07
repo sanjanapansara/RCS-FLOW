@@ -16,8 +16,13 @@ import {
   Typography,
   Image as AntdImage,
   Image,
+  Flex,
+  Space,
+  Divider,
 } from "antd";
 import Meta from "antd/es/card/Meta";
+import Link from "antd/es/typography/Link";
+
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -32,43 +37,24 @@ function RichcardNode({ data, selected }) {
     switch (alldata?.data?.size) {
       case "short":
         return {
-          height: 120,
-          fontSize: 10,
-          description: 8,
-          padding: 8,
-          imageWidth: 150,
+          imageWidth: 80,
         };
       case "medium":
         return {
-          height: 160,
-          fontSize: 16,
-          description: 12,
-          padding: 12,
-          imageWidth: 180,
+          imageWidth: 120,
         };
       case "tall":
         return {
-          height: 200,
-          fontSize: 22,
-          description: 14,
-          padding: 16,
-          imageWidth: 200,
+          imageWidth: 180,
         };
       default:
         return {
-          height: 180,
-          fontSize: 16,
-          description: 12,
-          padding: 10,
-          imageWidth: 180,
+          imageWidth: 120,
         };
     }
   };
 
   const cardStyle = getCardStyle();
-
-  // console.log("richcard data-->", alldata);
-
   return (
     <ConfigProvider
       theme={{
@@ -87,198 +73,116 @@ function RichcardNode({ data, selected }) {
 
       <Card
         title={alldata?.data?.templateName || "Rich Card"}
-        extra={<Switch size="small" />}
+        extra={<Switch size="small" value={true} />}
         size="small"
         bodyStyle={{ padding: cardStyle.padding }}
         style={{
+          width: 220,
           padding: "0px",
           boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
           border: selected ? "1px solid #d4dfd3" : "none",
-          background: "rgba(255, 255, 255, 0.8)", // Apply opacity only to the card background
+          background: "rgba(255, 255, 255, 0.8)",
         }}
+        
       >
         <Handle type="target" position={Position.Left} />
-        <Card
-          bodyStyle={{ padding: "10px" }}
-          width="68%"
-          cover={
-            <Image
-              style={{
-                marginBottom: "10px",
-                borderRadius: "4px",
-              }}
-              preview={false}
-              width={cardStyle.imageWidth}
-              alt="example"
-              src={
-                alldata?.data?.mediaUrl ||
-                "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
-              }
-            />
-          }
-        >
-          <Meta
-            title={alldata?.data?.label ?? "Richcard"}
-            description={
-              alldata?.data.description
-                ? alldata?.data.description.split("\n").map((line, index) => (
-                    <span key={index}>
-                      {line}
-                      <br />
-                    </span>
-                  ))
-                : "Card description"
-            }
-          />
-          <br />
-          {alldata?.data?.actions?.length > 0 ? (
-            alldata.data.actions.map((btn, i) => (
-              <Button
-                key={i}
-                size="small"
-                block
-                style={{
-                  background: "#adafce",
-                  color: "black",
-                  marginBottom: 5,
-                  fontSize: cardStyle.fontSize,
-                }}
-                icon={
-                  <>
-                    {btn?.type === "quick" && <MessageOutlined />}
-                    {btn?.type === "call" && <PhoneOutlined />}
-                    {btn?.type === "url" && <LinkOutlined />}
-                    {btn?.type === "location" && <EnvironmentOutlined />}
-                    {btn?.type === "calendar" && <CalendarOutlined />}
-                  </>
-                }
-              >
-                {btn?.type === "quick" && (
-                  <Handle
-                    type="source"
-                    position={Position.Right}
-                    isConnectable={true}
-                  />
-                )}
-                <Typography.Text>
-                  {btn?.title ?? "Default Button"}
-                </Typography.Text>
-              </Button>
-            ))
-          ) : (
-            <Button
-              size="small"
-              block
-              style={{ background: "#adafce", color: "black" }}
-            >
-              <Handle
-                type="source"
-                position={Position.Right}
-                isConnectable={true}
-              />
-              <Typography.Text>Default Button</Typography.Text>
-            </Button>
-          )}
-        </Card>
-        {/* <div
+
+        <Flex
           style={{
-            display: "flex",
+            width: "100%",
             flexDirection: "column",
-            alignItems: "center",
-            border: "1px solid #d9d9d9",
-            borderRadius: "8px",
-            padding: "13.1px",
-            backgroundColor: "#f9f9f9",
+            background: "#fff",
+            borderRadius: "1rem",
           }}
         >
           <Image
             style={{
-              marginBottom: "10px",
-              borderRadius: "4px",
+              height: cardStyle.imageWidth,
+              borderRadius: "8px 8px 8px 8px",
             }}
-            preview={false}
-            width={cardStyle.imageWidth}
-            alt="example"
             src={
               alldata?.data?.mediaUrl ||
-              "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
+              "https://dash-bootstrap-components.opensource.faculty.ai/static/images/placeholder286x180.png"
             }
+            alt="Media not found"
+            preview={false}
           />
-          <Typography.Title
-            level={5}
-            style={{
-              margin: "0 0 0px",
-              textAlign: "center",
-              fontSize: cardStyle.fontSize,
-            }}
-          >
-            <strong>{alldata?.data?.label ?? "Richcard"}</strong>
-          </Typography.Title>
-          <Typography.Text
-            style={{
-              marginBottom: "10px",
-              fontSize: cardStyle.description,
-            }}
-          >
-            {alldata?.data.description
-              ? alldata?.data.description.split("\n").map((line, index) => (
-                  <span key={index}>
-                    {line}
-                    <br />
-                  </span>
-                ))
-              : "Card description"}
-          </Typography.Text>
-          
-          {alldata?.data?.actions?.length > 0 ? (
-            alldata.data.actions.map((btn, i) => (
-              <Button
-                key={i}
-                size="small"
-                block
-                style={{
-                  background: "#adafce",
-                  color: "black",
-                  marginBottom: 5,
-                  fontSize: cardStyle.fontSize,
-                }}
-                icon={
-                  <>
-                    {btn?.type === "quick" && <MessageOutlined />}
-                    {btn?.type === "call" && <PhoneOutlined />}
-                    {btn?.type === "url" && <LinkOutlined />}
-                    {btn?.type === "location" && <EnvironmentOutlined />}
-                    {btn?.type === "calendar" && <CalendarOutlined />}
-                  </>
-                }
-              >
-                {btn?.type === "quick" && (
+
+          <Space direction="vertical" style={{ gap: 5, padding: "1rem" }}>
+            <Typography style={{ fontWeight: 600, fontSize: "1rem" }}>
+              {alldata?.data?.label ?? "Richcard"}
+            </Typography>
+            <div
+              style={{
+                overflowWrap: "break-word",
+              }}
+              dangerouslySetInnerHTML={{
+                __html:
+                  alldata?.data?.description?.replace(/\n/g, "<br/>") ||
+                  "Description of the Card.",
+              }}
+            />
+
+            {alldata?.data?.actions?.length > 0 ? (
+              alldata.data.actions.map((btn, i) => (
+                <>
+                  <Divider style={{ margin: "0px" }} />
+                  <Button key={i} size="small" block type="text">
+                    {btn?.type === "quick" && (
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={true}
+                      />
+                    )}
+
+                    {btn.type === "quick" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <MessageOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+
+                    {btn.type === "call" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <PhoneOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                    {btn.type === "url" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <LinkOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                    {btn.type === "location" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <EnvironmentOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                    {btn.type === "calendar" && (
+                      <Typography.Text href={btn?.url} strong>
+                        <CalendarOutlined /> {btn?.title}
+                      </Typography.Text>
+                    )}
+                  </Button>
+                </>
+              ))
+            ) : (
+              <>
+                <Divider style={{ margin: "0px" }} />
+                <Button size="small" type="text" block>
                   <Handle
                     type="source"
                     position={Position.Right}
                     isConnectable={true}
                   />
-                )}
-                <Typography.Text>
-                  {btn?.title ?? "Default Button"}
-                </Typography.Text>
-              </Button>
-            ))
-          ) : (
-            <Button
-              size="small"
-              block
-              style={{ background: "#adafce", color: "black" }}
-            >
-              <Handle
-                type="source"
-                position={Position.Right}
-                isConnectable={true}
-              />
-              <Typography.Text>Default Button</Typography.Text>
-            </Button>
-          )}
-        </div> */}
+                  <Typography.Text strong>
+                    <MessageOutlined />
+                    Default Button
+                  </Typography.Text>
+                </Button>
+              </>
+            )}
+          </Space>
+        </Flex>
       </Card>
     </ConfigProvider>
   );
