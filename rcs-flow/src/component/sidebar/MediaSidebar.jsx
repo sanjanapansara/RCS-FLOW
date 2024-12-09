@@ -59,7 +59,6 @@ const MediaNodeSider = ({ title, setSelectedNode, selectedNode }) => {
   const handleMessageChange = (e) => {
     const value = e.target.value;
     setMessage(value);
-
     const data = { selectedNode, value, key: "label" };
     dispatch(setUpdateNodeData(data));
   };
