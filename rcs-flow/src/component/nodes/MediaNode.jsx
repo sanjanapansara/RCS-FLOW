@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import { Badge, Card, ConfigProvider, Image, Switch, Typography } from "antd";
+import { Badge, Card, ConfigProvider, Image, Switch } from "antd";
 import Meta from "antd/es/card/Meta";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";

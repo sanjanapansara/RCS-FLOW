@@ -32,7 +32,6 @@ const ButtonNodeSidebar = ({ node,selectedNode, updateNodeData,setSelectedNode,t
   const nodes = useSelector((state) => state.nodes.nodes);
   const alldata = nodes.find((item) => item.id === selectedNode);
   console.log("alldata-->", alldata);
-  
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [templateName, setTemplateName] = useState(

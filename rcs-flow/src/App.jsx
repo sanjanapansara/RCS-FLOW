@@ -493,7 +493,7 @@ const DnDFlow = () => {
                   cancelText="No"
                 >
                   <Space onClick={(e) => e.stopPropagation()}>
-                    <DeleteOutlined style={{ fontSize: "20px" }} />
+                    <DeleteOutlined style={{ fontSize: "20px",cursor:"pointer" }}  />
                   </Space>
                 </Popconfirm>
                 <Dropdown

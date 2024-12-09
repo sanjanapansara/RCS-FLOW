@@ -14,19 +14,19 @@ import {
   ConfigProvider,
   Switch,
   Typography,
-  Image as AntdImage,
+  Image as 
   Image,
   Flex,
   Space,
   Divider,
 } from "antd";
-import Meta from "antd/es/card/Meta";
-import Link from "antd/es/typography/Link";
 
-import React, { useEffect } from "react";
+
+import React, {  useState } from "react";
 import { useSelector } from "react-redux";
 
 function RichcardNode({ data, selected }) {
+  const [enabled, setEnabled] = useState(true);
   const id = data.id;
   const nodes = useSelector((state) => state.nodes.nodes);
   console.log("richcard node", nodes);
@@ -73,7 +73,13 @@ function RichcardNode({ data, selected }) {
 
       <Card
         title={alldata?.data?.templateName || "Rich Card"}
-        extra={<Switch size="small" value={true} />}
+        extra={ <Switch
+          size="small"
+          disabled
+          checked={enabled}
+          value={enabled}
+          onChange={() => setEnabled(!enabled)}
+        />}
         size="small"
         bodyStyle={{ padding: cardStyle.padding }}
         style={{
@@ -135,7 +141,6 @@ function RichcardNode({ data, selected }) {
                         isConnectable={true}
                       />
                     )}
-
                     {btn.type === "quick" && (
                       <Typography.Text href={btn?.url} strong>
                         <MessageOutlined /> {btn?.title}
