@@ -191,13 +191,16 @@ const ButtonNode = ({ data, selected }) => {
             {alldata?.data?.actions?.length > 0 ? (
               <>
                 {alldata?.data?.actions?.map((btn, i) => (
+                  <>
+                  <Divider style={{margin:"0px"}} />
                   <Button
                     key={i}
                     size="small"
+                    type="text"
                     block
                     style={{
-                      background: "#adafce",
-                      color: "black",
+                      // background: "#adafce",
+                      // color: "black",
                       marginBottom: 5,
                     }}
                     icon={
@@ -221,13 +224,17 @@ const ButtonNode = ({ data, selected }) => {
                       {btn?.title ?? "Deafult Button"}
                     </Typography.Text>
                   </Button>
+                  </>
                 ))}
               </>
             ) : (
+              <>
+              <Divider style={{margin:"0px"}}/>
               <Button
                 size="small"
+                type="text"
                 block
-                style={{ background: "#adafce", color: "black" }}
+                // style={{ background: "#adafce", color: "black" }}
               >
                 <Handle
                   type="source"
@@ -236,6 +243,7 @@ const ButtonNode = ({ data, selected }) => {
                 />
                 <Typography.Text>Deafult Button</Typography.Text>
               </Button>
+              </>
             )}
           </Card>
         </Card>
