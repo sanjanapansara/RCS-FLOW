@@ -106,13 +106,14 @@ function RichCardCarouselSidebar({
   const [previewImage, setPreviewImage] = useState([]);
   const [value, setValue] = useState(alldata?.data?.value ?? "medium");
   const [templateName, setTemplateName] = useState(
-    node?.data?.templateName || ""
+    alldata?.data?.templateName || ""
   );
   const [messageName, setMessageName] = useState(
     alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ?? ""
   );
   const [description, setDescription] = useState("");
   const [cardWidth, setCardWidth] = useState(0);
+console.log( "name",alldata?.data?.templateName);
 
   useEffect(() => {
     const initValues = richCardCarousels?.cards?.[cardIndex]?.actions?.reduce(
@@ -433,11 +434,11 @@ function RichCardCarouselSidebar({
           }}
         >
           <Form layout="vertical" form={form}>
-            <Form.Item label="Template Name" style={{ marginBottom: "10px" }}>
+            <Form.Item label="Template Name" style={{ marginBottom: "10px" }} name={"templatename"}>
               <Input
                 variant="filled"
                 placeholder="Template Name"
-                value={templateName}
+                defaultValue={templateName}
                 onChange={handleTemplateNameChange}
               />
             </Form.Item>
