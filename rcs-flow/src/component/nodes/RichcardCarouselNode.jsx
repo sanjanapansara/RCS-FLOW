@@ -138,15 +138,16 @@ function RichcardCarouselNode({ data, selected }) {
                     <Image
                       style={{
                         borderRadius: "4px",
-                        objectFit: "cover",
+                        // objectFit: "cover",
+                        objectFit: "scale-down",
+
                         height:
                           card?.size === "short"
                             ? "100px"
                             : card?.size === "tall"
                             ? "150px"
                             : "120px",
-
-                        width: "10vw",
+                        width: alldata?.data?.cardWidth === 0 ? "6vw" : "9vw",
                       }}
                       preview={false}
                       alt="example"
@@ -155,13 +156,16 @@ function RichcardCarouselNode({ data, selected }) {
                         "https://dash-bootstrap-components.opensource.faculty.ai/static/images/placeholder286x180.png"
                       }
                     />
+
                     <Typography
                       style={{
                         fontWeight: 600,
                         fontSize: "1rem",
                         marginTop: "10px",
-                        alignSelf:"flex-start",
-                        width: "10vw",
+                        alignSelf: "flex-start",
+                        // width: "10vw",
+                        width: alldata?.data?.cardWidth === 0 ? "6vw" : "9vw",
+
                       }}
                     >
                       {card?.title || "Card Title"}
@@ -170,7 +174,9 @@ function RichcardCarouselNode({ data, selected }) {
                       style={{
                         // marginTop: "5px",
                         // textAlign: "center",
-                        width: "10vw",
+                        // width: "10vw",
+                        width: alldata?.data?.cardWidth === 0 ? "6vw" : "9vw",
+
                         overflowWrap: "break-word",
                       }}
                       dangerouslySetInnerHTML={{
@@ -178,8 +184,7 @@ function RichcardCarouselNode({ data, selected }) {
                           card?.description?.replace(/\n/g, "<br/>") ||
                           "Description of the Card.",
                       }}
-                    >
-                      </Typography>
+                    ></Typography>
                   </div>
                   <div
                     style={{

@@ -37,7 +37,7 @@ function RichcardNode({ data, selected }) {
     switch (alldata?.data?.size) {
       case "short":
         return {
-          imageWidth: 80,
+          imageWidth: 100,
         };
       case "medium":
         return {
@@ -45,7 +45,7 @@ function RichcardNode({ data, selected }) {
         };
       case "tall":
         return {
-          imageWidth: 180,
+          imageWidth: 150,
         };
       default:
         return {
@@ -92,7 +92,6 @@ function RichcardNode({ data, selected }) {
         
       >
         <Handle type="target" position={Position.Left} />
-
         <Flex
           style={{
             width: "100%",

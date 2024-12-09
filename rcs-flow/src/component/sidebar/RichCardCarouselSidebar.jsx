@@ -112,8 +112,8 @@ function RichCardCarouselSidebar({
     alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ?? ""
   );
   const [description, setDescription] = useState("");
-  const [cardWidth, setCardWidth] = useState(0);
-console.log( "name",alldata?.data?.templateName);
+  const [cardWidth, setCardWidth] = useState(1);
+  console.log("name", alldata?.data?.templateName);
 
   useEffect(() => {
     const initValues = richCardCarousels?.cards?.[cardIndex]?.actions?.reduce(
@@ -434,7 +434,11 @@ console.log( "name",alldata?.data?.templateName);
           }}
         >
           <Form layout="vertical" form={form}>
-            <Form.Item label="Template Name" style={{ marginBottom: "10px" }} name={"templatename"}>
+            <Form.Item
+              label="Template Name"
+              style={{ marginBottom: "10px" }}
+              name={"templatename"}
+            >
               <Input
                 variant="filled"
                 placeholder="Template Name"
@@ -451,7 +455,7 @@ console.log( "name",alldata?.data?.templateName);
                 defaultValue={cardWidth}
                 size="small"
                 style={{ display: "flex", gap: 20 }}
-                onChange={(e)=>handlecardwidth(e)}
+                onChange={(e) => handlecardwidth(e)}
               >
                 <div
                   style={{
@@ -587,7 +591,11 @@ console.log( "name",alldata?.data?.templateName);
                             ?.media
                         }
                         alt="avatar"
-                        style={{ width: "100%" }}
+                        style={{
+                          width: "100%",
+                          height: 50,
+                          objectFit: "scale-down",
+                        }}
                       />
                     ) : (
                       uploadButton
