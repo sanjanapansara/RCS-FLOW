@@ -30,7 +30,9 @@ const CustomSegment = ({
       onChange(option);
     }
   };
+  
   console.log("Selected value", options);
+
   const handleClose = (index) => {
     if (options.length > 2) {
       const updatedOptions = options.filter((_, i) => i !== index);
@@ -44,9 +46,9 @@ const CustomSegment = ({
       }));
       setPreviewImage(updatedImages);
       if (updatedOptions.length === 0) {
-        onChange(null); 
+        onChange(null);
       } else if (value === index) {
-        onChange(index === 0 ? 0 : index - 1); 
+        onChange(index === 0 ? 0 : index - 1);
       } else if (value < index) {
         onChange(value);
       } else {
@@ -54,7 +56,7 @@ const CustomSegment = ({
       }
       const data = {
         selectedNode,
-        value: { ...richCardCarousels, cards: updatedCards }, 
+        value: { ...richCardCarousels, cards: updatedCards },
         key: "richCardCarousels",
       };
       dispatch(setRichCardNodeCarousleData(data));
@@ -109,7 +111,7 @@ const CustomSegment = ({
                   borderRadius: 5,
                 }}
               >
-               {`Card ${index + 1}`}
+                {`Card ${index + 1}`}
               </Tag>
             </Space>
           </Col>
