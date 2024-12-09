@@ -472,7 +472,7 @@ const DnDFlow = () => {
               alignItems: "center",
               justifyContent: "end",
               // width: toolbarWidth,
-              width: selected?.type === "richcard_carosal" ? "20%" : "10%",
+              width: selected?.type === "richcard_carosal" ? "25%" : "15%",
             }}
             nodeId={selectedNode}
             position={Position.Top}

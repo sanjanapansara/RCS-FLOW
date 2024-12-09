@@ -108,6 +108,8 @@ function RichCardCarouselSidebar({
   const [templateName, setTemplateName] = useState(
     alldata?.data?.templateName || ""
   );
+  console.log("size of card-->",value);
+  
   const [messageName, setMessageName] = useState(
     alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ?? ""
   );
@@ -160,6 +162,8 @@ function RichCardCarouselSidebar({
 
   const onChange = (e, index, key) => {
     const newSize = e.target.value;
+    console.log(e);
+    
     setValue(newSize);
     setRichCardCarousels((prev) => {
       console.log("Prev State:", prev);
@@ -184,6 +188,13 @@ function RichCardCarouselSidebar({
     setTemplateName(value);
     const data = { selectedNode, value, key: "templateName" };
     dispatch(setRichCardNodeCarousleData(data));
+  };
+  const handlecardwidth = (e) => {
+    const value = e.target.value;
+    setCardWidth(value);
+    const data = { selectedNode, value, key: "cardWidth" };
+    dispatch(setRichCardNodeCarousleData(data));
+    
   };
   const handleMessageNameChange = (e, index, key) => {
     const newMessageName = e.target.value;
@@ -392,12 +403,7 @@ function RichCardCarouselSidebar({
     setCardIndex(newValue);
   };
 
-  const handlecardwidth = (e) => {
-    const value = e.target.value;
-    setCardWidth(value);
-    const data = { selectedNode, value, key: "cardWidth" };
-    dispatch(setRichCardNodeCarousleData(data));
-  };
+
 
   return (
     <Layout>
@@ -535,7 +541,7 @@ function RichCardCarouselSidebar({
                 placeholder="Title"
                 defaultValue={
                   alldata?.data?.richCardCarousels?.cards[cardIndex]?.title ||
-                  messageName
+                  ""
                 }
                 id="message"
                 onChange={(e) => handleMessageNameChange(e, cardIndex, "title")}
@@ -554,7 +560,7 @@ function RichCardCarouselSidebar({
                 // value={description}
                 defaultValue={
                   alldata?.data?.richCardCarousels?.cards[cardIndex]
-                    ?.description || description
+                    ?.description || ""
                 }
                 onChange={(e) =>
                   handleDescriptionNameChange(e, cardIndex, "description")
