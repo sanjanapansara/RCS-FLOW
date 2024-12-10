@@ -107,7 +107,7 @@ function RichcardCarouselNode({ data, selected }) {
             style={{ marginTop: -30 }}
           />
         )}
-        <Flex Direction="column" alignItems="center" gap={7}>
+        <Flex Direction="column" gap={7}>
           {cardsToShow.map((card, index) => {
             const cardStyle = getCardStyle(card.size);
             return (
@@ -122,7 +122,7 @@ function RichcardCarouselNode({ data, selected }) {
                     borderRadius: "1rem",
                     display: "flex",
                     flexDirection: "column",
-                    paddingTop: "10px",
+                    // paddingTop: "10px",
                   }}
                 >
                   <div
@@ -131,15 +131,16 @@ function RichcardCarouselNode({ data, selected }) {
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "flex-start",
-                      alignItems: "center",
-                      padding: "10px",
+                      // alignItems: "center",
+                      // paddingBottom: "10px",
+                      borderRadius: "1rem",
                     }}
                   >
                     <Image
                       style={{
                         borderRadius: "4px",
-                        // objectFit: "cover",
-                        objectFit: "scale-down",
+                        objectFit: "cover",
+                        // objectFit: "scale-down",
 
                         height:
                           card?.size === "short"
@@ -147,7 +148,7 @@ function RichcardCarouselNode({ data, selected }) {
                             : card?.size === "tall"
                             ? "150px"
                             : "120px",
-                        width: alldata?.data?.cardWidth === 0 ? "6vw" : "9vw",
+                        width: alldata?.data?.cardWidth === 0 ? "7vw" : "9vw",
                       }}
                       preview={false}
                       alt="example"
@@ -173,10 +174,9 @@ function RichcardCarouselNode({ data, selected }) {
                     <Typography
                       style={{
                         // marginTop: "5px",
-                        // textAlign: "center",
+                        // textAlign: "Left",
                         // width: "10vw",
                         width: alldata?.data?.cardWidth === 0 ? "6vw" : "9vw",
-
                         overflowWrap: "break-word",
                       }}
                       dangerouslySetInnerHTML={{
